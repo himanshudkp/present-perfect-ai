@@ -63,3 +63,15 @@ export interface Theme {
   navbarColor?: string;
   type: "light" | "dark";
 }
+
+export interface OutlineCard {
+  id: string;
+  title: string;
+  order: number;
+}
+
+export type Page =
+  | "create"
+  | "creative-ai"
+  | "create-from-scratch"
+  | "/templates";

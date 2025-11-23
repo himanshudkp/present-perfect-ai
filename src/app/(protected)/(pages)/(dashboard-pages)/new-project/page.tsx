@@ -4,7 +4,7 @@ import RenderPage from "@/components/global/render-page";
 
 type Props = {};
 
-const CreateNewProject = (props: Props) => {
+const CreateNewProject = async (props: Props) => {
   return (
     <main className="w-full h-full pt-6">
       <Suspense fallback={<NewProjectSkeleton />}>

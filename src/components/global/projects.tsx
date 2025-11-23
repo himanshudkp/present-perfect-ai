@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { containerVariants } from "@/lib/constants";
 import ProjectCard from "./project-card";
@@ -32,31 +32,58 @@ import {
   Sparkles,
   Filter,
   X,
+  ArrowUpDown,
+  Star,
+  Inbox,
+  TrendingUp,
+  Zap,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-type ViewMode = "grid" | "compact";
-type SortOption = "recent" | "oldest" | "name-asc" | "name-desc" | "slides";
-// type FilterStatus = "all" | "active" | "deleted" | "purchased" | "sellable";
+type ViewMode = "grid" | "compact" | "list";
+type SortOption =
+  | "recent"
+  | "oldest"
+  | "name-asc"
+  | "name-desc"
+  | "slides"
+  | "updated";
+type TabView = "all" | "active" | "deleted" | "favorites";
 
 type Props = {
   projects: Project[];
   defaultView?: ViewMode;
+  defaultTab?: TabView;
   showFilters?: boolean;
   showViewToggle?: boolean;
+  showTabs?: boolean;
+  onRefresh?: () => void;
 };
 
 const Projects = ({
   projects,
   defaultView = "grid",
+  defaultTab = "all",
   showFilters = true,
   showViewToggle = true,
+  showTabs = true,
+  onRefresh,
 }: Props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("recent");
   const [viewMode, setViewMode] = useState<ViewMode>(defaultView);
+  const [activeTab, setActiveTab] = useState<TabView>(defaultTab);
+  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
 
   const [filters, setFilters] = useState({
     showDeleted: false,
@@ -65,11 +92,11 @@ const Projects = ({
     showActive: true,
   });
 
-  const toggleFilter = (key: keyof typeof filters) => {
+  const toggleFilter = useCallback((key: keyof typeof filters) => {
     setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  }, []);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setFilters({
       showDeleted: false,
       showPurchased: false,
@@ -77,7 +104,20 @@ const Projects = ({
       showActive: true,
     });
     setSearchQuery("");
-  };
+    setActiveTab("all");
+  }, []);
+
+  const handleFavoriteToggle = useCallback((id: string) => {
+    setFavoriteIds((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  }, []);
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
@@ -91,28 +131,39 @@ const Projects = ({
 
   const filteredProjects = useMemo(() => {
     let filtered = projects.filter((project) => {
-      // Status filters
+      // Tab filtering
       const isActive = !project.isDeleted;
       const isDeleted = project.isDeleted;
-      // const isPurchased = project.isPurchased || false;
-      const isSellable = project.isSellable || false;
+      const isFavorite = favoriteIds.has(project.id);
 
-      // Apply status filters
-      if (isDeleted && !filters.showDeleted) return false;
-      if (isActive && !filters.showActive && !isDeleted) return false;
-      // if (isPurchased && !filters.showPurchased) return false;
+      if (activeTab === "active" && !isActive) return false;
+      if (activeTab === "deleted" && !isDeleted) return false;
+      if (activeTab === "favorites" && !isFavorite) return false;
+
+      // Status filters (only apply in "all" tab)
+      if (activeTab === "all") {
+        if (isDeleted && !filters.showDeleted) return false;
+        if (isActive && !filters.showActive && !isDeleted) return false;
+      }
+
+      const isSellable = project.isSellable || false;
       if (isSellable && !filters.showSellable) return false;
 
+      // Search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         return (
           project.title.toLowerCase().includes(query) ||
-          project.theme?.toLowerCase().includes(query)
+          project.theme?.toLowerCase().includes(query) ||
+          project.outlines?.some((outline: string) =>
+            outline.toLowerCase().includes(query)
+          )
         );
       }
       return true;
     });
 
+    // Sorting
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "recent":
@@ -122,6 +173,10 @@ const Projects = ({
         case "oldest":
           return (
             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+        case "updated":
+          return (
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
           );
         case "name-asc":
           return a.title.localeCompare(b.title);
@@ -137,17 +192,17 @@ const Projects = ({
     });
 
     return filtered;
-  }, [projects, searchQuery, sortBy, filters]);
+  }, [projects, searchQuery, sortBy, filters, activeTab, favoriteIds]);
 
   const projectCounts = useMemo(() => {
     return {
       all: projects.length,
       active: projects.filter((p) => !p.isDeleted).length,
       deleted: projects.filter((p) => p.isDeleted).length,
-      // purchased: projects.filter((p) => p.isPurchased).length,
+      favorites: projects.filter((p) => favoriteIds.has(p.id)).length,
       sellable: projects.filter((p) => p.isSellable).length,
     };
-  }, [projects]);
+  }, [projects, favoriteIds]);
 
   const gridClasses = {
     grid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4",
@@ -168,16 +223,57 @@ const Projects = ({
 
   return (
     <div className="space-y-6">
+      {/* Tabs */}
+      {showTabs && (
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as TabView)}
+        >
+          <TabsList className="grid w-full grid-cols-4 lg:w-auto">
+            <TabsTrigger value="all" className="gap-2">
+              <Inbox className="h-4 w-4" />
+              <span>All</span>
+              <Badge variant="secondary" className="ml-1 px-1.5 text-xs">
+                {projectCounts.all}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger value="active" className="gap-2">
+              <Zap className="h-4 w-4" />
+              <span>Active</span>
+              <Badge variant="secondary" className="ml-1 px-1.5 text-xs">
+                {projectCounts.active}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger value="favorites" className="gap-2">
+              <Star className="h-4 w-4" />
+              <span>Favorites</span>
+              <Badge variant="secondary" className="ml-1 px-1.5 text-xs">
+                {projectCounts.favorites}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger value="deleted" className="gap-2">
+              <X className="h-4 w-4" />
+              <span>Trash</span>
+              <Badge variant="secondary" className="ml-1 px-1.5 text-xs">
+                {projectCounts.deleted}
+              </Badge>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      )}
+
+      {/* Filters & Controls */}
       {showFilters && (
         <div className="flex flex-col gap-3">
           <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+            {/* Search */}
             <div className="relative w-full sm:w-96">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search projects..."
+                placeholder="Search by title, theme, or content..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-9 pr-9"
               />
               {searchQuery && (
                 <Button
@@ -191,88 +287,84 @@ const Projects = ({
               )}
             </div>
 
+            {/* Controls */}
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Filter className="h-4 w-4" />
-                    Filters
+              {/* Filters Dropdown */}
+              {activeTab === "all" && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Filter className="h-4 w-4" />
+                      Filters
+                      {activeFiltersCount > 0 && (
+                        <Badge
+                          variant="secondary"
+                          className="ml-1 px-1.5 py-0 h-5 text-xs"
+                        >
+                          {activeFiltersCount}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={filters.showActive}
+                      onCheckedChange={() => toggleFilter("showActive")}
+                    >
+                      Active Projects
+                      <span className="ml-auto text-xs text-muted-foreground">
+                        {projectCounts.active}
+                      </span>
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={filters.showDeleted}
+                      onCheckedChange={() => toggleFilter("showDeleted")}
+                    >
+                      Deleted Projects
+                      <span className="ml-auto text-xs text-muted-foreground">
+                        {projectCounts.deleted}
+                      </span>
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="text-xs">
+                      Marketplace
+                    </DropdownMenuLabel>
+                    <DropdownMenuCheckboxItem
+                      checked={filters.showSellable}
+                      onCheckedChange={() => toggleFilter("showSellable")}
+                    >
+                      For Sale
+                      <span className="ml-auto text-xs text-muted-foreground">
+                        {projectCounts.sellable}
+                      </span>
+                    </DropdownMenuCheckboxItem>
                     {activeFiltersCount > 0 && (
-                      <Badge
-                        variant="secondary"
-                        className="ml-1 px-1.5 py-0 h-5 text-xs"
-                      >
-                        {activeFiltersCount}
-                      </Badge>
+                      <>
+                        <DropdownMenuSeparator />
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={clearFilters}
+                          className="w-full justify-start h-8 px-2"
+                        >
+                          <X className="h-3 w-3 mr-2" />
+                          Clear Filters
+                        </Button>
+                      </>
                     )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem
-                    checked={filters.showActive}
-                    onCheckedChange={() => toggleFilter("showActive")}
-                  >
-                    Active Projects
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {projectCounts.active}
-                    </span>
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    checked={filters.showDeleted}
-                    onCheckedChange={() => toggleFilter("showDeleted")}
-                  >
-                    Deleted Projects
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {projectCounts.deleted}
-                    </span>
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel className="text-xs">
-                    Marketplace
-                  </DropdownMenuLabel>
-                  <DropdownMenuCheckboxItem
-                    checked={filters.showPurchased}
-                    onCheckedChange={() => toggleFilter("showPurchased")}
-                  >
-                    Purchased
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {/* {projectCounts.purchased} */}
-                    </span>
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    checked={filters.showSellable}
-                    onCheckedChange={() => toggleFilter("showSellable")}
-                  >
-                    Sellable
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {projectCounts.sellable}
-                    </span>
-                  </DropdownMenuCheckboxItem>
-                  {activeFiltersCount > 0 && (
-                    <>
-                      <DropdownMenuSeparator />
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearFilters}
-                        className="w-full justify-start h-8 px-2"
-                      >
-                        <X className="h-3 w-3 mr-2" />
-                        Clear Filters
-                      </Button>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
 
+              {/* Sort */}
               <Select
                 value={sortBy}
                 onValueChange={(v) => setSortBy(v as SortOption)}
               >
                 <SelectTrigger className="w-[180px]">
-                  <SlidersHorizontal className="h-4 w-4 mr-2" />
+                  <ArrowUpDown className="h-4 w-4 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -280,6 +372,12 @@ const Projects = ({
                     <span className="flex items-center gap-2">
                       <Calendar className="h-4 w-4" />
                       Most Recent
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="updated">
+                    <span className="flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      Recently Updated
                     </span>
                   </SelectItem>
                   <SelectItem value="oldest">Oldest First</SelectItem>
@@ -294,39 +392,97 @@ const Projects = ({
                 </SelectContent>
               </Select>
 
+              {/* View Toggle */}
               {showViewToggle && (
                 <div className="flex items-center gap-1 border rounded-md p-1">
-                  <Button
-                    variant={viewMode === "grid" ? "secondary" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("grid")}
-                    className="h-8 w-8 p-0"
-                    title="Grid view"
-                  >
-                    <LayoutGrid className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "compact" ? "secondary" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("compact")}
-                    className="h-8 w-8 p-0"
-                    title="Compact view"
-                  >
-                    <Grid3x3 className="h-4 w-4" />
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={viewMode === "grid" ? "secondary" : "ghost"}
+                          size="sm"
+                          onClick={() => setViewMode("grid")}
+                          className="h-8 w-8 p-0"
+                        >
+                          <LayoutGrid className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Grid view</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={
+                            viewMode === "compact" ? "secondary" : "ghost"
+                          }
+                          size="sm"
+                          onClick={() => setViewMode("compact")}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Grid3x3 className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Compact view</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={viewMode === "list" ? "secondary" : "ghost"}
+                          size="sm"
+                          onClick={() => setViewMode("list")}
+                          className="h-8 w-8 p-0"
+                        >
+                          <List className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>List view</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
+              )}
+
+              {/* Refresh */}
+              {onRefresh && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={onRefresh}
+                        className="h-9 w-9 p-0"
+                      >
+                        <RefreshCw className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Refresh</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </div>
           </div>
 
+          {/* Active Filters Display */}
           {activeFiltersCount > 0 && (
-            <div className="flex items-center gap-2 flex-wrap">
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="flex items-center gap-2 flex-wrap"
+            >
               <span className="text-xs text-muted-foreground">
                 Active filters:
               </span>
               {searchQuery && (
                 <Badge variant="secondary" className="gap-1">
-                  Search: "{searchQuery}"
+                  Search: "{searchQuery.substring(0, 20)}
+                  {searchQuery.length > 20 ? "..." : ""}"
                   <X
                     className="h-3 w-3 cursor-pointer"
                     onClick={() => setSearchQuery("")}
@@ -342,18 +498,9 @@ const Projects = ({
                   />
                 </Badge>
               )}
-              {filters.showPurchased && (
-                <Badge variant="secondary" className="gap-1">
-                  Purchased
-                  <X
-                    className="h-3 w-3 cursor-pointer"
-                    onClick={() => toggleFilter("showPurchased")}
-                  />
-                </Badge>
-              )}
               {filters.showSellable && (
                 <Badge variant="secondary" className="gap-1">
-                  Sellable
+                  For Sale
                   <X
                     className="h-3 w-3 cursor-pointer"
                     onClick={() => toggleFilter("showSellable")}
@@ -377,19 +524,27 @@ const Projects = ({
               >
                 Clear all
               </Button>
-            </div>
+            </motion.div>
           )}
         </div>
       )}
 
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>
+      {/* Results Summary */}
+      <div className="flex items-center justify-between text-sm">
+        <span className="text-muted-foreground">
           {filteredProjects.length}{" "}
           {filteredProjects.length === 1 ? "project" : "projects"}
-          {searchQuery && ` found`}
+          {searchQuery && " found"}
+          {activeTab !== "all" && ` in ${activeTab}`}
         </span>
+        {filteredProjects.length > 0 && (
+          <span className="text-muted-foreground text-xs">
+            Sorted by {sortBy.replace("-", " ")}
+          </span>
+        )}
       </div>
 
+      {/* Projects Grid */}
       <AnimatePresence mode="popLayout">
         {filteredProjects.length > 0 ? (
           <motion.div
@@ -401,12 +556,13 @@ const Projects = ({
             {filteredProjects.map((project, index) => {
               const {
                 createdAt,
+                updatedAt,
                 id,
                 isDeleted,
                 slides,
                 theme,
-                thumbnail,
                 title,
+                isSellable,
               } = project;
               const created = formatDistanceToNow(new Date(createdAt), {
                 addSuffix: true,
@@ -425,10 +581,20 @@ const Projects = ({
                     projectId={id}
                     title={title}
                     createdAt={created}
+                    updatedAt={
+                      updatedAt
+                        ? formatDistanceToNow(new Date(updatedAt), {
+                            addSuffix: true,
+                          })
+                        : undefined
+                    }
                     isDeleted={isDeleted}
+                    isFavorite={favoriteIds.has(id)}
+                    isSellable={isSellable}
                     slidesData={slides}
                     themeName={theme}
-                    // viewMode={viewMode}
+                    viewMode={viewMode}
+                    onFavoriteToggle={handleFavoriteToggle}
                   />
                 </motion.div>
               );
@@ -436,19 +602,28 @@ const Projects = ({
           </motion.div>
         ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-16 border-2 border-dashed rounded-xl bg-muted/20"
           >
-            <Search className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No projects found</h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <Search className="h-16 w-16 mx-auto text-muted-foreground mb-4 opacity-50" />
+            <h3 className="text-xl font-semibold mb-2">No projects found</h3>
+            <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
               {searchQuery || activeFiltersCount > 0
-                ? `Try adjusting your filters or search terms`
-                : `Create your first project to get started`}
+                ? "Try adjusting your search terms or filters to find what you're looking for"
+                : activeTab === "favorites"
+                ? "You haven't favorited any projects yet. Star projects to see them here!"
+                : activeTab === "deleted"
+                ? "No deleted projects. Deleted items will appear here for recovery."
+                : "Create your first project to get started with presentations"}
             </p>
-            {activeFiltersCount > 0 && (
-              <Button variant="outline" onClick={clearFilters}>
+            {(searchQuery || activeFiltersCount > 0) && (
+              <Button
+                variant="outline"
+                onClick={clearFilters}
+                className="gap-2"
+              >
+                <X className="h-4 w-4" />
                 Clear all filters
               </Button>
             )}
