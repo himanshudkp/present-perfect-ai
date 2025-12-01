@@ -2,9 +2,8 @@
 
 import React, { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { containerVariants } from "@/lib/constants";
+import { containerVariants } from "@/constants";
 import ProjectCard from "./project-card";
-import type { Project } from "@/generated/prisma/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,8 +38,7 @@ import {
   Zap,
   RefreshCw,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { formatDistanceToNow } from "date-fns";
+import { cn, getTimeAgo } from "@/utils";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -49,6 +47,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Project } from "@/generated/prisma/client";
 
 type ViewMode = "grid" | "compact" | "list";
 type SortOption =
@@ -564,9 +563,7 @@ const Projects = ({
                 title,
                 isSellable,
               } = project;
-              const created = formatDistanceToNow(new Date(createdAt), {
-                addSuffix: true,
-              });
+              const created = getTimeAgo(new Date(createdAt));
 
               return (
                 <motion.div
@@ -582,11 +579,7 @@ const Projects = ({
                     title={title}
                     createdAt={created}
                     updatedAt={
-                      updatedAt
-                        ? formatDistanceToNow(new Date(updatedAt), {
-                            addSuffix: true,
-                          })
-                        : undefined
+                      updatedAt ? getTimeAgo(new Date(updatedAt)) : undefined
                     }
                     isDeleted={isDeleted}
                     isFavorite={favoriteIds.has(id)}

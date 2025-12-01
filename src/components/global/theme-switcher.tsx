@@ -3,7 +3,7 @@
 import { Moon, Sun, Monitor } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 

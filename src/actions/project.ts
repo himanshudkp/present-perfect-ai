@@ -1,8 +1,8 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/database/prisma";
 import { authenticateUser } from "./user";
-import { OutlineCard } from "@/lib/types";
+import { OutlineCard } from "@/types";
 
 export const getAllProjects = async () => {
   try {
@@ -141,6 +141,29 @@ export const createProject = async (title: string, outlines: OutlineCard[]) => {
     return { status: 200, data: project };
   } catch (error) {
     console.error("An error occurred in createProject():", error);
+    return { status: 500, error: "An unexpected error occurred." };
+  }
+};
+
+export const getProjectById = async (projectId: string) => {
+  try {
+    const { status, user } = await authenticateUser();
+
+    if (status !== 200 || !user)
+      return { status: 403, error: "User not authenticated" };
+
+    const project = await prisma.project.findFirst({
+      where: {
+        ownerId: user.id,
+        id: projectId,
+      },
+    });
+
+    if (!project) return { status: 404, error: "Project does not exist." };
+
+    return { status: 200, data: project };
+  } catch (error) {
+    console.error("An error occurred in getProjectById():", error);
     return { status: 500, error: "An unexpected error occurred." };
   }
 };

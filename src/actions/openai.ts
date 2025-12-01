@@ -5,7 +5,8 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google/generative-ai";
-import { OutlineCard } from "@/lib/types";
+import { OutlineCard } from "@/types";
+import { env } from "@/lib/env";
 
 type GenerationResult<T> = {
   status: number;
@@ -54,7 +55,7 @@ const safetySettings = [
 ];
 
 const initializeGemini = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = env.GEMINI_API_KEY;
 
   if (!apiKey) {
     throw new Error(
@@ -142,7 +143,7 @@ You are an expert presentation designer. Create a professional presentation outl
 
 **Requirements:**
 - Generate exactly ${slideCount} slide titles
-- Each title should be clear, concise, and engaging (max 10 words)
+- Each title should be clear, concise, and engaging
 - Follow a logical flow: Introduction → Main Content → Conclusion
 - Make titles action-oriented and specific
 - Ensure proper coverage of the topic
@@ -154,8 +155,8 @@ Return ONLY valid JSON with this exact structure:
   "title": "Main presentation title",
   "description": "Brief 1-2 sentence description",
   "outlines": [
-    "Slide 1 title",
-    "Slide 2 title",
+    "Point 1",
+    "Point 2",
     ...
   ]
 }
@@ -163,31 +164,38 @@ Return ONLY valid JSON with this exact structure:
 Do not include any markdown formatting, explanations, or additional text outside the JSON.
 `;
 
-    const result = await retryWithBackoff(async () => {
-      return await model.generateContent(enhancedPrompt);
-    });
+    // const result = await retryWithBackoff(async () => {
+    //   return await model.generateContent(enhancedPrompt);
+    // });
+    const text: OutlineResponse = {
+      outlines: [
+        "MERN Unveiled: Why Choose This Powerful Stack?",
+        "Building Blocks: Mastering MERN Components",
+        "MERN's Future: Trends and Career Paths",
+      ],
+      title: "MERN DEVEloper slides",
+    };
+    // const text = result.response.text();
+    // const parsed = parseGeminiResponse<OutlineResponse>(text);
 
-    const text = result.response.text();
-    const parsed = parseGeminiResponse<OutlineResponse>(text);
+    // if (!parsed || !parsed.outlines || !Array.isArray(parsed.outlines)) {
+    //   console.error("Invalid response structure:", text);
+    //   return {
+    //     status: 500,
+    //     error: "AI returned invalid format. Please try again.",
+    //   };
+    // }
 
-    if (!parsed || !parsed.outlines || !Array.isArray(parsed.outlines)) {
-      console.error("Invalid response structure:", text);
-      return {
-        status: 500,
-        error: "AI returned invalid format. Please try again.",
-      };
-    }
-
-    if (parsed.outlines.length < slideCount - 2) {
-      return {
-        status: 500,
-        error: `Expected ${slideCount} slides but got ${parsed.outlines.length}`,
-      };
-    }
+    // if (parsed.outlines.length < slideCount - 2) {
+    //   return {
+    //     status: 500,
+    //     error: `Expected ${slideCount} slides but got ${parsed.outlines.length}`,
+    //   };
+    // }
 
     return {
       status: 200,
-      data: parsed,
+      data: text,
     };
   } catch (error: any) {
     console.error("Error in generateCreativePrompt:", error);

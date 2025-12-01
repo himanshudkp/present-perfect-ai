@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 type ComparisonOption = {
   id: string;

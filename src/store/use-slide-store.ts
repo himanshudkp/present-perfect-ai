@@ -1,5 +1,5 @@
 import { Project } from "@/generated/prisma/client";
-import { Slide } from "@/lib/types";
+import { Slide, Theme } from "@/types";
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
@@ -20,7 +20,23 @@ interface SlideState {
   setCurrentSlideIndex: (index: number) => void;
   nextSlide: () => void;
   previousSlide: () => void;
+
+  currentTheme: Theme;
+  setCurrentTheme: (theme: Theme) => void;
 }
+
+const defaultTheme: Theme = {
+  fontFamily: "Inter, sans-serif",
+  fontColor: "#333333",
+  bgColor: "#F0F0F0",
+  slideBgColor: "#FFFFFF",
+  accentColor: "#3B82F6",
+  type: "light",
+  name: "",
+  gradientBgColor: "",
+  navbarColor: "",
+  sidebarColor: "",
+};
 
 export const useSlideStore = create<SlideState>()(
   devtools(
@@ -29,10 +45,10 @@ export const useSlideStore = create<SlideState>()(
         slides: [],
         project: null,
         currentSlideIndex: 0,
+        currentTheme: defaultTheme,
 
-        // Slide operations
         setSlides: (slides) => set({ slides }, false, "setSlides"),
-
+        setCurrentTheme: (theme: Theme) => set(() => ({ currentTheme: theme })),
         addSlide: (slide) =>
           set(
             (state) => ({

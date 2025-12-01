@@ -3,12 +3,12 @@
 import { usePromptStore } from "@/store/use-prompt-store";
 import React, { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/constants";
+import { containerVariants, itemVariants } from "@/constants";
 import { Card } from "../ui/card";
-import { timeAgo, cn } from "@/lib/utils";
+import { cn, getTimeAgo } from "@/utils";
 import { Button } from "../ui/button";
 import { useCreativeAiStore } from "@/store/use-creative-ai-store";
-import { showError, showSuccess } from "@/lib/toast";
+import { showError, showSuccess } from "@/components/toast";
 import {
   Clock,
   Sparkles,
@@ -334,7 +334,9 @@ const RecentPrompts = ({
                       <div className="flex flex-col gap-2 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 shrink-0" />
-                          <span className="truncate">{timeAgo(createdAt)}</span>
+                          <span className="truncate">
+                            {getTimeAgo(createdAt)}
+                          </span>
                         </div>
                         <div className="flex items-center gap-1.5">
                           <FileText className="w-3.5 h-3.5 shrink-0" />

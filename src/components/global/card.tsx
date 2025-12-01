@@ -1,10 +1,10 @@
 "use client";
 
-import { OutlineCard } from "@/lib/types";
+import { OutlineCard } from "@/types";
 import React, { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card as ShadCNCard } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import {

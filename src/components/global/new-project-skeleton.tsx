@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 type Props = {
   className?: string;

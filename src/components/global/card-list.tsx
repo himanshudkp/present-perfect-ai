@@ -1,10 +1,10 @@
 "use client";
 
-import { OutlineCard } from "@/lib/types";
+import { OutlineCard } from "@/types";
 import React, { useCallback, useRef, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GripVertical, Plus, Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import { toast } from "sonner";
 import Card from "./card";
 import AddCardButton from "./add-card-button";

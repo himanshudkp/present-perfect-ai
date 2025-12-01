@@ -4,7 +4,7 @@ import { useCreativeAiStore } from "@/store/use-creative-ai-store";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/constants";
+import { containerVariants, itemVariants } from "@/constants";
 import { Button } from "../ui/button";
 import {
   ChevronLeft,
@@ -35,8 +35,8 @@ import { usePromptStore } from "@/store/use-prompt-store";
 import RecentPrompts from "./recent-prompts";
 import { toast } from "sonner";
 import { generateCreativePrompt, regenerateSlide } from "@/actions/openai";
-import { cn } from "@/lib/utils";
-import { OutlineCard } from "@/lib/types";
+import { cn } from "@/utils";
+import { OutlineCard } from "@/types";
 import { createProject } from "@/actions/project";
 import { useSlideStore } from "@/store/use-slide-store";
 import { Badge } from "../ui/badge";
@@ -83,7 +83,7 @@ const CreateWithAI = ({ onBack }: Props) => {
   } = useCreativeAiStore();
 
   const { prompts, addPrompt } = usePromptStore();
-  const { setProject, setSlides } = useSlideStore();
+  const { setProject, setSlides, slides } = useSlideStore();
 
   // Computed values
   const cardCount = outlines.length;
@@ -307,15 +307,19 @@ const CreateWithAI = ({ onBack }: Props) => {
   const handleCreatePresentation = useCallback(async () => {
     if (!isReady) {
       if (!presentationTitle.trim()) {
+        console.log("presentationTitle");
         toast.error("Please enter a presentation title");
         return;
       }
       if (outlines.length === 0) {
+        console.log("outlines.length");
         toast.error("Please generate or add slides");
         return;
       }
       return;
     }
+
+    console.log("Outer");
 
     setIsCreating(true);
 
@@ -330,9 +334,11 @@ const CreateWithAI = ({ onBack }: Props) => {
       }
 
       setProject(res.data);
-      if (res.data.slides) {
-        setSlides(JSON.parse(JSON.stringify(res.data.slides)));
-      }
+
+      // if (res.data.outlines) {
+      //   setSlides(JSON.parse(JSON.stringify(res.data.outlines)));
+      //   console.log({ slides });
+      // }
 
       // Save to prompt history
       addPrompt({
@@ -356,7 +362,7 @@ const CreateWithAI = ({ onBack }: Props) => {
         description: "Redirecting to theme selection...",
       });
 
-      router.push(`/ppt/${res.data.id}/select-theme`);
+      router.push(`/presentation/${res.data.id}/select-theme`);
     } catch (error) {
       console.error("Creation error:", error);
       toast.error("Failed to create presentation", {

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { FileText, Plus, ArrowRight } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import Link from "next/link";
 
 const ProjectNotFound = () => {

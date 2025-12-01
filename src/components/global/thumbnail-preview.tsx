@@ -1,4 +1,4 @@
-import { Slide, Theme } from "@/lib/types";
+import { Slide, Theme } from "@/types";
 import Image from "next/image";
 import React from "react";
 
@@ -31,7 +31,7 @@ const ThumbnailPreview = ({ slides, theme }: Props) => {
             alt="image"
             width={0}
             height={0}
-            src={""}
+            src={"/logo.png"}
           />
         </div>
       )}

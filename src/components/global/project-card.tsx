@@ -1,16 +1,15 @@
 "use client";
 
-import type { JsonValue } from "@prisma/client/runtime/library";
 import React, { useCallback, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { itemVariants, THEMES } from "@/lib/constants";
+import { itemVariants, THEMES } from "@/constants";
 import { useSlideStore } from "@/store/use-slide-store";
-import { cn, timeAgo } from "@/lib/utils";
+import { cn, getTimeAgo } from "@/utils";
 import { useRouter } from "next/navigation";
 import ThumbnailPreview from "./thumbnail-preview";
 import AlertDialogBox from "./alert-dialog-box";
 import { Button } from "../ui/button";
-import { showSuccess, showError } from "@/lib/toast";
+import { showSuccess, showError } from "@/components/toast";
 import { deleteProject, recoverProject } from "@/actions/project";
 import {
   RotateCcw,
@@ -40,6 +39,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import type { JsonValue } from "@/generated/prisma/internal/prismaNamespace";
 
 type Props = {
   projectId: string;
@@ -224,7 +224,7 @@ const ProjectCard = ({
               <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  {timeAgo(createdAt)}
+                  {getTimeAgo(new Date(createdAt))}
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
@@ -634,7 +634,7 @@ const ProjectCard = ({
         {/* Metadata */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Clock className="h-3 w-3" />
-          <span>{timeAgo(createdAt)}</span>
+          <span>{getTimeAgo(new Date(createdAt))}</span>
         </div>
 
         {/* Actions */}

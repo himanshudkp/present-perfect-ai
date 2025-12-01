@@ -4,7 +4,7 @@ import { useStartScratchStore } from "@/store/use-start-scratch";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/constants";
+import { containerVariants, itemVariants } from "@/constants";
 import { Button } from "../ui/button";
 import {
   ChevronLeft,
@@ -32,12 +32,12 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import CardList from "./card-list";
-import { OutlineCard } from "@/lib/types";
-import { showError, showSuccess } from "@/lib/toast";
+import { OutlineCard } from "@/types";
+import { showError, showSuccess } from "@/components/toast";
 import { createProject } from "@/actions/project";
 import { useSlideStore } from "@/store/use-slide-store";
 import { Badge } from "../ui/badge";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import {
   Card,
   CardContent,

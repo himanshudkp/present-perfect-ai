@@ -1,4 +1,4 @@
-import { OutlineCard } from "@/lib/types";
+import { OutlineCard } from "@/types";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 

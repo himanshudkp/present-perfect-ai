@@ -12,7 +12,7 @@ import {
   BarChart3,
   Activity,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -145,7 +145,7 @@ const DashboardHeader = ({
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
               >
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md">
+                <div className="h-10 w-10 rounded-full bg-linear-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold text-lg shadow-md">
                   {userName.charAt(0).toUpperCase()}
                 </div>
               </motion.div>
@@ -169,7 +169,7 @@ const DashboardHeader = ({
               <FileText className="h-7 w-7 text-primary" />
             </motion.div>
             <div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-foreground bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+              <h1 className="text-3xl sm:text-4xl font-bold text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text">
                 Projects
               </h1>
               <p
@@ -193,25 +193,6 @@ const DashboardHeader = ({
               </p>
             </div>
           </div>
-
-          {/* Milestone Badge */}
-          {hasProjects && projectCount >= 10 && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex items-center gap-2"
-            >
-              <Award className="h-4 w-4 text-amber-500" />
-              <span className="text-xs font-medium text-muted-foreground">
-                {projectCount >= 50
-                  ? "🎉 Power User!"
-                  : projectCount >= 25
-                  ? "🌟 Expert Creator"
-                  : "✨ Getting Started"}
-              </span>
-            </motion.div>
-          )}
         </motion.div>
 
         {/* Right Section - Actions */}
@@ -238,85 +219,17 @@ const DashboardHeader = ({
               </TooltipProvider>
             )}
 
-            <Button
+            {/* <Button
               onClick={handleCreateNew}
               size="lg"
               className="gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary hover:to-primary/90 shadow-lg hover:shadow-xl transition-all"
             >
               <Plus className="h-4 w-4" />
               <span>New Project</span>
-            </Button>
+            </Button> */}
           </motion.div>
         )}
       </div>
-
-      {/* Stats Section */}
-      {hasProjects && showStats && (
-        <motion.div
-          variants={itemVariants}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-3"
-        >
-          <AnimatePresence>
-            {stats.map(
-              (stat, index) =>
-                stat.show && (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, y: 20 }}
-                    transition={{
-                      delay: index * 0.1,
-                      duration: 0.3,
-                      type: "spring",
-                      stiffness: 200,
-                    }}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    className={cn(
-                      "relative overflow-hidden rounded-xl border p-4",
-                      "transition-all duration-200 cursor-pointer",
-                      stat.bgColor,
-                      stat.borderColor,
-                      "hover:shadow-md"
-                    )}
-                  >
-                    {/* Background Pattern */}
-                    <div className="absolute inset-0 opacity-5">
-                      <div className="absolute inset-0 bg-gradient-to-br from-current to-transparent" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="relative space-y-2">
-                      <div className="flex items-center justify-between">
-                        <stat.icon className={cn("h-5 w-5", stat.color)} />
-                        {stat.label === "Active" && (
-                          <motion.div
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                            className={cn("h-2 w-2 rounded-full", stat.color)}
-                          />
-                        )}
-                      </div>
-
-                      <div>
-                        <p className="text-2xl font-bold text-foreground">
-                          {stat.value}
-                        </p>
-                        <p className="text-xs font-medium text-muted-foreground">
-                          {stat.label}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )
-            )}
-          </AnimatePresence>
-        </motion.div>
-      )}
 
       {/* Quick Actions / Recent Activity */}
       {hasProjects && recentActivityCount > 0 && (
@@ -332,29 +245,6 @@ const DashboardHeader = ({
             </span>{" "}
             updated in the last 7 days
           </p>
-        </motion.div>
-      )}
-
-      {/* Empty State Hint */}
-      {!hasProjects && (
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-col sm:flex-row items-center gap-4 p-6 rounded-xl bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20"
-        >
-          <div className="flex-shrink-0">
-            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <Plus className="h-8 w-8 text-primary" />
-            </div>
-          </div>
-          <div className="flex-1 text-center sm:text-left space-y-1">
-            <h3 className="font-semibold text-foreground">
-              Ready to create something amazing?
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Click "New Project" to start building your first presentation with
-              AI or from scratch
-            </p>
-          </div>
         </motion.div>
       )}
 
