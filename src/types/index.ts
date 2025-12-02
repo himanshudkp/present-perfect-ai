@@ -76,9 +76,9 @@ export type Page =
   | "create"
   | "creative-ai"
   | "create-from-scratch"
-  | "/templates";
+  | "templates";
 
-export type ActionCategory = "navigation" | "create" | "search" | "settings";
+export type ActionCategory = "navigation" | "create" | "settings";
 
 export interface Action {
   id: string;
@@ -90,3 +90,28 @@ export interface Action {
   keywords: string[];
   shortcut?: string;
 }
+
+export interface ProjectFilters {
+  showDeleted: boolean;
+  showPurchased: boolean;
+  showSellable: boolean;
+  showActive: boolean;
+}
+
+export interface ProjectsState {
+  searchQuery: string;
+  sortBy: SortOption;
+  viewMode: ViewMode;
+  activeTab: TabView;
+  filters: ProjectFilters;
+}
+
+export type SortOption =
+  | "recent"
+  | "oldest"
+  | "updated"
+  | "name-asc"
+  | "name-desc"
+  | "slides";
+export type ViewMode = "grid" | "compact" | "list";
+export type TabView = "all" | "active" | "deleted" | "favorites";

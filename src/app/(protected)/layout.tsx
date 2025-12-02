@@ -1,12 +1,12 @@
 import { getRecentProjects } from "@/actions/project";
 import { authenticateUser } from "@/actions/user";
-import AppSidebar from "@/components/app-sidebar";
-import UpperInfoBar from "@/components/upper-info-bar";
+import AppSidebar from "@/components/app-sidebar/app-sidebar";
+import UpperInfoBar from "@/components/top-info-bar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 import React, { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import SidebarSkeleton from "@/components/app-sidebar/skeleton-loader";
+import SidebarSkeleton from "@/components/app-sidebar/sidebar-keleton";
 import RouteTransition from "@/components/route-transition";
 
 interface Props {

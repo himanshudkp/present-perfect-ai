@@ -1,10 +1,17 @@
 import { getAllProjects } from "@/actions/project";
-import Projects from "@/components/global/projects";
-import DashboardHeader from "@/components/global/dashboard-header";
-import ProjectNotFound from "@/components/global/project-not-found";
-import DashboardErrorPage from "@/components/global/dashboard-error-page";
+import Projects from "@/components/dashboard/projects";
+import DashboardHeader from "@/components/dashboard/dashboard-header";
+import ProjectNotFound from "@/components/dashboard/project-not-found";
+import DashboardErrorPage from "@/components/dashboard-error-page";
+import { type TabView } from "@/types";
 
-const DashboardPage = async () => {
+const DashboardPage = async ({
+  searchParams,
+}: {
+  searchParams: { filter?: string };
+}) => {
+  const filter = searchParams.filter as TabView;
+
   try {
     const [allProjects] = await Promise.all([
       getAllProjects(),
@@ -21,9 +28,17 @@ const DashboardPage = async () => {
           projectCount={projectCount}
           hasProjects={hasProjects}
         />
-
         <div className="w-full">
-          {hasProjects ? <Projects projects={projects} /> : <ProjectNotFound />}
+          {hasProjects ? (
+            <Projects
+              projects={projects}
+              filter={filter}
+              defaultTab="all"
+              defaultView="grid"
+            />
+          ) : (
+            <ProjectNotFound />
+          )}
         </div>
       </div>
     );

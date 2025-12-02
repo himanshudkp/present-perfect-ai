@@ -1,14 +1,19 @@
 import React, { Suspense } from "react";
-import NewProjectSkeleton from "@/components/global/new-project-skeleton";
-import RenderPage from "@/components/global/render-page";
+import NewProjectSkeleton from "@/components/new-project-skeleton";
+import RenderPage from "@/components/render-page";
+import type { Page } from "@/types";
 
-type Props = {};
+const CreateNewProject = async ({
+  searchParams,
+}: {
+  searchParams: { mode?: string };
+}) => {
+  const mode = searchParams.mode as Page;
 
-const CreateNewProject = async (props: Props) => {
   return (
     <main className="w-full h-full pt-6">
       <Suspense fallback={<NewProjectSkeleton />}>
-        <RenderPage />
+        <RenderPage mode={mode} />
       </Suspense>
     </main>
   );

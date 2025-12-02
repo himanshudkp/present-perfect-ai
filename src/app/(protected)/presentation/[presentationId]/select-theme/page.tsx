@@ -1,4 +1,4 @@
-import ThemePreview from "@/components/select-theme/theme-preview";
+import ThemePreview from "@/components/project-theme/theme-preview";
 import React from "react";
 
 type Props = {};

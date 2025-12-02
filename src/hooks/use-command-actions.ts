@@ -1,5 +1,6 @@
 "use client";
 
+import { usePromptStore } from "@/store/use-prompt-store";
 import { Action } from "@/types";
 import {
   Brain,
@@ -17,20 +18,11 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 export const useCommandActions = () => {
+  const { setPage } = usePromptStore();
   const router = useRouter();
 
   return useMemo<Action[]>(
     () => [
-      {
-        id: "home",
-        title: "Go to Home",
-        description: "Navigate to dashboard",
-        icon: Home,
-        action: () => router.push("/dashboard"),
-        category: "navigation",
-        keywords: ["home", "dashboard", "main"],
-        shortcut: "H",
-      },
       {
         id: "projects",
         title: "View All Projects",
@@ -46,7 +38,7 @@ export const useCommandActions = () => {
         title: "Recent Projects",
         description: "View recently edited",
         icon: Clock,
-        action: () => router.push("/dashboard?filter=recent"),
+        action: () => router.push("/dashboard?filter=active"),
         category: "navigation",
         keywords: ["recent", "history", "last"],
       },
@@ -55,7 +47,7 @@ export const useCommandActions = () => {
         title: "Starred Projects",
         description: "View your favorites",
         icon: Star,
-        action: () => router.push("/dashboard?filter=starred"),
+        action: () => router.push("/dashboard?filter=favorites"),
         category: "navigation",
         keywords: ["starred", "favorites", "bookmarks"],
       },
@@ -74,7 +66,10 @@ export const useCommandActions = () => {
         title: "Generate with AI",
         description: "Use AI to create slides",
         icon: Brain,
-        action: () => router.push("/new-project?mode=ai"),
+        action: () => {
+          router.push("/new-project");
+          setPage("creative-ai");
+        },
         category: "create",
         keywords: ["ai", "generate", "creative", "automatic"],
         shortcut: "A",
@@ -84,7 +79,10 @@ export const useCommandActions = () => {
         title: "Create Manually",
         description: "Build from scratch",
         icon: FileText,
-        action: () => router.push("/new-project?mode=manual"),
+        action: () => {
+          router.push("/new-project");
+          setPage("create-from-scratch");
+        },
         category: "create",
         keywords: ["manual", "scratch", "custom"],
         shortcut: "M",

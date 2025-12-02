@@ -1,4 +1,4 @@
-import { CommonAuthSkeleton } from "@/components/global/common-auth-skeleton";
+import { CommonAuthSkeleton } from "@/components/common-auth-skeleton";
 import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {

@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@clerk/nextjs": "^6.35.1",
     "@clerk/themes": "^2.4.36",
@@ -48,8 +51,11 @@
     "cmdk": "^1.1.1",
     "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
+    "faker": "^6.6.6",
     "framer-motion": "^12.23.24",
+    "html2canvas": "^1.4.1",
     "input-otp": "^1.4.2",
+    "jspdf": "^3.0.4",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "next": "15.5.6",
@@ -66,12 +72,14 @@
     "recharts": "^2.15.4",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
+    "tsx": "^4.21.0",
     "vaul": "^1.1.2",
     "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@faker-js/faker": "^10.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

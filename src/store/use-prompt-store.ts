@@ -122,7 +122,7 @@ export type PromptHistory = {
   outlines: OutlineCard[];
 };
 
-type Page = "create" | "creative-ai" | "create-scratch";
+type Page = "create" | "creative-ai" | "create-from-scratch";
 
 type PromptStore = {
   page: Page;
