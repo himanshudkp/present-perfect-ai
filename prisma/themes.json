@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Modern Light",
+    "type": "light"
+  },
+  {
+    "name": "Neo Dark",
+    "type": "dark"
+  },
+  {
+    "name": "Oceanic",
+    "type": "light"
+  },
+  {
+    "name": "Forest",
+    "type": "light"
+  },
+  {
+    "name": "Midnight Purple",
+    "type": "dark"
+  }
+]

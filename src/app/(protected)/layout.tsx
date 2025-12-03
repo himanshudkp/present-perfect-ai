@@ -1,16 +1,39 @@
-export const dynamic = "force-dynamic";
+import { getRecentProjects } from "@/actions/project";
 import { authenticateUser } from "@/actions/user";
+import AppSidebar from "@/components/app-sidebar/app-sidebar";
+import UpperInfoBar from "@/components/top-info-bar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import SidebarSkeleton from "@/components/app-sidebar/sidebar-skeleton";
+import RouteTransition from "@/components/route-transition";
 
-type Props = {
+interface Props {
   children: React.ReactNode;
-};
+}
 
 const Layout = async ({ children }: Props) => {
   const auth = await authenticateUser();
-  if (!auth.user) return redirect("/sign-in");
-  return <div className="w-full min-h-screen">{children}</div>;
+
+  if (!auth.user) {
+    redirect("/sign-in");
+  }
+
+  const recentProjects = await getRecentProjects();
+
+  return (
+    <SidebarProvider>
+      <AppSidebar recentProjects={recentProjects.data || []} user={auth.user} />
+      <SidebarInset>
+        <UpperInfoBar user={auth.user} />
+        <div className="p-4">
+          <RouteTransition />
+          {children}
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
 };
 
 export default Layout;
