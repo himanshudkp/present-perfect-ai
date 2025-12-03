@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { Search, Command } from "lucide-react";
+import { useCommandActions } from "@/hooks/command-palette/use-command-actions";
+import { useFilteredActions } from "@/hooks/command-palette/use-filtered-actions";
+import { useInputFocus } from "@/hooks/command-palette/use-input-focus";
+import { useKeyboardNavigation } from "@/hooks/command-palette/use--keyboard-navigation";
+import { useGlobalShortcuts } from "@/hooks/command-palette/use-global-shortcuts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,16 +15,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useCommandActions } from "@/hooks/use-command-actions";
-import { useFilteredActions } from "@/hooks/use-filtered-actions";
-import { useInputFocus } from "@/hooks/use-input-focus";
-import { Action } from "@/types";
-import { useKeyboardNavigation } from "@/hooks/use--keyboard-navigation";
-import { useGlobalShortcuts } from "@/hooks/use-global-shortcuts";
 import { EmptySearchResult } from "./empty-search";
-import { CATEGORY_ORDER } from "@/utils/constants";
 import { CategorySection } from "./category-section";
 import { CommandFooter } from "./command-footer";
+import { CATEGORY_ORDER } from "@/utils/constants";
+import type { Action } from "@/types";
 
 const CommandPalette = ({
   onNavigate,

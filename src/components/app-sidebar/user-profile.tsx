@@ -1,6 +1,8 @@
-import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { UserButton } from "@clerk/nextjs";
+"use client";
+
 import { memo } from "react";
+import { UserButton } from "@clerk/nextjs";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 
 const AVATAR_APPEARANCE = {
   elements: { avatarBox: "h-9 w-9" },

@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useCallback, useMemo, useState, memo } from "react";
-import { useSlideStore } from "@/store/use-slide-store";
+import { useCallback, useMemo, useState, memo } from "react";
 import { useRouter } from "next/navigation";
-import { showSuccess } from "@/components/toast-message";
-import type { Slide } from "@/types";
-import type { Project } from "@/generated/prisma/client";
-import { THEMES } from "@/utils/constants";
-import { getTimeAgo } from "@/utils/utils";
 import { ListViewCard } from "./list-view-card";
 import { GridViewCard } from "./grid-view-card";
+import { showSuccess } from "@/components/toast-message";
+import { THEMES } from "@/utils/constants";
+import { getTimeAgo } from "@/utils/utils";
+import { useSlideStore } from "@/store/use-slide-store";
+import type { Slide } from "@/types";
+import type { Project } from "@/generated/prisma/client";
 
 interface ProjectCardProps {
   project: Project;

@@ -1,11 +1,11 @@
 "use client";
 
-import { Moon, Sun, Monitor } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
-import { cn } from "@/utils/utils";
 import { useTheme } from "next-themes";
-import { toast } from "sonner";
+import { motion, AnimatePresence } from "motion/react";
+import { Moon, Sun, Monitor } from "lucide-react";
+import { cn } from "@/utils/utils";
+import { showSuccess } from "../toast-message";
 
 const THEMES = [
   {
@@ -31,9 +31,35 @@ const THEMES = [
   },
 ];
 
+const THEME_BUTTON_ANIM = {
+  whileHover: { scale: 1.05 },
+  whileTap: { scale: 0.95 },
+} as const;
+
+const ACTIVE_THEME_ANIMATION = {
+  type: "spring",
+  duration: 0.4,
+  bounce: 0.3,
+} as const;
+
+const activeThemeAnimation = (
+  isActive: boolean
+): {
+  rotate: number;
+  scale: number;
+} => {
+  return {
+    rotate: isActive ? 360 : 0,
+    scale: isActive ? 1.1 : 1,
+  };
+};
+
+const INITIAL_EXIT_ANIM = { opacity: 0, scale: 0.8, y: -5 } as const;
+const MOTION_ANIMATE = { opacity: 1, scale: 1, y: 0 } as const;
+
 const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme, themes } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [hoveredTheme, setHoveredTheme] = useState<string | null>(null);
 
   const handleThemeClick = useCallback(
@@ -43,9 +69,7 @@ const ThemeSwitcher = () => {
       const themeName =
         THEMES.find((t) => t.key === themeKey)?.name || themeKey;
 
-      toast.success(`Switched to ${themeName} theme`, {
-        duration: 2000,
-      });
+      showSuccess("Success", `Switched to ${themeName} theme`);
     },
     [setTheme]
   );
@@ -109,30 +133,18 @@ const ThemeSwitcher = () => {
               onMouseLeave={() => setHoveredTheme(null)}
               type="button"
               title={`Switch to ${label.toLowerCase()}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              {...THEME_BUTTON_ANIM}
             >
               {isActive && (
                 <motion.div
-                  className={cn(
-                    "absolute inset-0 rounded-full",
-                    "bg-linear-to-br from-primary/20 to-primary/10",
-                    "border border-primary/30"
-                  )}
+                  className="absolute inset-0 rounded-full bg-linear-to-br from-primary/20 to-primary/10 border border-primary/30"
                   layoutId="activeTheme"
-                  transition={{
-                    type: "spring",
-                    duration: 0.4,
-                    bounce: 0.3,
-                  }}
+                  transition={ACTIVE_THEME_ANIMATION}
                 />
               )}
 
               <motion.div
-                animate={{
-                  rotate: isActive ? 360 : 0,
-                  scale: isActive ? 1.1 : 1,
-                }}
+                animate={activeThemeAnimation(isActive)}
                 transition={{
                   duration: isActive ? 0.5 : 0.2,
                   type: "spring",
@@ -152,9 +164,9 @@ const ThemeSwitcher = () => {
 
               {hoveredTheme === key && !isActive && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: -5 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: -5 }}
+                  initial={INITIAL_EXIT_ANIM}
+                  animate={MOTION_ANIMATE}
+                  exit={INITIAL_EXIT_ANIM}
                   transition={{ duration: 0.2 }}
                   className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 px-3 py-1.5 rounded-md bg-foreground text-background text-xs font-medium whitespace-nowrap pointer-events-none z-50 shadow-lg"
                 >

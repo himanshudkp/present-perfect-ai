@@ -1,6 +1,6 @@
 "use client";
 
-import { ViewMode } from "@/types";
+import { memo } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Button } from "../ui/button";
-import { memo } from "react";
+import type { ViewMode } from "@/types";
 
 interface ViewToggleButtonProps {
   mode: ViewMode;

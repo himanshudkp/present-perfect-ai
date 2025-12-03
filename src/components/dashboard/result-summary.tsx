@@ -1,14 +1,15 @@
-import type { SortOption, TabView } from "@/types";
-import { memo } from "react";
+"use client";
 
+import { memo } from "react";
+import type { SortOption, TabView } from "@/types";
+
+const formatSortLabel = (sortBy: SortOption) => sortBy.replace("-", " ");
 interface ResultSummaryProps {
   searchQuery: string;
   activeTab: TabView;
   sortBy: SortOption;
   filteredProjectsCount: number;
 }
-
-const formatSortLabel = (sortBy: SortOption) => sortBy.replace("-", " ");
 
 const ResultSummary = ({
   filteredProjectsCount,

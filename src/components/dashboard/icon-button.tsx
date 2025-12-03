@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -7,9 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/utils/utils";
 import { Star } from "lucide-react";
-import { memo } from "react";
+import { cn } from "@/utils/utils";
 
 interface IconButtonProps {
   icon: typeof Star;

@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import type { Project } from "@/generated/prisma/client";
 import { ProjectFilters, SortOption, TabView } from "@/types";
 

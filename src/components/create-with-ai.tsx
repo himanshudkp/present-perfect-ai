@@ -307,19 +307,15 @@ const CreateWithAI = ({ onBack }: Props) => {
   const handleCreatePresentation = useCallback(async () => {
     if (!isReady) {
       if (!presentationTitle.trim()) {
-        console.log("presentationTitle");
         toast.error("Please enter a presentation title");
         return;
       }
       if (outlines.length === 0) {
-        console.log("outlines.length");
         toast.error("Please generate or add slides");
         return;
       }
       return;
     }
-
-    console.log("Outer");
 
     setIsCreating(true);
 
@@ -337,7 +333,6 @@ const CreateWithAI = ({ onBack }: Props) => {
 
       // if (res.data.outlines) {
       //   setSlides(JSON.parse(JSON.stringify(res.data.outlines)));
-      //   console.log({ slides });
       // }
 
       // Save to prompt history

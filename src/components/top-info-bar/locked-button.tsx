@@ -1,9 +1,9 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
-import { memo } from "react";
 
 interface LockedButtonProps {
   isHovering: boolean;

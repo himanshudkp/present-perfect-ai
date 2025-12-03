@@ -1,17 +1,17 @@
 "use client";
 
-import React, { memo } from "react";
+import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ITEM_VARIANTS } from "@/utils/constants";
+import { Badge } from "@/components/ui/badge";
 import { Clock, FileText, Eye } from "lucide-react";
+import ThumbnailPreview from "./thumbnail-preview";
 import StatusBadges from "./status-badges";
 import { LoadingOverlay } from "./loading-overlay";
+import ActionButtons from "./action-buttons";
+import { cn } from "@/utils/utils";
+import { ITEM_VARIANTS } from "@/utils/constants";
 import type { Project } from "@/generated/prisma/client";
 import type { Slide } from "@/types";
-import { cn } from "@/utils/utils";
-import { Badge } from "@/components/ui/badge";
-import ActionButtons from "./action-buttons";
-import ThumbnailPreview from "./thumbnail-preview";
 
 const SELECTION_BAR_VARIANTS = {
   initial: { scaleY: 0 },

@@ -1,5 +1,7 @@
 "use client";
 
+import { memo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,11 +13,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { Loader2, Trash2, RotateCcw, X } from "lucide-react";
 import { cn } from "@/utils/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { memo } from "react";
-import { Button } from "@/components/ui/button";
 
 interface ConfirmDialogProps {
   trigger?: React.ReactNode;
@@ -60,11 +60,6 @@ const ICON_ANIMATION = {
   initial: { scale: 0, rotate: -180 },
   animate: { scale: 1, rotate: 0 },
   transition: { type: "spring", stiffness: 200, damping: 15 },
-} as const;
-
-const SHAKE_ANIMATION = {
-  animate: { rotate: [0, -10, 10, -10, 0] },
-  transition: { duration: 0.5, delay: 0.2 },
 } as const;
 
 const DialogIcon = memo(

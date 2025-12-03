@@ -2,8 +2,8 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Search, X } from "lucide-react";
 import { Button } from "../ui/button";
+import { Search, X } from "lucide-react";
 import type { TabView } from "@/types";
 
 const ANIM = {

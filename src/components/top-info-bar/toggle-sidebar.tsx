@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -8,7 +9,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { memo } from "react";
 
 const ToggleSidebar = () => {
   return (

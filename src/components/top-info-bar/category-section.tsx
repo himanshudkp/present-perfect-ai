@@ -1,9 +1,9 @@
 "use client";
 
-import { CATEGORY_LABELS } from "@/utils/constants";
-import type { Action, ActionCategory } from "@/types";
 import { memo } from "react";
 import { ActionItem } from "./action-item";
+import { CATEGORY_LABELS } from "@/utils/constants";
+import type { Action, ActionCategory } from "@/types";
 
 interface CategorySectionProps {
   category: ActionCategory;
@@ -23,7 +23,6 @@ export const CategorySection = memo(
     onAction,
     onSelectIndex,
   }: CategorySectionProps) => {
-    console.log({ actions });
     if (Array.isArray(actions) && !actions.length) return null;
 
     return (

@@ -1,3 +1,8 @@
+"use client";
+
+import { memo } from "react";
+import { UserButton } from "@clerk/nextjs";
+import { Crown } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -5,9 +10,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/utils/utils";
-import { UserButton } from "@clerk/nextjs";
-import { Crown } from "lucide-react";
-import { memo } from "react";
 
 const COLLAPSED_AVATAR_APPEARANCE = {
   elements: { avatarBox: "h-10 w-10" },

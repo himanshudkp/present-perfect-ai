@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { SidebarGroupLabel } from "../ui/sidebar";
-import { motion } from "framer-motion";
-import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+import { useCallback, memo } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Plus } from "lucide-react";
+import { SidebarGroupLabel } from "../ui/sidebar";
+import { Button } from "../ui/button";
 
 const QUICK_ACTION_VARIANTS = {
   hidden: { opacity: 0, x: -20 },
@@ -14,7 +14,7 @@ const QUICK_ACTION_VARIANTS = {
 
 const MOTION_TRANSITION = { delay: 0.1 } as const;
 
-export default function QuickAction() {
+const QuickAction = () => {
   const router = useRouter();
 
   const handleNewProject = useCallback(() => {
@@ -47,4 +47,6 @@ export default function QuickAction() {
       </motion.div>
     </>
   );
-}
+};
+
+export default memo(QuickAction);

@@ -10,12 +10,10 @@ export const useKeyboardNavigation = (
 ) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Reset selected index when search changes
   useEffect(() => {
     setSelectedIndex(0);
   }, [filteredActions]);
 
-  // Handle keyboard events
   useEffect(() => {
     if (!open) return;
 

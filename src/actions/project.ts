@@ -21,8 +21,6 @@ export const getAllProjects = async () => {
       },
     });
 
-    console.log(projects);
-
     if (projects.length === 0)
       return { status: 404, error: "No projects found" };
 

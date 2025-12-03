@@ -45,7 +45,7 @@ const Presentation = (props: Props) => {
 
         setSlides(JSON.parse(JSON.stringify(project.slides)));
       } catch (error) {
-        console.log("Error while fetching project: ", error);
+        console.error("Error while fetching project: ", error);
         showError("Error", "Unexpected error occurred, Something went wrong");
       } finally {
         setLoading(false);

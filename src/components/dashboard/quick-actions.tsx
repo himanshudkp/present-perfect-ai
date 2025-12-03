@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { cn } from "@/utils/utils";
+import { Copy, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Copy, Star } from "lucide-react";
+import { cn } from "@/utils/utils";
 
 interface QuickActionsProps {
   isFavorite?: boolean | null;

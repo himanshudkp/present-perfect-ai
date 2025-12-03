@@ -6,7 +6,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 import React, { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import SidebarSkeleton from "@/components/app-sidebar/sidebar-keleton";
+import SidebarSkeleton from "@/components/app-sidebar/sidebar-skeleton";
 import RouteTransition from "@/components/route-transition";
 
 interface Props {

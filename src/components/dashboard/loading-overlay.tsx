@@ -9,11 +9,7 @@ const overlayVariants = {
   exit: { opacity: 0 },
 } as const;
 
-interface LoadingOverlayProps {
-  isDeleted?: boolean;
-}
-
-export const LoadingOverlay = memo(({ isDeleted }: LoadingOverlayProps) => (
+export const LoadingOverlay = memo(({ isDeleted }: { isDeleted?: boolean }) => (
   <motion.div
     variants={overlayVariants}
     initial="initial"

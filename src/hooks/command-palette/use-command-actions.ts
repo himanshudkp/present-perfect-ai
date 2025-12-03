@@ -7,11 +7,9 @@ import {
   Clock,
   FileText,
   Folder,
-  Home,
   LayoutTemplate,
   Plus,
   Settings,
-  Sparkles,
   Star,
 } from "lucide-react";
 import { useRouter } from "next/navigation";

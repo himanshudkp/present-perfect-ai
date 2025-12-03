@@ -1,7 +1,7 @@
-import { Theme } from "@/types";
-import React, { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { type LegacyAnimationControls, motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { Theme } from "@/types";
 
 type Props = {
   title: string;

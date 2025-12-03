@@ -1,9 +1,11 @@
+"use client";
+
 import { memo } from "react";
-import { ConfirmDialog } from "./confirm-dialog";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Copy, Download, Eye, RotateCcw, Star, Trash2 } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
 import IconButton from "./icon-button";
+import { ConfirmDialog } from "./confirm-dialog";
 
 const HOVER_OVERLAY_VARIANTS = {
   initial: { opacity: 0, y: 10 },

@@ -1,10 +1,10 @@
 "use client";
 
 import { memo, type ReactNode, useMemo } from "react";
+import { Star, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/utils/utils";
-import { Star, Trash2 } from "lucide-react";
-import { ViewMode } from "@/types";
+import type { ViewMode } from "@/types";
 
 interface StatusBadgesProps {
   isFavorite?: boolean | null;

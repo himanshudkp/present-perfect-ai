@@ -1,4 +1,8 @@
+"use client";
+
 import { memo } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2, RefreshCw } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Tooltip,
@@ -6,8 +10,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { useRouter } from "next/navigation";
-import { Loader2, RefreshCw } from "lucide-react";
 
 interface RefreshProjectsButtonProps {
   showSkeleton: boolean;

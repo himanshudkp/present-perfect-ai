@@ -1,9 +1,8 @@
 "use client";
 
 import { memo } from "react";
-import { Badge } from "../ui/badge";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Badge } from "../ui/badge";
 
 interface FilterBadgeProps {
   label: string;

@@ -1,5 +1,8 @@
 "use client";
 
+import { memo, useCallback, useState } from "react";
+import { motion } from "framer-motion";
+import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -8,9 +11,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { showError, showSuccess } from "@/components/toast-message";
-import { memo, useCallback, useState } from "react";
-import { Upload } from "lucide-react";
-import { motion } from "framer-motion";
 
 const MOTION_ANIMATE = { rotate: 360 } as const;
 const MOTION_TRANSITION = {
@@ -48,7 +48,7 @@ const ImportButton = () => {
 
         try {
           // TODO: Implement actual import logic
-          console.log("Importing file:", file.name);
+          console.info("Importing file:", file.name);
 
           showSuccess(
             "Import started",

@@ -1,7 +1,7 @@
 "use client";
 
-import { Search } from "lucide-react";
 import { memo } from "react";
+import { Search } from "lucide-react";
 
 export const EmptySearchResult = memo(() => (
   <div className="py-12 text-center text-sm text-muted-foreground">

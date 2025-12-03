@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useMemo } from "react";
 import { cn } from "@/utils/utils";
 import { GRID_CLASSES } from "@/utils/constants";

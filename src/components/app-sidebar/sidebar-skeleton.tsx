@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Skeleton } from "../ui/skeleton";
 
 const ListSkeleton = memo(function ListSkeleton({

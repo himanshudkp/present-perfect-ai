@@ -1,11 +1,9 @@
 "use client";
 
-import type { User } from "@/generated/prisma/client";
-import { Sparkles, Zap } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useCallback, useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { cn } from "@/utils/utils";
+import { Sparkles, Zap } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -16,6 +14,8 @@ import UnlockedButton from "./unlocked-button";
 import LockedButton from "./locked-button";
 import { showError } from "@/components/toast-message";
 import { usePromptStore } from "@/store/use-prompt-store";
+import { cn } from "@/utils/utils";
+import type { User } from "@/generated/prisma/client";
 
 const BUTTON_VARIANTS = {
   initial: { opacity: 0, scale: 0.95 },

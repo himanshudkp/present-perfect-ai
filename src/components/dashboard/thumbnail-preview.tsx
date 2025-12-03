@@ -1,8 +1,8 @@
 "use client";
 
-import React, { memo, useMemo } from "react";
-import { Slide, Theme } from "@/types";
+import { memo, useMemo } from "react";
 import Image from "next/image";
+import type { Slide, Theme } from "@/types";
 
 type ThumbnailPreviewProps = {
   slides: Slide[];

@@ -2,8 +2,10 @@
 
 import { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CONTAINER_VARIANTS, GRID_CLASSES } from "@/utils/constants";
-import type { Project } from "@/generated/prisma/client";
+import { Grid3x3, LayoutGrid, List } from "lucide-react";
+import { useProjectActions } from "@/hooks/presentation/use-project-actions";
+import { useProjectStats } from "@/hooks/presentation/use-project-stats";
+import { useProjectFiltering } from "@/hooks/presentation/use-project-filter";
 import SkeletonGrid from "./skeleton-loader";
 import FilterTabs from "../search-sort-filter/filter-tabs";
 import SearchProjects from "../search-sort-filter/search-projects";
@@ -11,14 +13,13 @@ import SortDropdown from "../search-sort-filter/sort-dropdown";
 import RefreshProjectsButton from "./refresh-projects-button";
 import ResultSummary from "./result-summary";
 import NoProjectsFound from "./no-projects-found";
-import { ProjectFilters, SortOption, TabView, ViewMode } from "@/types";
-import { useProjectActions } from "@/hooks/use-project-actions";
-import { useProjectStats } from "@/hooks/use-project-stats";
-import { useProjectFiltering } from "@/hooks/use-project-filter";
-import { cn } from "@/utils/utils";
 import ProjectCard from "./project-card";
 import ViewToggleButton from "./view-toggle-button";
-import { Grid3x3, LayoutGrid, List } from "lucide-react";
+import { cn } from "@/utils/utils";
+import { CONTAINER_VARIANTS, GRID_CLASSES } from "@/utils/constants";
+
+import type { Project } from "@/generated/prisma/client";
+import type { ProjectFilters, SortOption, TabView, ViewMode } from "@/types";
 
 const ITEM_VARIANTS = {
   hidden: { opacity: 0, y: 20 },
@@ -66,10 +67,6 @@ const Projects = ({
 
   const activeFiltersCount =
     Object.values(filters).filter(Boolean).length + (searchQuery ? 1 : 0);
-
-  const handleToggleFilter = (key: keyof ProjectFilters) => {
-    setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
 
   const handleClearFilters = () => {
     setFilters(DEFAULT_FILTERS);

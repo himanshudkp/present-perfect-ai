@@ -1,11 +1,11 @@
 "use client";
 
-import type { Action } from "@/types";
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/utils/utils";
-import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/utils/utils";
+import type { Action } from "@/types";
 
 const MOTION_WHILE_HOVER = { x: 2 } as const;
 const MOTION_TRANSITION = { duration: 0.15 } as const;

@@ -1,9 +1,9 @@
 "use client";
 
+import { memo, useCallback } from "react";
 import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { memo, useCallback } from "react";
 
 interface SearchProjectsProps {
   searchQuery: string;

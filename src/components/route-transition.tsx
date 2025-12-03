@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, memo } from "react";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 const INITIAL_STATE = {
   PARENT: { scaleX: 0, opacity: 1 },
@@ -39,7 +39,7 @@ const TRANSITION = {
   },
 } as const;
 
-export default function RouteTransition() {
+const RouteTransition = () => {
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -84,4 +84,5 @@ export default function RouteTransition() {
       )}
     </AnimatePresence>
   );
-}
+};
+export default memo(RouteTransition);

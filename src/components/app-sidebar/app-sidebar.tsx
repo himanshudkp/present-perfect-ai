@@ -1,7 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Project, User } from "@/generated/prisma/client";
-import React, { useEffect, useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,13 +10,13 @@ import {
   SidebarGroup,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import NavigationContainer from "./navigation-container";
-import { DATA } from "@/utils/constants";
-import RecentProjects from "./recent-projects";
-import SidebarSkeleton from "./sidebar-keleton";
-import QuickAction from "./quick-action";
-import LogoBrand from "./logo-brand";
 import AppSidebarFooter from "./app-sidebar-footer";
+import LogoBrand from "./logo-brand";
+import NavigationContainer from "./navigation-container";
+import QuickAction from "./quick-action";
+import RecentProjects from "./recent-projects";
+import SidebarSkeleton from "./sidebar-skeleton";
+import { DATA } from "@/utils/constants";
 
 type AppSidebarProps = {
   recentProjects: Project[];

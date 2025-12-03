@@ -1,12 +1,12 @@
 "use client";
 
-import type { User } from "@/generated/prisma/client";
-import React, { memo } from "react";
+import { memo } from "react";
 import SearchBar from "./command-palette";
 import ThemeSwitcher from "./theme-switcher";
 import NewProjectButton from "./new-project-button";
 import ImportButton from "./import-button";
 import ToggleSidebar from "./toggle-sidebar";
+import type { User } from "@/generated/prisma/client";
 
 const UpperInfoBar = ({ user }: { user: User }) => {
   return (

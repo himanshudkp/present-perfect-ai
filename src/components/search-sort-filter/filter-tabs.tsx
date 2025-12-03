@@ -1,10 +1,10 @@
 "use client";
 
-import type { TabView } from "@/types";
+import { memo, useMemo } from "react";
+import { Inbox, Star, X, Zap } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Badge } from "../ui/badge";
-import { Inbox, Star, X, Zap } from "lucide-react";
-import { memo, useMemo } from "react";
+import type { TabView } from "@/types";
 
 const TAB_CONFIG = [
   { value: "all", icon: Inbox, label: "All" },

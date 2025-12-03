@@ -1,5 +1,7 @@
-import { FolderOpen } from "lucide-react";
+"use client";
+
 import { memo } from "react";
+import { FolderOpen } from "lucide-react";
 
 function NoRecentProjects() {
   return (

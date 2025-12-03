@@ -1,26 +1,21 @@
 "use client";
 
+import { memo, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { SignedIn, useUser } from "@clerk/nextjs";
 import {
   SidebarMenu,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { User } from "@/generated/prisma/client";
-import { SignedIn, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useMemo, useState, memo } from "react";
 import UserProfile from "./user-profile";
 import UserAvatar from "./user-avatar";
 import UpgradeCard from "./upgrade-card";
+import type { User } from "@/generated/prisma/client";
 
-interface Props {
-  dbUser: User;
-}
-
-const AppSidebarFooter = ({ dbUser }: Props) => {
+const AppSidebarFooter = ({ dbUser }: { dbUser: User }) => {
   const { isLoaded, isSignedIn, user } = useUser();
   const { open: sidebarOpen } = useSidebar();
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const userEmail = useMemo(
@@ -38,17 +33,8 @@ const AppSidebarFooter = ({ dbUser }: Props) => {
   const showUpgrade = useMemo(() => !isPremium, [isPremium]);
 
   const handleSubscription = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      // TODO: Implement subscription logic
-      console.log("Redirecting to subscription...");
-      router.push("/subscription");
-    } catch (error) {
-      console.error("Failed to upgrade subscription:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    router.push("/subscription");
+  }, [router]);
 
   if (!isLoaded || !isSignedIn) return null;
 
@@ -57,12 +43,7 @@ const AppSidebarFooter = ({ dbUser }: Props) => {
       <SidebarMenuItem>
         {sidebarOpen ? (
           <div className="flex flex-col gap-4 items-start">
-            {showUpgrade && (
-              <UpgradeCard
-                isLoading={isLoading}
-                onUpgrade={handleSubscription}
-              />
-            )}
+            {showUpgrade && <UpgradeCard onUpgrade={handleSubscription} />}
             <SignedIn>
               <UserProfile userName={userName} userEmail={userEmail} />
             </SignedIn>

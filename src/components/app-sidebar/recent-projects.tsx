@@ -1,5 +1,8 @@
 "use client";
 
+import { useMemo, memo } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -7,18 +10,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-
-import { useRouter, usePathname } from "next/navigation";
-import React, { useMemo } from "react";
-import { Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { motion, AnimatePresence } from "framer-motion";
-
+import { Clock } from "lucide-react";
 import NoRecentProjects from "./no-recent-projects";
 import CollapsedProjectItem from "./collapsed-project-item";
 import ExpandedProjectItem from "./expanded-project-item";
-import { Project } from "@/generated/prisma/client";
 import { showError, showSuccess } from "@/components/toast-message";
+import type { Project } from "@/generated/prisma/client";
 
 const MOTION_VARIANTS = {
   enter: {
@@ -136,4 +134,4 @@ const RecentProjects = ({
   );
 };
 
-export default RecentProjects;
+export default memo(RecentProjects);

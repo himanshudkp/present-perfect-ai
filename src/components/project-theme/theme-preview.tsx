@@ -19,7 +19,6 @@ const ThemePreview = (props: Props) => {
 
   useEffect(() => {
     if (!project?.slides) {
-      console.log(project?.slides);
       // redirect(`/presentation/${presentationId}`);
     }
   }, [project]);

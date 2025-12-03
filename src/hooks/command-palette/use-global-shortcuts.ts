@@ -9,20 +9,17 @@ export const useGlobalShortcuts = (
 ) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Toggle palette with Cmd/Ctrl + K
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen(!open);
         return;
       }
 
-      // Close on ESC
       if (e.key === "Escape" && open) {
         setOpen(false);
         return;
       }
 
-      // Individual shortcuts when closed
       if (!open && (e.metaKey || e.ctrlKey)) {
         const action = actions.find((a) => a.shortcut === e.key.toUpperCase());
         if (action) {

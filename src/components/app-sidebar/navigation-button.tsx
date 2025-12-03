@@ -1,6 +1,8 @@
 "use client";
 
 import React, { memo, useMemo } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import {
@@ -8,10 +10,9 @@ import {
   TooltipTrigger,
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import { cn } from "@/utils/utils";
-import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
+
+import { cn } from "@/utils/utils";
 
 const ITEM_VARIANTS = {
   hidden: { opacity: 0, x: -10 },

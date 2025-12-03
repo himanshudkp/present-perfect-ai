@@ -1,7 +1,6 @@
 "use client";
 
-import React, { memo, useMemo } from "react";
-import { usePathname } from "next/navigation";
+import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   SidebarGroup,
@@ -25,13 +24,7 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-interface NavigationContainerProps {
-  items: NavItem[];
-}
-
-function NavigationContainer({ items }: NavigationContainerProps) {
-  const pathname = usePathname();
-
+function NavigationContainer({ items }: { items: NavItem[] }) {
   const navItems = useMemo(() => items, [items]);
 
   return (
