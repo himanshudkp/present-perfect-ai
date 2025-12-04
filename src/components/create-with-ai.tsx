@@ -19,7 +19,6 @@ import {
   ListPlus,
   Save,
   CheckCircle,
-  Info,
 } from "lucide-react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -34,7 +33,7 @@ import CardList from "./card-list";
 import { usePromptStore } from "@/store/use-prompt-store";
 import RecentPrompts from "./recent-prompts";
 import { toast } from "sonner";
-import { generateCreativePrompt, regenerateSlide } from "@/actions/gemini";
+import { generateCreativePrompt } from "@/actions/gemini";
 import { cn } from "@/utils/utils";
 import { OutlineCard } from "@/types";
 import { createProject } from "@/actions/project";
@@ -55,7 +54,6 @@ type Props = {
 const CreateWithAI = ({ onBack }: Props) => {
   const router = useRouter();
 
-  // State management
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
@@ -71,7 +69,6 @@ const CreateWithAI = ({ onBack }: Props) => {
   const [showBulkAdd, setShowBulkAdd] = useState(false);
   const [bulkSlides, setBulkSlides] = useState("");
 
-  // Store hooks
   const {
     currentAIPrompt,
     setCurrentAIPrompt,
@@ -85,13 +82,11 @@ const CreateWithAI = ({ onBack }: Props) => {
   const { prompts, addPrompt } = usePromptStore();
   const { setProject, setSlides, slides } = useSlideStore();
 
-  // Computed values
   const cardCount = outlines.length;
   const isReady = cardCount > 0 && presentationTitle.trim().length > 0;
   const canAddManualSlide = manualSlideTitle.trim().length > 0;
   const hasGeneratedSlides = cardCount > 0 && currentAIPrompt.trim().length > 0;
 
-  // Handler: Back navigation with confirmation
   const handleBack = useCallback(() => {
     if (
       outlines.length > 0 ||
@@ -118,7 +113,6 @@ const CreateWithAI = ({ onBack }: Props) => {
     currentAIPrompt,
   ]);
 
-  // Handler: Reset all slides with confirmation
   const resetCards = useCallback(() => {
     if (showResetConfirm) {
       setEditingCard(null);
@@ -151,7 +145,6 @@ const CreateWithAI = ({ onBack }: Props) => {
     presentationTitle,
   ]);
 
-  // Handler: Generate outline with AI
   const generateOutline = useCallback(async () => {
     if (!currentAIPrompt.trim()) {
       toast.error("Please enter a prompt", {
@@ -191,7 +184,6 @@ const CreateWithAI = ({ onBack }: Props) => {
           description: `Created ${cards.length} slides`,
         });
 
-        // Auto-set presentation title from AI response
         if (result.data.title && !presentationTitle.trim()) {
           setPresentationTitle(result.data.title);
         }
@@ -212,7 +204,6 @@ const CreateWithAI = ({ onBack }: Props) => {
     }
   }, [currentAIPrompt, noOfCards, addMultipleOutlines, presentationTitle]);
 
-  // Handler: Add manual slide
   const handleAddManualSlide = useCallback(() => {
     if (!canAddManualSlide) {
       toast.error("Please enter a slide title");
@@ -230,7 +221,6 @@ const CreateWithAI = ({ onBack }: Props) => {
     toast.success(`"${newCard.title}" added successfully`);
   }, [canAddManualSlide, manualSlideTitle, outlines.length, addOutline]);
 
-  // Handler: Bulk add slides
   const handleBulkAdd = useCallback(() => {
     if (!bulkSlides.trim()) {
       toast.error("Please enter slide titles");
@@ -264,46 +254,6 @@ const CreateWithAI = ({ onBack }: Props) => {
     toast.success(`Added ${newCards.length} slides`);
   }, [bulkSlides, outlines, addMultipleOutlines]);
 
-  // Handler: Regenerate specific slide
-  const handleRegenerateSlide = useCallback(
-    async (slideId: string) => {
-      const slide = outlines.find((s) => s.id === slideId);
-      if (!slide) return;
-
-      setRegeneratingId(slideId);
-
-      try {
-        const previousTitles = outlines
-          .filter((s) => s.id !== slideId)
-          .map((s) => s.title);
-
-        const result = await regenerateSlide(
-          slide.title,
-          currentAIPrompt || presentationTitle || "Presentation slides",
-          previousTitles
-        );
-
-        if (result.status === 200 && result.data?.title) {
-          updateOutline(slideId, { title: result.data.title });
-          toast.success("Slide regenerated!", {
-            description: "Try regenerating again for more options",
-          });
-        } else {
-          toast.error("Regeneration failed", {
-            description: result.error || "Please try again",
-          });
-        }
-      } catch (error) {
-        console.error("Regeneration error:", error);
-        toast.error("Failed to regenerate slide");
-      } finally {
-        setRegeneratingId(null);
-      }
-    },
-    [outlines, currentAIPrompt, updateOutline, presentationTitle]
-  );
-
-  // Handler: Create presentation
   const handleCreatePresentation = useCallback(async () => {
     if (!isReady) {
       if (!presentationTitle.trim()) {
@@ -335,7 +285,6 @@ const CreateWithAI = ({ onBack }: Props) => {
       //   setSlides(JSON.parse(JSON.stringify(res.data.outlines)));
       // }
 
-      // Save to prompt history
       addPrompt({
         id: crypto.randomUUID(),
         title: presentationTitle,
@@ -378,24 +327,20 @@ const CreateWithAI = ({ onBack }: Props) => {
     setCurrentAIPrompt,
   ]);
 
-  // Handler: Card selection
   const handleCardSelect = useCallback((id: string) => {
     setSelectedCard(id);
   }, []);
 
-  // Handler: Card double-click (edit)
   const handleCardDoubleClick = useCallback((id: string, title: string) => {
     setEditingCard(id);
     setEditText(title);
     setSelectedCard(id);
   }, []);
 
-  // Handler: Quick example selection
   const handleQuickExample = useCallback((example: string) => {
     setManualSlideTitle(example);
   }, []);
 
-  // Handler: Save draft
   const handleSaveDraft = useCallback(() => {
     if (!cardCount && !presentationTitle.trim() && !currentAIPrompt.trim()) {
       toast.error("Nothing to save");
@@ -411,7 +356,6 @@ const CreateWithAI = ({ onBack }: Props) => {
       initial="hidden"
       animate="visible"
     >
-      {/* Back Button */}
       <motion.button
         variants={ITEM_VARIANTS}
         onClick={handleBack}
@@ -428,7 +372,6 @@ const CreateWithAI = ({ onBack }: Props) => {
         Back
       </motion.button>
 
-      {/* Header */}
       <motion.div variants={ITEM_VARIANTS} className="text-center space-y-3">
         <div className="flex items-center justify-center gap-2 mb-2">
           <motion.div
@@ -443,7 +386,7 @@ const CreateWithAI = ({ onBack }: Props) => {
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
           Generate with{" "}
-          <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             Creative AI
           </span>
         </h1>
@@ -453,7 +396,6 @@ const CreateWithAI = ({ onBack }: Props) => {
         </p>
       </motion.div>
 
-      {/* Presentation Details Section */}
       <motion.div variants={ITEM_VARIANTS}>
         <Card>
           <CardHeader>
@@ -510,7 +452,6 @@ const CreateWithAI = ({ onBack }: Props) => {
         </Card>
       </motion.div>
 
-      {/* AI Generation Section */}
       <motion.div
         className={cn(
           "p-6 rounded-xl border-2 transition-all duration-200",
@@ -626,7 +567,6 @@ const CreateWithAI = ({ onBack }: Props) => {
             </div>
           </div>
 
-          {/* Progress Bar */}
           <AnimatePresence>
             {isGenerating && generationProgress > 0 && (
               <motion.div
@@ -657,7 +597,6 @@ const CreateWithAI = ({ onBack }: Props) => {
         </div>
       </motion.div>
 
-      {/* Manual Slide Addition Section */}
       <motion.div
         className={cn(
           "p-6 rounded-xl border-2 transition-all duration-200",
@@ -702,7 +641,6 @@ const CreateWithAI = ({ onBack }: Props) => {
             </p>
           </div>
 
-          {/* Quick Examples */}
           {!manualSlideTitle.trim() && cardCount < 5 && (
             <div className="space-y-2">
               <p className="text-xs text-muted-foreground">Quick examples:</p>
@@ -753,7 +691,6 @@ const CreateWithAI = ({ onBack }: Props) => {
         </div>
       </motion.div>
 
-      {/* Bulk Add Section */}
       <AnimatePresence>
         {showBulkAdd && (
           <motion.div
@@ -813,7 +750,6 @@ Conclusion`}
         )}
       </AnimatePresence>
 
-      {/* Status Message */}
       {(cardCount > 0 || presentationTitle.trim()) && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -871,7 +807,6 @@ Conclusion`}
         </motion.div>
       )}
 
-      {/* Empty State Hint */}
       {!cardCount &&
         !currentAIPrompt.trim() &&
         !manualSlideTitle.trim() &&
@@ -901,7 +836,6 @@ Conclusion`}
           </motion.div>
         )}
 
-      {/* Card List with Regeneration */}
       <motion.div variants={ITEM_VARIANTS}>
         <AnimatePresence mode="wait">
           {cardCount > 0 ? (
@@ -925,35 +859,6 @@ Conclusion`}
                 setSelectedCard={setSelectedCard}
                 onCardDoubleClick={handleCardDoubleClick}
               />
-
-              {/* Regenerate Button */}
-              {selectedCard && !editingCard && hasGeneratedSlides && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 flex justify-center"
-                >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRegenerateSlide(selectedCard)}
-                    disabled={regeneratingId === selectedCard}
-                    className="gap-2"
-                  >
-                    {regeneratingId === selectedCard ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Regenerating...
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="h-4 w-4" />
-                        Regenerate Selected Slide with AI
-                      </>
-                    )}
-                  </Button>
-                </motion.div>
-              )}
             </motion.div>
           ) : (
             <motion.div
@@ -973,21 +878,19 @@ Conclusion`}
         </AnimatePresence>
       </motion.div>
 
-      {/* Recent Prompts */}
       {prompts.length > 0 && (
         <motion.div variants={ITEM_VARIANTS}>
           <RecentPrompts />
         </motion.div>
       )}
 
-      {/* Fixed Bottom Create Button */}
       <AnimatePresence>
         {(cardCount > 0 || presentationTitle.trim()) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-transparent pt-6 pb-4 px-4 sm:px-6 lg:px-8 z-40 border-t"
+            className="fixed bottom-0 left-0 right-0 bg-linear-to-t from-background via-background to-transparent pt-6 pb-4 px-4 sm:px-6 lg:px-8 z-40 border-t"
           >
             <div className="max-w-7xl mx-auto">
               <Button
@@ -995,7 +898,7 @@ Conclusion`}
                 disabled={!isReady || isCreating}
                 className={cn(
                   "w-full font-semibold text-base gap-2",
-                  "bg-gradient-to-r from-primary to-primary/80 hover:from-primary hover:to-primary/90",
+                  "bg-linear-to-r from-primary to-primary/80 hover:from-primary hover:to-primary/90",
                   "transition-all duration-200 shadow-lg hover:shadow-xl",
                   "h-12 sm:h-14"
                 )}
@@ -1021,7 +924,6 @@ Conclusion`}
         )}
       </AnimatePresence>
 
-      {/* Loading Overlay */}
       <AnimatePresence>
         {isCreating && (
           <motion.div

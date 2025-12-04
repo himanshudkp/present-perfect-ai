@@ -1,14 +1,25 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import SearchBar from "./command-palette";
 import ThemeSwitcher from "./theme-switcher";
 import NewProjectButton from "./new-project-button";
 import ImportButton from "./import-button";
 import ToggleSidebar from "./toggle-sidebar";
+import UpperInfoBarSkeleton from "./upper-info-bar-skeleton";
 import type { User } from "@/generated/prisma/client";
 
 const UpperInfoBar = ({ user }: { user: User }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      setLoading(false);
+    }
+  }, [user]);
+
+  if (loading) return <UpperInfoBarSkeleton />;
+
   return (
     <header className="sticky top-0 z-40 flex shrink-0 flex-wrap items-center gap-2 border-b border-border bg-background/95 backdrop-blur-md p-3 sm:p-4 justify-between transition-all duration-200 shadow-sm">
       <ToggleSidebar />

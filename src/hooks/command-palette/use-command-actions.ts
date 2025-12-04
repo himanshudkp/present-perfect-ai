@@ -1,7 +1,7 @@
 "use client";
 
-import { usePromptStore } from "@/store/use-prompt-store";
-import { Action } from "@/types";
+import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Brain,
   Clock,
@@ -12,8 +12,8 @@ import {
   Settings,
   Star,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { usePromptStore } from "@/store/use-prompt-store";
+import type { Action } from "@/types";
 
 export const useCommandActions = () => {
   const { setPage } = usePromptStore();

@@ -1,7 +1,7 @@
 "use client";
 
-import type { Action, ActionCategory } from "@/types";
 import { useMemo } from "react";
+import type { Action, ActionCategory } from "@/types";
 
 export const useFilteredActions = (actions: Action[], search: string) => {
   const filteredActions = useMemo(() => {

@@ -7,7 +7,6 @@ import CreatePage from "./create-page";
 import CreateFromScratch from "./create-from-scratch";
 import CreateWithAI from "./create-with-ai";
 import NewProjectSkeleton from "@/components/new-project-skeleton";
-import type { Page } from "@/types";
 
 const pageVariants = {
   initial: {
@@ -35,7 +34,7 @@ const pageVariants = {
   },
 } as const;
 
-const RenderPage = ({ mode }: { mode: Page }) => {
+const RenderPage = () => {
   const { page, setPage } = usePromptStore();
   const [isLoading, setIsLoading] = useState(true);
   const [displayPage, setDisplayPage] = useState(page);

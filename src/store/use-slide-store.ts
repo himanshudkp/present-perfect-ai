@@ -1,15 +1,22 @@
-import { Project } from "@/generated/prisma/client";
-import { Slide, Theme } from "@/types";
+"use client";
+
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
+import { DEFAULT_THEME } from "@/utils/constants";
+import type { Project } from "@/generated/prisma/client";
+import type { ContentItem, Slide, Theme } from "@/types";
 
 interface SlideState {
   slides: Slide[];
   setSlides: (slides: Slide[]) => void;
-  addSlide: (slide: Slide) => void;
-  updateSlide: (id: string, updates: Partial<Slide>) => void;
+  addSlide: (slide: Slide, index: number) => void;
+  updateCurrentSlide: (
+    id: string,
+    newContent: string | string[] | string[][],
+    contentId: string
+  ) => void;
   deleteSlide: (id: string) => void;
-  reorderSlides: (slides: Slide[]) => void;
+  reorderSlides: (fromIndex: number, toIndex: number) => void;
   clearSlides: () => void;
 
   project: Project | null;
@@ -23,20 +30,12 @@ interface SlideState {
 
   currentTheme: Theme;
   setCurrentTheme: (theme: Theme) => void;
-}
 
-const defaultTheme: Theme = {
-  fontFamily: "Inter, sans-serif",
-  fontColor: "#333333",
-  bgColor: "#F0F0F0",
-  slideBgColor: "#FFFFFF",
-  accentColor: "#3B82F6",
-  type: "light",
-  name: "",
-  gradientBgColor: "",
-  navbarColor: "",
-  sidebarColor: "",
-};
+  getOrderedSlides: () => Slide[];
+
+  currentSlide: number;
+  setCurrentSlide: (index: number) => void;
+}
 
 export const useSlideStore = create<SlideState>()(
   devtools(
@@ -45,26 +44,70 @@ export const useSlideStore = create<SlideState>()(
         slides: [],
         project: null,
         currentSlideIndex: 0,
-        currentTheme: defaultTheme,
+        currentTheme: DEFAULT_THEME,
+        currentSlide: 0,
 
-        setSlides: (slides) => set({ slides }, false, "setSlides"),
-        setCurrentTheme: (theme: Theme) => set(() => ({ currentTheme: theme })),
-        addSlide: (slide) =>
+        setSlides: (slides) => set({ slides }),
+
+        setCurrentTheme: (theme) => set({ currentTheme: theme }),
+
+        addSlide: (slide, index) =>
           set(
-            (state) => ({
-              slides: [...state.slides, slide],
-            }),
+            (state) => {
+              const newSlides = [...state.slides];
+              newSlides.splice(index, 0, {
+                ...slide,
+                id: crypto.randomUUID(),
+              });
+
+              newSlides.forEach((s, i) => {
+                s.slideOrder = i;
+              });
+
+              return {
+                slides: newSlides,
+                currentSlideIndex: index,
+              };
+            },
             false,
             "addSlide"
           ),
 
-        updateSlide: (id, updates) =>
+        updateCurrentSlide: (id, newContent, contentId) =>
           set(
-            (state) => ({
-              slides: state.slides.map((slide) =>
-                slide.id === id ? { ...slide, ...updates } : slide
-              ),
-            }),
+            (state) => {
+              const updateContentRecursively = (
+                item: ContentItem
+              ): ContentItem => {
+                if (item.id === contentId) {
+                  return { ...item, content: newContent };
+                }
+
+                if (Array.isArray(item.content)) {
+                  return {
+                    ...item,
+                    content: item.content.map((subItem) =>
+                      typeof subItem === "string"
+                        ? subItem
+                        : updateContentRecursively(subItem as ContentItem)
+                    ),
+                  };
+                }
+
+                return item;
+              };
+
+              return {
+                slides: state.slides.map((slide) =>
+                  slide.id === id
+                    ? {
+                        ...slide,
+                        content: updateContentRecursively(slide.content),
+                      }
+                    : slide
+                ),
+              };
+            },
             false,
             "updateSlide"
           ),
@@ -78,12 +121,23 @@ export const useSlideStore = create<SlideState>()(
             "deleteSlide"
           ),
 
-        reorderSlides: (slides) => set({ slides }, false, "reorderSlides"),
+        reorderSlides: (fromIndex, toIndex) =>
+          set((state) => {
+            const newSlides = [...state.slides];
+            const [removed] = newSlides.splice(fromIndex, 1);
+            newSlides.splice(toIndex, 0, removed);
+
+            return {
+              slides: newSlides.map((slide, index) => ({
+                ...slide,
+                slideOrder: index,
+              })),
+            };
+          }),
 
         clearSlides: () =>
           set({ slides: [], currentSlideIndex: 0 }, false, "clearSlides"),
 
-        // Project operations
         setProject: (project) => set({ project }, false, "setProject"),
 
         clearProject: () =>
@@ -93,7 +147,6 @@ export const useSlideStore = create<SlideState>()(
             "clearProject"
           ),
 
-        // Navigation
         setCurrentSlideIndex: (index) =>
           set({ currentSlideIndex: index }, false, "setCurrentSlideIndex"),
 
@@ -117,7 +170,21 @@ export const useSlideStore = create<SlideState>()(
             false,
             "previousSlide"
           ),
+
+        getOrderedSlides: () => {
+          const state = get();
+          return [...state.slides].sort((a, b) => a.slideOrder - b.slideOrder);
+        },
+
+        setCurrentSlide: (index) =>
+          set((state) => ({
+            currentSlideIndex: Math.max(
+              0,
+              Math.min(index, state.slides.length - 1)
+            ),
+          })),
       }),
+
       {
         name: "slide-store",
       }

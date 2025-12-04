@@ -17,8 +17,6 @@ import {
   AlertCircle,
   Save,
   ListPlus,
-  Pencil,
-  Trash2,
   CheckCircle,
   Info,
 } from "lucide-react";
@@ -55,7 +53,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
   const { addMultipleOutlines, addOutline, outlines, resetOutlines } =
     useStartScratchStore();
 
-  // State management
   const [editText, setEditText] = useState("");
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
@@ -69,13 +66,11 @@ const CreateFromScratch = ({ onBack }: Props) => {
 
   const { project, setProject } = useSlideStore();
 
-  // Computed values
   const hasCards = outlines.length > 0;
   const canAddCard = editText.trim().length > 0;
   const cardCount = outlines.length;
   const isReadyToCreate = hasCards && presentationTitle.trim().length > 0;
 
-  // Slide templates by category
   const slideTemplates = {
     business: [
       "Executive Summary",
@@ -139,7 +134,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
     ],
   };
 
-  // Handler: Back navigation with confirmation
   const handleBack = useCallback(() => {
     if (
       hasCards ||
@@ -163,7 +157,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
     presentationDescription,
   ]);
 
-  // Handler: Reset with double confirmation
   const resetCards = useCallback(() => {
     if (showResetConfirm) {
       setEditText("");
@@ -182,7 +175,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
     }
   }, [resetOutlines, showResetConfirm, hasCards, presentationTitle]);
 
-  // Handler: Add single slide
   const handleAddCard = useCallback(() => {
     if (!canAddCard) {
       showError("Please enter a slide title");
@@ -200,12 +192,10 @@ const CreateFromScratch = ({ onBack }: Props) => {
     showSuccess(`"${newCard.title}" added`);
   }, [canAddCard, editText, outlines.length, addOutline]);
 
-  // Handler: Quick template selection
   const handleTemplateClick = useCallback((title: string) => {
     setEditText(title);
   }, []);
 
-  // Handler: Apply template category
   const handleApplyTemplate = useCallback(
     (category: keyof typeof slideTemplates) => {
       if (outlines.length > 0) {
@@ -229,7 +219,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
     [addMultipleOutlines, outlines.length]
   );
 
-  // Handler: Bulk add slides
   const handleBulkAdd = useCallback(() => {
     if (!bulkSlides.trim()) {
       showError("Please enter slide titles");
@@ -263,7 +252,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
     showSuccess(`Added ${newCards.length} slides`);
   }, [bulkSlides, outlines, addMultipleOutlines]);
 
-  // Handler: Keyboard shortcuts
   const handleKeyPress = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && canAddCard && !e.shiftKey) {
@@ -274,7 +262,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
     [canAddCard, handleAddCard]
   );
 
-  // Handler: Create presentation
   const handleGenerate = useCallback(async () => {
     if (!isReadyToCreate) {
       if (!presentationTitle.trim()) {
@@ -325,14 +312,12 @@ const CreateFromScratch = ({ onBack }: Props) => {
     router,
   ]);
 
-  // Handler: Save draft (could be extended to actually save)
   const handleSaveDraft = useCallback(() => {
     if (!hasCards && !presentationTitle.trim()) {
       showError("Nothing to save");
       return;
     }
 
-    // In a real implementation, you'd save to localStorage or backend
     showSuccess("Draft saved locally");
   }, [hasCards, presentationTitle]);
 
@@ -343,7 +328,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
       initial="hidden"
       animate="visible"
     >
-      {/* Back Button */}
       <motion.button
         variants={ITEM_VARIANTS}
         onClick={handleBack}
@@ -360,7 +344,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
         Back
       </motion.button>
 
-      {/* Header */}
       <motion.div variants={ITEM_VARIANTS} className="text-center space-y-3">
         <div className="flex items-center justify-center gap-2 mb-2">
           <Wand2 className="h-6 w-6 text-primary" />
@@ -370,7 +353,7 @@ const CreateFromScratch = ({ onBack }: Props) => {
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
           Build Your{" "}
-          <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             Presentation
           </span>
         </h1>
@@ -380,7 +363,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
         </p>
       </motion.div>
 
-      {/* Presentation Info Section */}
       <motion.div variants={ITEM_VARIANTS}>
         <Card>
           <CardHeader>
@@ -434,7 +416,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
         </Card>
       </motion.div>
 
-      {/* Template Selection */}
       <motion.div variants={ITEM_VARIANTS}>
         <Card>
           <CardHeader>
@@ -497,7 +478,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
         </Card>
       </motion.div>
 
-      {/* Add Single Slide Section */}
       <motion.div
         className={cn(
           "p-6 rounded-xl border-2 transition-all duration-200",
@@ -537,7 +517,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
             </p>
           </div>
 
-          {/* Quick Examples */}
           {!editText.trim() && cardCount < 5 && (
             <div className="space-y-2">
               <p className="text-xs text-muted-foreground">Quick examples:</p>
@@ -563,7 +542,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
             </div>
           )}
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
               onClick={handleAddCard}
@@ -603,7 +581,6 @@ const CreateFromScratch = ({ onBack }: Props) => {
         </div>
       </motion.div>
 
-      {/* Bulk Add Section */}
       <AnimatePresence>
         {showBulkAdd && (
           <motion.div
@@ -663,7 +640,6 @@ Conclusion`}
         )}
       </AnimatePresence>
 
-      {/* Status Card */}
       {(cardCount > 0 || presentationTitle.trim()) && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -709,7 +685,6 @@ Conclusion`}
         </motion.div>
       )}
 
-      {/* Empty State */}
       {!hasCards && !presentationTitle.trim() && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -734,7 +709,6 @@ Conclusion`}
         </motion.div>
       )}
 
-      {/* Card List */}
       <motion.div variants={ITEM_VARIANTS}>
         <AnimatePresence mode="wait">
           {hasCards ? (
@@ -780,14 +754,13 @@ Conclusion`}
         </AnimatePresence>
       </motion.div>
 
-      {/* Fixed Bottom Create Button */}
       <AnimatePresence>
         {(hasCards || presentationTitle.trim()) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-transparent pt-6 pb-4 px-4 sm:px-6 lg:px-8 z-40 border-t"
+            className="fixed bottom-0 left-0 right-0 bg-linear-to-t from-background via-background to-transparent pt-6 pb-4 px-4 sm:px-6 lg:px-8 z-40 border-t"
           >
             <div className="max-w-7xl mx-auto">
               <Button
@@ -795,7 +768,7 @@ Conclusion`}
                 disabled={!isReadyToCreate || isCreating}
                 className={cn(
                   "w-full font-semibold text-base gap-2",
-                  "bg-gradient-to-r from-primary to-primary/80 hover:from-primary hover:to-primary/90",
+                  "bg-linear-to-r from-primary to-primary/80 hover:from-primary hover:to-primary/90",
                   "transition-all duration-200 shadow-lg hover:shadow-xl",
                   "h-12 sm:h-14"
                 )}
@@ -821,7 +794,6 @@ Conclusion`}
         )}
       </AnimatePresence>
 
-      {/* Loading Overlay */}
       <AnimatePresence>
         {isCreating && (
           <motion.div

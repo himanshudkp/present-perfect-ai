@@ -15,7 +15,6 @@ import {
   Edit3,
   Trash2,
   FileText,
-  Calendar,
   MoreVertical,
   Copy,
   ExternalLink,
@@ -66,7 +65,6 @@ const RecentPrompts = ({
 
   const displayPrompts = maxDisplay ? prompts.slice(0, maxDisplay) : prompts;
 
-  // ✅ LOAD/EDIT PROMPT
   const handleEdit = useCallback(
     (id: string) => {
       const prompt = prompts.find((p) => p.id === id);
@@ -77,7 +75,6 @@ const RecentPrompts = ({
 
       const { outlines, title } = prompt;
 
-      // Convert to OutlineCard format if needed
       const formattedOutlines = outlines.map((outline) => ({
         id: outline.id || crypto.randomUUID(),
         title: outline.title,
@@ -90,7 +87,6 @@ const RecentPrompts = ({
 
       showSuccess("Prompt loaded", "Continue editing your presentation");
 
-      // Optional callback
       if (onLoadPrompt) {
         onLoadPrompt(id);
       }
@@ -98,7 +94,6 @@ const RecentPrompts = ({
     [prompts, setPage, addMultipleOutlines, setCurrentAIPrompt, onLoadPrompt]
   );
 
-  // ✅ DELETE WITH CONFIRMATION
   const handleDelete = useCallback(
     async (id: string) => {
       if (showDeleteConfirm !== id) {
@@ -117,7 +112,6 @@ const RecentPrompts = ({
     [deletePrompt, showDeleteConfirm]
   );
 
-  // ✅ DUPLICATE PROMPT
   const handleDuplicate = useCallback(
     (id: string) => {
       const prompt = prompts.find((p) => p.id === id);
@@ -130,8 +124,6 @@ const RecentPrompts = ({
         createdAt: new Date(),
       };
 
-      // Note: You'll need to add this to your store
-      // For now, we'll just load it
       const formattedOutlines = prompt.outlines.map((outline) => ({
         id: outline.id || crypto.randomUUID(),
         title: outline.title,
@@ -147,7 +139,6 @@ const RecentPrompts = ({
     [prompts, addMultipleOutlines, setCurrentAIPrompt, setPage]
   );
 
-  // ✅ CLEAR ALL
   const handleClearAll = useCallback(() => {
     if (
       window.confirm(
@@ -159,7 +150,6 @@ const RecentPrompts = ({
     }
   }, [clearPrompts, prompts.length]);
 
-  // ✅ EMPTY STATE
   if (prompts.length === 0) {
     return (
       <motion.div
@@ -186,7 +176,6 @@ const RecentPrompts = ({
       variants={CONTAINER_VARIANTS}
       className="space-y-6 mt-16 w-full"
     >
-      {/* Header */}
       <motion.div variants={ITEM_VARIANTS} className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -206,10 +195,8 @@ const RecentPrompts = ({
             </div>
           </div>
 
-          {/* Actions */}
           {showActions && prompts.length > 0 && (
             <div className="flex items-center gap-2">
-              {/* View Mode Toggle */}
               <div className="hidden sm:flex items-center gap-1 p-1 bg-muted rounded-lg">
                 <Button
                   variant={viewMode === "grid" ? "secondary" : "ghost"}
@@ -245,7 +232,6 @@ const RecentPrompts = ({
         </div>
       </motion.div>
 
-      {/* Grid/List View */}
       <motion.div
         variants={CONTAINER_VARIANTS}
         className={cn(
@@ -288,14 +274,12 @@ const RecentPrompts = ({
                       isDeleting && "opacity-50 pointer-events-none"
                     )}
                   >
-                    {/* Background Gradient */}
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: isHovered ? 0.1 : 0 }}
-                      className="absolute inset-0 bg-gradient-to-br from-primary via-primary/50 to-transparent pointer-events-none"
+                      className="absolute inset-0 bg-linear-to-br from-primary via-primary/50 to-transparent pointer-events-none"
                     />
 
-                    {/* Header */}
                     <div className="flex items-start justify-between mb-3 relative z-10">
                       <div
                         className={cn(
@@ -320,7 +304,6 @@ const RecentPrompts = ({
                       </Badge>
                     </div>
 
-                    {/* Content */}
                     <div className="flex-1 mb-4 relative z-10">
                       <h3
                         className={cn(
@@ -333,7 +316,6 @@ const RecentPrompts = ({
                         {title}
                       </h3>
 
-                      {/* Metadata */}
                       <div className="flex flex-col gap-2 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 shrink-0" />
@@ -348,7 +330,6 @@ const RecentPrompts = ({
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex items-center gap-2 relative z-10">
                       <Button
                         variant="default"
@@ -412,12 +393,11 @@ const RecentPrompts = ({
                       </DropdownMenu>
                     </div>
 
-                    {/* Shine Effect */}
                     <motion.div
                       initial={{ x: "-100%" }}
                       animate={{ x: isHovered ? "100%" : "-100%" }}
                       transition={{ duration: 0.6 }}
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"
+                      className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent pointer-events-none"
                     />
                   </Card>
                 </motion.div>
@@ -427,7 +407,6 @@ const RecentPrompts = ({
         </AnimatePresence>
       </motion.div>
 
-      {/* Footer Stats */}
       <motion.div
         variants={ITEM_VARIANTS}
         className="flex items-center justify-center gap-2 text-sm text-muted-foreground pt-4"

@@ -1,48 +1,10 @@
-// import { OutlineCard } from "@/lib/types";
-// import { create } from "zustand";
-// import { devtools, persist } from "zustand/middleware";
+"use client";
 
-// type CreativeAiStore = {
-//   outlines: OutlineCard[] | [];
-//   addOutline: (outlines: OutlineCard) => void;
-//   addMultipleOutlines: (outlines: OutlineCard[]) => void;
-//   currentAIPrompt: string;
-//   setCurrentAIPrompt: (prompt: string) => void;
-//   resetOutlines: () => void;
-// };
-
-// export const useCreativeAiStore = create<CreativeAiStore>()(
-//   devtools(
-//     persist(
-//       (set) => ({
-//         outlines: [],
-//         currentAIPrompt: "",
-//         addOutline: (outline) => {
-//           set((state) => ({
-//             outlines: [outline, ...state.outlines],
-//           }));
-//         },
-//         addMultipleOutlines: (outlines) =>
-//           set(() => ({
-//             outlines: [...outlines],
-//           })),
-//         setCurrentAIPrompt: (prompt) => {
-//           set({ currentAIPrompt: prompt });
-//         },
-//         resetOutlines: () => {
-//           set({ outlines: [] });
-//         },
-//       }),
-//       { name: "creative-ai-store" }
-//     )
-//   )
-// );
-
-import { OutlineCard } from "@/types";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import type { OutlineCard } from "@/types";
 
-type CreativeAiStore = {
+interface CreativeAiStore {
   outlines: OutlineCard[];
   currentAIPrompt: string;
   setCurrentAIPrompt: (prompt: string) => void;
@@ -51,7 +13,7 @@ type CreativeAiStore = {
   updateOutline: (id: string, updates: Partial<OutlineCard>) => void;
   deleteOutline: (id: string) => void;
   resetOutlines: () => void;
-};
+}
 
 export const useCreativeAiStore = create<CreativeAiStore>()(
   devtools(

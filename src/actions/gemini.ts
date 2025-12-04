@@ -4,9 +4,20 @@ import {
   GoogleGenerativeAI,
   HarmCategory,
   HarmBlockThreshold,
+  GenerateContentCandidate,
 } from "@google/generative-ai";
-import { OutlineCard } from "@/types";
+import { currentUser } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 import { env } from "@/lib/env";
+import {
+  autoFillMissingSlides,
+  buildSlidePrompt,
+  repairJsonString,
+  safeParseJson,
+  validateSlidesWithZod,
+} from "@/utils/utils";
+import { EXISTING_LAYOUTS } from "@/utils/constants";
+import type { ContentItem, Slide } from "@/types";
 
 type GenerationResult<T> = {
   status: number;
@@ -20,19 +31,13 @@ type OutlineResponse = {
   description?: string;
 };
 
-type SlideContent = {
-  title: string;
-  content: string;
-  bulletPoints?: string[];
-  notes?: string;
-};
-
 const GEMINI_CONFIG = {
   model: "gemini-2.0-flash",
   temperature: 0.7,
   topK: 40,
   topP: 0.95,
   maxOutputTokens: 2048,
+  imageModel: "gemini-2.5-flash-image",
 };
 
 const safetySettings = [
@@ -164,38 +169,31 @@ Return ONLY valid JSON with this exact structure:
 Do not include any markdown formatting, explanations, or additional text outside the JSON.
 `;
 
-    // const result = await retryWithBackoff(async () => {
-    //   return await model.generateContent(enhancedPrompt);
-    // });
-    const text: OutlineResponse = {
-      outlines: [
-        "MERN Unveiled: Why Choose This Powerful Stack?",
-        "Building Blocks: Mastering MERN Components",
-        "MERN's Future: Trends and Career Paths",
-      ],
-      title: "MERN DEVEloper slides",
-    };
-    // const text = result.response.text();
-    // const parsed = parseGeminiResponse<OutlineResponse>(text);
+    const result = await retryWithBackoff(async () => {
+      return await model.generateContent(enhancedPrompt);
+    });
 
-    // if (!parsed || !parsed.outlines || !Array.isArray(parsed.outlines)) {
-    //   console.error("Invalid response structure:", text);
-    //   return {
-    //     status: 500,
-    //     error: "AI returned invalid format. Please try again.",
-    //   };
-    // }
+    const text = result.response.text();
+    const parsed = parseGeminiResponse<OutlineResponse>(text);
 
-    // if (parsed.outlines.length < slideCount - 2) {
-    //   return {
-    //     status: 500,
-    //     error: `Expected ${slideCount} slides but got ${parsed.outlines.length}`,
-    //   };
-    // }
+    if (!parsed || !parsed.outlines || !Array.isArray(parsed.outlines)) {
+      console.error("Invalid response structure:", text);
+      return {
+        status: 500,
+        error: "AI returned invalid format. Please try again.",
+      };
+    }
+
+    if (parsed.outlines.length < slideCount - 2) {
+      return {
+        status: 500,
+        error: `Expected ${slideCount} slides but got ${parsed.outlines.length}`,
+      };
+    }
 
     return {
       status: 200,
-      data: text,
+      data: parsed,
     };
   } catch (error: any) {
     console.error("Error in generateCreativePrompt:", error);
@@ -221,264 +219,259 @@ Do not include any markdown formatting, explanations, or additional text outside
   }
 };
 
-export const generateSlideContent = async (
-  slideTitle: string,
-  presentationContext: string,
-  slideIndex: number,
-  totalSlides: number
-): Promise<GenerationResult<SlideContent>> => {
+const generateImageUrl = async (prompt: string): Promise<string> => {
   try {
-    if (!slideTitle?.trim() || !presentationContext?.trim()) {
+    const improvedPrompt = `
+Create a highly realistic, professional image based on the
+following description. The image should look as if captured in
+real life, with attention to detail, lighting, and texture.
+
+Description: ${prompt}
+
+Important Notes:
+- The image must be in a photorealistic style and visually
+  compelling.
+- Ensure all text, signs, or visible writing in the image are in
+  English.
+- Pay special attention to lighting, shadows, and textures to make
+  the image as lifelike as possible.
+- Avoid elements that appear abstract, cartoonish, or overly
+  artistic. The image should be suitable for professional
+  presentations.
+- Focus on accurately depicting the concept described, including
+  specific objects, environment, mood, and context. Maintain
+  relevance to the description provided.
+
+Example Use Cases: Business presentations, educational slides,
+professional designs.
+`;
+
+    const genAI = initializeGemini();
+
+    const model = genAI.getGenerativeModel({
+      model: GEMINI_CONFIG.imageModel,
+      generationConfig: {
+        temperature: GEMINI_CONFIG.temperature,
+        topK: GEMINI_CONFIG.topK,
+        topP: GEMINI_CONFIG.topP,
+        maxOutputTokens: GEMINI_CONFIG.maxOutputTokens,
+      },
+      safetySettings,
+    });
+    const result = await retryWithBackoff(async () => {
+      return await model.generateContent(improvedPrompt);
+    });
+
+    const candidates = result.response.candidates as GenerateContentCandidate[];
+
+    let imageDataUrl: string = "";
+
+    for (const part of candidates[0].content.parts) {
+      if (part.text) {
+        console.log(part.text);
+      } else if (part.inlineData) {
+        const imageData = part.inlineData.data;
+        imageDataUrl = `data:image/png;base64,${imageData}`;
+        console.log("generateImageUrl - imageDataUrl ", imageDataUrl);
+      }
+    }
+
+    return imageDataUrl || "https://via.placeholder.com/1024";
+  } catch (error) {
+    console.error("Failed to generate image: ", error);
+    return "https://via.placeholder.com/1024";
+  }
+};
+
+export const findImageComponent = async (
+  node: ContentItem
+): Promise<ContentItem[]> => {
+  const images: ContentItem[] = [];
+  if (!node) return images;
+
+  if (node.type === "image") {
+    images.push(node);
+  }
+
+  if (Array.isArray(node.content)) {
+    for (const child of node.content)
+      images.push(
+        ...(await findImageComponent(child as unknown as ContentItem))
+      );
+    return images;
+  }
+
+  const c = node.content;
+  if (c && typeof c === "object") {
+    images.push(...(await findImageComponent(c)));
+  }
+
+  return images;
+};
+
+export const replaceImagePlaceholders = async (
+  slide: Slide,
+  generateImageUrlFn: (prompt: string) => Promise<string>
+) => {
+  const images = await findImageComponent(slide.content as any);
+  if (!images.length) return;
+
+  await Promise.all(
+    images.map(async (img) => {
+      try {
+        const prompt =
+          img.alt || `Professional presentation image for ${slide.slideName}`;
+        const url = await generateImageUrlFn(prompt);
+        if (url) {
+          (img as any).content = url;
+        } else {
+          (img as any).content =
+            (img as any).content || "https://via.placeholder.com/1024";
+        }
+      } catch (err) {
+        console.error("Image generation failed", err);
+        (img as any).content =
+          (img as any).content || "https://via.placeholder.com/1024";
+      }
+    })
+  );
+};
+
+export const generateLayoutsJson = async (
+  outlineArray: string[],
+  {
+    existingLayoutsSample,
+    generateImageUrlFn,
+  }: {
+    existingLayoutsSample: Slide[];
+    generateImageUrlFn: (prompt: string) => Promise<string>;
+  }
+) => {
+  const prompt = buildSlidePrompt(outlineArray, existingLayoutsSample);
+
+  try {
+    const genAI = initializeGemini();
+    const model = genAI.getGenerativeModel({
+      model: GEMINI_CONFIG.model,
+      generationConfig: {
+        temperature: GEMINI_CONFIG.temperature,
+        topK: GEMINI_CONFIG.topK,
+        topP: GEMINI_CONFIG.topP,
+        maxOutputTokens: GEMINI_CONFIG.maxOutputTokens,
+      },
+      safetySettings,
+    });
+
+    const result = await retryWithBackoff(() => model.generateContent(prompt));
+    const raw = result?.response?.text?.() ?? "";
+
+    let parsed = parseGeminiResponse<Slide[]>(raw);
+
+    if (!parsed || !Array.isArray(parsed)) {
+      const repaired = repairJsonString(raw);
+      parsed = safeParseJson<Slide[]>(repaired) ?? [];
+    }
+
+    const slidesCandidate = Array.isArray(parsed) ? (parsed as Slide[]) : [];
+    const slidesFilled = autoFillMissingSlides(
+      slidesCandidate as Slide[],
+      outlineArray
+    );
+
+    const validation = validateSlidesWithZod(slidesFilled);
+    if (!validation.ok) {
+      console.error("Slide schema validation failed:", validation.errors);
+      return {
+        status: 500,
+        error: "Invalid slide schema",
+        details: validation.errors,
+      };
+    }
+
+    const slides = validation.data as Slide[];
+
+    try {
+      await Promise.all(
+        slides.map((s) => replaceImagePlaceholders(s, generateImageUrlFn))
+      );
+    } catch (err) {
+      console.error(
+        "Image replacement had errors (continuing with placeholders):",
+        err
+      );
+    }
+
+    if (slides.length !== outlineArray.length) {
+      const final = autoFillMissingSlides(slides, outlineArray);
+      return { status: 200, data: final };
+    }
+
+    return { status: 200, data: slides };
+  } catch (err) {
+    console.error("generateLayoutsJson error:", err);
+    return { status: 500, error: "Unexpected error", details: err };
+  }
+};
+
+export const generateLayouts = async (projectId: string, theme: string) => {
+  try {
+    if (!projectId) {
+      return { status: 400, error: "Project ID is required" };
+    }
+
+    const user = await currentUser();
+    if (!user) return { status: 401, error: "User not authenticated" };
+
+    const existingUser = await prisma.user.findUnique({
+      where: { clerkId: user.id },
+    });
+
+    if (!existingUser) {
+      return { status: 403, error: "User does not exist" };
+    }
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId, isDeleted: false },
+    });
+
+    if (!project) {
+      return { status: 404, error: "Project not found" };
+    }
+
+    if (!project.outlines || project.outlines.length === 0) {
       return {
         status: 400,
-        error: "Slide title and context are required",
+        error: "Project does not have any outlines",
       };
     }
 
-    const genAI = initializeGemini();
-    const model = genAI.getGenerativeModel({
-      model: GEMINI_CONFIG.model,
-      generationConfig: GEMINI_CONFIG,
-      safetySettings,
+    const slides = await generateLayoutsJson(project.outlines, {
+      existingLayoutsSample: EXISTING_LAYOUTS,
+      generateImageUrlFn: generateImageUrl,
     });
 
-    const prompt = `
-You are creating detailed content for slide ${
-      slideIndex + 1
-    } of ${totalSlides} in a presentation.
-
-**Presentation Context:** ${presentationContext}
-**Current Slide Title:** ${slideTitle}
-
-Generate comprehensive content for this slide including:
-1. An engaging title (can be refined from the original)
-2. Main content/description (2-3 sentences)
-3. 3-5 key bullet points
-4. Speaker notes (optional, 1-2 sentences)
-
-Return ONLY valid JSON:
-{
-  "title": "Refined slide title",
-  "content": "Main description of the slide",
-  "bulletPoints": [
-    "Key point 1",
-    "Key point 2",
-    "Key point 3"
-  ],
-  "notes": "Speaker notes for this slide"
-}
-`;
-
-    const result = await retryWithBackoff(async () => {
-      return await model.generateContent(prompt);
-    });
-
-    const text = result.response.text();
-    const parsed = parseGeminiResponse<SlideContent>(text);
-
-    if (!parsed) {
+    if (!slides || !slides.data) {
       return {
         status: 500,
-        error: "Failed to generate slide content",
+        error: "Failed to generate slides",
       };
     }
+
+    const updated = await prisma.project.update({
+      where: { id: projectId },
+      data: {
+        slides: JSON.stringify(slides.data),
+        theme: theme,
+        updatedAt: new Date(),
+      },
+    });
 
     return {
       status: 200,
-      data: parsed,
+      data: updated.slides,
     };
-  } catch (error: any) {
-    console.error("Error in generateSlideContent:", error);
-    return {
-      status: 500,
-      error: error.message || "Failed to generate slide content",
-    };
-  }
-};
-
-export const regenerateSlide = async (
-  originalTitle: string,
-  presentationContext: string,
-  previousAttempts: string[] = []
-): Promise<GenerationResult<{ title: string; alternatives: string[] }>> => {
-  try {
-    const genAI = initializeGemini();
-    const model = genAI.getGenerativeModel({
-      model: GEMINI_CONFIG.model,
-      generationConfig: { ...GEMINI_CONFIG, temperature: 0.9 }, // Higher creativity
-      safetySettings,
-    });
-
-    const prompt = `
-Create alternative slide titles for a presentation.
-
-**Context:** ${presentationContext}
-**Original Title:** ${originalTitle}
-${
-  previousAttempts.length > 0
-    ? `**Previous Attempts:** ${previousAttempts.join(", ")}`
-    : ""
-}
-
-Generate 3 creative alternatives that:
-- Convey the same key message
-- Are more engaging or clearer
-- Avoid repetition with previous attempts
-- Stay professional and relevant
-
-Return ONLY valid JSON:
-{
-  "title": "Best alternative title",
-  "alternatives": [
-    "Alternative 1",
-    "Alternative 2",
-    "Alternative 3"
-  ]
-}
-`;
-
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    const parsed = parseGeminiResponse<{
-      title: string;
-      alternatives: string[];
-    }>(text);
-
-    if (!parsed) {
-      return {
-        status: 500,
-        error: "Failed to regenerate slide",
-      };
-    }
-
-    return {
-      status: 200,
-      data: parsed,
-    };
-  } catch (error: any) {
-    console.error("Error in regenerateSlide:", error);
-    return {
-      status: 500,
-      error: error.message || "Failed to regenerate slide",
-    };
-  }
-};
-
-export const refineOutline = async (
-  currentOutlines: OutlineCard[],
-  userFeedback: string
-): Promise<GenerationResult<OutlineResponse>> => {
-  try {
-    const genAI = initializeGemini();
-    const model = genAI.getGenerativeModel({
-      model: GEMINI_CONFIG.model,
-      generationConfig: GEMINI_CONFIG,
-      safetySettings,
-    });
-
-    const currentTitles = currentOutlines
-      .map((o) => `${o.order}. ${o.title}`)
-      .join("\n");
-
-    const prompt = `
-Improve the following presentation outline based on user feedback.
-
-**Current Outline:**
-${currentTitles}
-
-**User Feedback:** ${userFeedback}
-
-Apply the feedback and return an improved outline with the same number of slides.
-Maintain logical flow and ensure all slides are relevant.
-
-Return ONLY valid JSON:
-{
-  "outlines": [
-    "Improved slide 1",
-    "Improved slide 2",
-    ...
-  ]
-}
-`;
-
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    const parsed = parseGeminiResponse<OutlineResponse>(text);
-
-    if (!parsed || !parsed.outlines) {
-      return {
-        status: 500,
-        error: "Failed to refine outline",
-      };
-    }
-
-    return {
-      status: 200,
-      data: parsed,
-    };
-  } catch (error: any) {
-    console.error("Error in refineOutline:", error);
-    return {
-      status: 500,
-      error: error.message || "Failed to refine outline",
-    };
-  }
-};
-
-export const generatePresentationTitle = async (
-  outlines: string[]
-): Promise<GenerationResult<{ title: string; alternatives: string[] }>> => {
-  try {
-    const genAI = initializeGemini();
-    const model = genAI.getGenerativeModel({
-      model: GEMINI_CONFIG.model,
-      generationConfig: GEMINI_CONFIG,
-      safetySettings,
-    });
-
-    const prompt = `
-Based on these slide titles, generate a compelling main presentation title:
-
-${outlines.map((o, i) => `${i + 1}. ${o}`).join("\n")}
-
-Create:
-1. One main title (professional, clear, engaging - max 8 words)
-2. Three alternative titles
-
-Return ONLY valid JSON:
-{
-  "title": "Main Presentation Title",
-  "alternatives": [
-    "Alternative 1",
-    "Alternative 2", 
-    "Alternative 3"
-  ]
-}
-`;
-
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    const parsed = parseGeminiResponse<{
-      title: string;
-      alternatives: string[];
-    }>(text);
-
-    if (!parsed) {
-      return {
-        status: 500,
-        error: "Failed to generate title",
-      };
-    }
-
-    return {
-      status: 200,
-      data: parsed,
-    };
-  } catch (error: any) {
-    console.error("Error in generatePresentationTitle:", error);
-    return {
-      status: 500,
-      error: error.message || "Failed to generate title",
-    };
+  } catch (error) {
+    console.error("Error in generateLayouts():", error);
+    return { status: 500, error: "Unexpected server error", data: [] };
   }
 };

@@ -1,4 +1,5 @@
 "use client";
+
 import { getProjectById } from "@/actions/project";
 import { Project } from "@/generated/prisma/client";
 import { THEMES } from "@/utils/constants";
@@ -8,7 +9,11 @@ import { Loader2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-// import { DndProvider } from "react-dnd";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import PresentationNavbar from "@/components/presentation/presentation-navbar";
+import PresentationLayoutPreview from "@/components/presentation/presentation-layout-preview";
+import PresentationEditor from "@/components/presentation/presentation-editor";
 type Props = {};
 
 const Presentation = (props: Props) => {
@@ -43,7 +48,12 @@ const Presentation = (props: Props) => {
 
         setProject(project);
 
-        setSlides(JSON.parse(JSON.stringify(project.slides)));
+        const slideData =
+          typeof project.slides === "string"
+            ? JSON.parse(project.slides)
+            : project.slides;
+
+        setSlides(slideData);
       } catch (error) {
         console.error("Error while fetching project: ", error);
         showError("Error", "Unexpected error occurred, Something went wrong");
@@ -60,42 +70,25 @@ const Presentation = (props: Props) => {
       </div>
     );
   }
-  //<DndProvider></DndProvider>
   return (
-    <div className="min-h-screen w-full bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold text-black">{project?.title}</h1>
-
-        <div className="space-y-10">
-          {slides.map((slide, i) => (
-            <div
-              key={slide.id}
-              className="w-full aspect-video rounded-lg border shadow bg-white p-6"
-              style={{
-                fontFamily: currentTheme?.fontFamily || "sans-serif",
-                color: currentTheme?.accentColor || currentTheme?.accentColor,
-                backgroundColor: currentTheme?.slideBgColor,
-                backgroundImage: currentTheme?.gradientBgColor,
-              }}
-            >
-              <h1 className="text-xl font-semibold mb-3 text-red-600">
-                Slide - {i}
-              </h1>
-              <h2 className="text-xl font-semibold mb-3">Slide Title - {i}</h2>
-
-              {[...Array(6)].map(() => (
-                <p className="text-sm leading-relaxed mb-3 text-teal-500">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae
-                  autem, amet assumenda, totam explicabo incidunt dolores eos
-                  necessitatibus neque pariatur odio quibusdam illum. At porro
-                  dolores, provident consectetur reprehenderit a?
-                </p>
-              ))}
-            </div>
-          ))}
+    <DndProvider backend={HTML5Backend}>
+      <div className="min-h-screen flex flex-col">
+        <PresentationNavbar presentationId={presentationId as string} />
+      </div>
+      <div
+        className="flex-1 flex overflow-hidden pt-16 "
+        style={{
+          color: currentTheme.accentColor,
+          fontFamily: currentTheme.fontFamily,
+          backgroundColor: currentTheme.bgColor,
+        }}
+      >
+        <PresentationLayoutPreview />
+        <div className="flex-1 ml-64 pr-16">
+          <PresentationEditor isEditable={true} />
         </div>
       </div>
-    </div>
+    </DndProvider>
   );
 };
 

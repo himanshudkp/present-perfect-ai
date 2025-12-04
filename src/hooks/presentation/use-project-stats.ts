@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import type { Project } from "@/generated/prisma/client";
 

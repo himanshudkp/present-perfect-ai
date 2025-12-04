@@ -1,11 +1,13 @@
+"use client";
+
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { showError, showSuccess } from "@/components/toast-message";
 import {
   deleteProject,
   recoverProject,
   updateFavorite,
 } from "@/actions/project";
-import { showError, showSuccess } from "@/components/toast-message";
 
 interface ActionResponse {
   status: number;

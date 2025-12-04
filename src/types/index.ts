@@ -31,13 +31,20 @@ export type ContentType =
   | "codeBlock"
   | "customButton"
   | "table"
-  | "tableOfContents";
+  | "tableOfContents"
+  | "image";
 
 export interface ContentItem {
   id: string;
   type: ContentType;
   name: string;
-  content: ContentItem | string | string[] | string[][];
+  content:
+    | ContentItem
+    | string
+    | string[]
+    | string[][]
+    | ContentItem[]
+    | (string | ContentItem)[];
   initialRows?: number;
   initialColumns?: number;
   restrictToDrop?: boolean;
@@ -78,6 +85,13 @@ export type Page =
   | "create-from-scratch"
   | "templates";
 
+export type PromptHistory = {
+  id: string;
+  createdAt: string;
+  title: string;
+  outlines: OutlineCard[];
+};
+
 export type ActionCategory = "navigation" | "create" | "settings";
 
 export interface Action {
@@ -113,5 +127,21 @@ export type SortOption =
   | "name-asc"
   | "name-desc"
   | "slides";
+
 export type ViewMode = "grid" | "compact" | "list";
+
 export type TabView = "all" | "active" | "deleted" | "favorites";
+
+export interface SlidesLayout {
+  slideName: string;
+  content: ContentItem;
+  className?: string;
+  type: string;
+}
+
+export interface DropItem {
+  type: string;
+  layoutType: string;
+  component: SlidesLayout;
+  index?: number;
+}
