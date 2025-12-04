@@ -1,16 +1,14 @@
-import { getRecentProjects } from "@/actions/project";
-import { authenticateUser } from "@/actions/user";
+import { redirect } from "next/navigation";
 import AppSidebar from "@/components/app-sidebar/app-sidebar";
 import UpperInfoBar from "@/components/top-info-bar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { redirect } from "next/navigation";
-import React, { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import SidebarSkeleton from "@/components/app-sidebar/sidebar-skeleton";
 import RouteTransition from "@/components/route-transition";
+import { getRecentProjects } from "@/actions/project";
+import { authenticateUser } from "@/actions/user";
+import type { ReactNode } from "react";
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const Layout = async ({ children }: Props) => {

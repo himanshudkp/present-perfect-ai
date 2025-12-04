@@ -1,11 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { THEMES } from "@/utils/constants";
 import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
 
-/* --------------------------------------------
-   REAL USER (Provided)
---------------------------------------------- */
 const realUser = {
   id: "cfeaa3d7-6b9f-4aa0-9ece-b4bffc467849",
   clerkId: "user_35X1wybznVwHhk2bTJwN4Y1ZWUY",
@@ -16,27 +14,12 @@ const realUser = {
   subscription: false,
 };
 
-/* --------------------------------------------
-   THEMES
---------------------------------------------- */
-const themes = [
-  { name: "Modern Light", type: "light" },
-  { name: "Neo Dark", type: "dark" },
-  { name: "Oceanic", type: "light" },
-  { name: "Forest", type: "light" },
-  { name: "Midnight Purple", type: "dark" },
-];
-
-// Save themes.json
 fs.writeFileSync(
   path.join(process.cwd(), "prisma", "themes.json"),
-  JSON.stringify(themes, null, 2),
+  JSON.stringify(THEMES, null, 2),
   "utf8"
 );
 
-/* --------------------------------------------
-   CONTENT + SLIDE GENERATORS
---------------------------------------------- */
 const contentTypes = [
   "title",
   "heading1",
@@ -195,13 +178,9 @@ function genSlides() {
   });
 }
 
-/* --------------------------------------------
-   MAIN SEED (REAL USER + TEST USER)
---------------------------------------------- */
 async function main() {
   console.log("🌱 Seeding...");
 
-  // Real user
   const user1 = await prisma.user.upsert({
     where: { id: realUser.id },
     update: {},
@@ -233,9 +212,6 @@ async function main() {
 
   const bothUsers = [user1, user2];
 
-  /* --------------------------------------------
-        CREATE 100 PROJECTS TOTAL
-     --------------------------------------------- */
   console.log("📁 Creating 100 projects...");
 
   for (let i = 0; i < 100; i++) {
@@ -247,7 +223,7 @@ async function main() {
         slides: genSlides(),
         outlines: ["Intro", "Main", "Summary"],
         thumbnail: faker.image.urlPicsumPhotos(),
-        theme: faker.helpers.arrayElement(themes).name,
+        theme: faker.helpers.arrayElement(THEMES).name,
         isSellable: faker.datatype.boolean(),
         isFavorite: faker.datatype.boolean(),
         isDeleted: false,
@@ -263,12 +239,9 @@ async function main() {
   console.log("🎉 PROJECT SEED COMPLETE");
 }
 
-/* --------------------------------------------
-   RUN
---------------------------------------------- */
 main()
   .catch(async (err) => {
-    console.error("❌ Seed error", err);
+    console.error("Seed error", err);
     await prisma.$disconnect();
     process.exit(1);
   })

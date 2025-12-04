@@ -1,5 +1,7 @@
-import type { Action } from "@/types";
+"use client";
+
 import { useEffect } from "react";
+import type { Action } from "@/types";
 
 export const useGlobalShortcuts = (
   open: boolean,

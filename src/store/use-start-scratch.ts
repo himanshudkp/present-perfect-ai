@@ -1,15 +1,17 @@
-import { OutlineCard } from "@/types";
+"use client";
+
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import type { OutlineCard } from "@/types";
 
-type StartScratchStore = {
+interface StartScratchStore {
   outlines: OutlineCard[];
   addOutline: (outline: OutlineCard) => void;
   addMultipleOutlines: (outlines: OutlineCard[]) => void;
   updateOutline: (id: string, updates: Partial<OutlineCard>) => void;
   deleteOutline: (id: string) => void;
   resetOutlines: () => void;
-};
+}
 
 export const useStartScratchStore = create<StartScratchStore>()(
   devtools(
@@ -17,7 +19,6 @@ export const useStartScratchStore = create<StartScratchStore>()(
       (set) => ({
         outlines: [],
 
-        // Add a single outline (append to the end)
         addOutline: (outline) =>
           set(
             (state) => ({
@@ -27,18 +28,15 @@ export const useStartScratchStore = create<StartScratchStore>()(
             "addOutline"
           ),
 
-        // Replace ALL outlines (used for reordering and bulk updates)
-        // 🔥 THIS WAS THE BUG - it was appending instead of replacing!
         addMultipleOutlines: (newOutlines) =>
           set(
             () => ({
-              outlines: newOutlines, // ✅ REPLACE, don't append!
+              outlines: newOutlines,
             }),
             false,
             "addMultipleOutlines"
           ),
 
-        // Update a specific outline
         updateOutline: (id, updates) =>
           set(
             (state) => ({
@@ -50,7 +48,6 @@ export const useStartScratchStore = create<StartScratchStore>()(
             "updateOutline"
           ),
 
-        // Delete an outline and reorder
         deleteOutline: (id) =>
           set(
             (state) => ({
@@ -62,7 +59,6 @@ export const useStartScratchStore = create<StartScratchStore>()(
             "deleteOutline"
           ),
 
-        // Reset all outlines
         resetOutlines: () =>
           set(
             () => ({

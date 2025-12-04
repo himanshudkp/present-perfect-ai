@@ -10,12 +10,12 @@ const DashboardPage = async ({
 }: {
   searchParams: { filter?: string };
 }) => {
-  const filter = searchParams.filter as TabView;
+  const filter = (await searchParams.filter) as TabView;
 
   try {
     const [allProjects] = await Promise.all([
       getAllProjects(),
-      new Promise((resolve) => setTimeout(resolve, 50)),
+      new Promise((resolve) => setTimeout(resolve, 5000)),
     ]);
 
     const projects = allProjects?.data || [];

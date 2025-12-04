@@ -172,13 +172,11 @@ const NewProjectCard = ({
                     </motion.span>
                   </h3>
 
-                  {/* Description */}
                   <p className="text-xs sm:text-sm text-muted-foreground leading-snug">
                     {option.description}
                   </p>
                 </div>
 
-                {/* Button */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -206,7 +204,6 @@ const NewProjectCard = ({
                 </motion.div>
               </div>
 
-              {/* Hover Glow */}
               <AnimatePresence>
                 {isHovered && highlight && (
                   <motion.div

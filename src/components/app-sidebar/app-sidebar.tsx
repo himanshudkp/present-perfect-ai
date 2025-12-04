@@ -32,9 +32,7 @@ export default function AppSidebar({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (recentProjects && user) {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }, 25);
 
     return () => clearTimeout(timer);

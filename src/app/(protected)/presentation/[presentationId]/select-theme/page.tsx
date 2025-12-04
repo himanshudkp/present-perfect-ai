@@ -1,9 +1,7 @@
-import ThemePreview from "@/components/project-theme/theme-preview";
 import React from "react";
+import ThemePreview from "@/components/project-theme/theme-preview";
 
-type Props = {};
-
-const SelectThemePage = (props: Props) => {
+const SelectThemePage = () => {
   return <ThemePreview />;
 };
 
