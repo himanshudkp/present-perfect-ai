@@ -4,16 +4,6 @@ import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
 
-const realUser = {
-  id: "cfeaa3d7-6b9f-4aa0-9ece-b4bffc467849",
-  clerkId: "user_35X1wybznVwHhk2bTJwN4Y1ZWUY",
-  name: "Himanshu Pandey",
-  email: "himanshudkp@gmail.com",
-  profileImage:
-    "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zNVgxd3dxamJmaVlZeFBJRVRSTEtPV0ZvVlcifQ",
-  subscription: false,
-};
-
 fs.writeFileSync(
   path.join(process.cwd(), "prisma", "themes.json"),
   JSON.stringify(THEMES, null, 2),
@@ -181,18 +171,18 @@ function genSlides() {
 async function main() {
   console.log("🌱 Seeding...");
 
-  const user1 = await prisma.user.upsert({
-    where: { id: realUser.id },
-    update: {},
-    create: {
-      id: realUser.id,
-      name: realUser.name,
-      email: realUser.email,
-      clerkId: realUser.clerkId,
-      profileImage: realUser.profileImage,
-      subscription: realUser.subscription,
-    },
-  });
+  // const user1 = await prisma.user.upsert({
+  //   where: { id: realUser.id },
+  //   update: {},
+  //   create: {
+  //     id: realUser.id,
+  //     name: realUser.name,
+  //     email: realUser.email,
+  //     clerkId: realUser.clerkId,
+  //     profileImage: realUser.profileImage,
+  //     subscription: realUser.subscription,
+  //   },
+  // });
 
   console.log("👤 Real user added.");
 
@@ -210,7 +200,8 @@ async function main() {
 
   console.log("🧪 Test user added.");
 
-  const bothUsers = [user1, user2];
+  // const bothUsers = [user1, user2];
+  const bothUsers = [user2];
 
   console.log("📁 Creating 100 projects...");
 
