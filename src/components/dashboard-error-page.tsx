@@ -1,10 +1,17 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/utils/utils";
 import { FileText } from "lucide-react";
+import { useCallback } from "react";
+
+const INITIAL = { opacity: 0, y: 20 } as const;
+const ANIMATE = { opacity: 1, y: 0 } as const;
+const TRANSITION = { duration: 0.3 } as const;
 
 const DashboardErrorPage = () => {
+  const handleTryAgain = useCallback(() => window.location.reload(), [window]);
+
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -18,13 +25,10 @@ const DashboardErrorPage = () => {
       </div>
 
       <motion.div
-        className={cn(
-          "flex flex-col items-center justify-center gap-4 py-12 rounded-lg",
-          "border border-destructive/30 bg-destructive/5"
-        )}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        className="flex flex-col items-center justify-center gap-4 py-12 rounded-lg border border-destructive/30 bg-destructive/5"
+        initial={INITIAL}
+        animate={ANIMATE}
+        transition={TRANSITION}
       >
         <div className="flex flex-col items-center gap-2">
           <div className="h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center">
@@ -39,12 +43,8 @@ const DashboardErrorPage = () => {
           </p>
         </div>
         <button
-          onClick={() => window.location.reload()}
-          className={cn(
-            "px-4 py-2 rounded-lg font-medium text-sm",
-            "bg-primary text-primary-foreground hover:bg-primary/90",
-            "transition-colors duration-200"
-          )}
+          onClick={handleTryAgain}
+          className="px-4 py-2 rounded-lg font-medium text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
         >
           Try Again
         </button>
@@ -53,4 +53,4 @@ const DashboardErrorPage = () => {
   );
 };
 
-export default DashboardErrorPage;
+export default memo(DashboardErrorPage);

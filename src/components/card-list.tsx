@@ -7,7 +7,7 @@ import { GripVertical, Plus, Sparkles } from "lucide-react";
 import { cn } from "@/utils/utils";
 import { toast } from "sonner";
 import Card from "./card";
-import AddCardButton from "./add-card-button";
+import AddOutlineButton from "./new-outlines/add-outline-btn";
 
 type Props = {
   outlines: OutlineCard[];
@@ -417,9 +417,8 @@ const CardList = ({
                   }}
                   dragOverStyles={dragOverStylesMap[index] || {}}
                 />
-
                 {index < outlines.length - 1 && (
-                  <AddCardButton
+                  <AddOutlineButton
                     onAddCard={() => onAddCard(index)}
                     label="Add slide here"
                     variant="minimal"
@@ -432,7 +431,7 @@ const CardList = ({
       </motion.div>
 
       {outlines.length > 0 && (
-        <AddCardButton
+        <AddOutlineButton
           onAddCard={() => onAddCard()}
           label="Add slide at end"
           variant="default"

@@ -3,9 +3,8 @@
 import { memo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { FileText, Plus, ArrowRight } from "lucide-react";
-import { cn } from "@/utils/utils";
+import { Button } from "@/components/ui/button";
 
 const CONTAINER_VARIANTS = {
   hidden: { opacity: 0 },
@@ -26,6 +25,13 @@ const TRANSITION = {
   ease: "easeInOut",
 } as const;
 
+const ANIMATE = {
+  FILETEXT_PARENT: { y: [0, -10, 0] },
+  FILETEXT_CHILD: { rotate: [0, 5, -5, 0] },
+  FILETEXT: { scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] },
+  FOOTER: { x: [0, 100, 0], y: [0, -50, 0] },
+};
+
 const ProjectNotFound = () => {
   return (
     <motion.div
@@ -37,19 +43,16 @@ const ProjectNotFound = () => {
       <motion.div
         className="relative"
         variants={ITEM_VARIANTS}
-        animate={{ y: [0, -10, 0] }}
+        animate={ANIMATE.FILETEXT_PARENT}
         transition={TRANSITION}
       >
         <div className="relative h-20 w-20 flex items-center justify-center">
           <motion.div
             className="absolute inset-0 rounded-full bg-primary/10 border border-primary/20"
-            animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+            animate={ANIMATE.FILETEXT}
             transition={TRANSITION}
           />
-          <motion.div
-            animate={{ rotate: [0, 5, -5, 0] }}
-            transition={TRANSITION}
-          >
+          <motion.div animate={ANIMATE.FILETEXT_CHILD} transition={TRANSITION}>
             <FileText className="h-10 w-10 text-primary" />
           </motion.div>
         </div>
@@ -75,11 +78,7 @@ const ProjectNotFound = () => {
         <Link href="/new-project" className="w-full sm:w-auto">
           <Button
             size="lg"
-            className={cn(
-              "w-full gap-2 rounded-lg font-semibold",
-              "bg-primary hover:bg-primary/90",
-              "transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
-            )}
+            className="w-full gap-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
           >
             <Plus className="h-4 w-4" />
             Create Your First Project
@@ -97,13 +96,10 @@ const ProjectNotFound = () => {
         </Link>
       </motion.div>
 
-      <motion.div
-        className="absolute inset-0 -z-10 overflow-hidden pointer-events-none"
-        animate={{}}
-      >
+      <motion.div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
-          animate={{ x: [0, 100, 0], y: [0, -50, 0] }}
+          animate={ANIMATE.FOOTER}
           transition={TRANSITION}
         />
       </motion.div>
