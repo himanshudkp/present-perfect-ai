@@ -4,8 +4,8 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/utils/utils";
-import type { Action } from "@/types";
+import { cn } from "@/lib/utils";
+import type { Action } from "@/lib/types";
 
 const MOTION_WHILE_HOVER = { x: 2 } as const;
 const MOTION_TRANSITION = { duration: 0.15 } as const;

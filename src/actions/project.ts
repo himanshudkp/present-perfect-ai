@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "./user";
-import { OutlineCard } from "@/types";
+import { OutlineCard } from "@/lib/types";
 
 export const getAllProjects = async () => {
   try {

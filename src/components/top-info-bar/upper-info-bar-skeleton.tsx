@@ -4,7 +4,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 
 const UpperInfoBarSkeleton = () => {
   return (

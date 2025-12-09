@@ -4,7 +4,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { Search, X } from "lucide-react";
-import type { TabView } from "@/types";
+import type { TabView } from "@/lib/types";
 
 const ANIM = {
   initial: { opacity: 0, scale: 0.95 },

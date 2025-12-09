@@ -6,7 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn, getTimeAgo } from "@/utils/utils";
+import { cn, getTimeAgo } from "@/lib/utils";
 import { FileText, Star } from "lucide-react";
 
 interface ExpandedProjectItemProps {

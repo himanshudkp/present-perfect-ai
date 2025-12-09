@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import FeatureCard from "./feature-card";
-import type { Theme } from "@/types";
+import type { Theme } from "@/lib/types";
 
 export function MainCardContent({ selectedTheme }: { selectedTheme: Theme }) {
   const { accentColor, bgColor } = selectedTheme;

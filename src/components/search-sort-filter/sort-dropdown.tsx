@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import type { SortOption } from "@/types";
+import type { SortOption } from "@/lib/types";
 
 const SORT_OPTIONS: {
   value: SortOption;

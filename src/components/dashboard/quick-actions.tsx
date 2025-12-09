@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 
 interface QuickActionsProps {
   isFavorite?: boolean | null;

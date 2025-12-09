@@ -1,6 +1,6 @@
 import { useSlideStore } from "@/store/use-slide-store";
-import { Slide } from "@/types";
-import { cn } from "@/utils/utils";
+import { Slide } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { isDragging } from "framer-motion";
 import React, { useRef } from "react";
 import { useDrag } from "react-dnd";
