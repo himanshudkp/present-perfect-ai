@@ -1,5 +1,5 @@
 import { Home, LayoutTemplate, Settings2, Trash2 } from "lucide-react";
-import type { ActionCategory, Slide, Theme } from "../types";
+import type { ActionCategory, CreateOption, Slide, Theme } from "./types";
 
 export const DATA = {
   user: {
@@ -168,28 +168,6 @@ export const DEFAULT_THEME: Theme = {
   sidebarColor: "#2a0f0f",
   type: "dark",
 };
-
-export const CREATE_PAGE_CARD = [
-  {
-    title: "Use a ",
-    highlightedText: "Template",
-    description: "Write a prompt and leave everything else for us to handle.",
-    type: "template",
-  },
-  {
-    title: "Generate with ",
-    highlightedText: "Creative AI",
-    description: "Write a prompt and leave everything else for us to handle.",
-    type: "creative-ai",
-    highlight: true,
-  },
-  {
-    title: "Start from ",
-    highlightedText: "Scratch",
-    description: "Write a prompt and leave everything else for us to handle.",
-    type: "create-from-scratch",
-  },
-];
 
 export const CATEGORY_LABELS: Record<ActionCategory, string> = {
   navigation: "Navigation",
@@ -633,3 +611,56 @@ STRICT JSON RULES:
 - Output MUST be a JSON ARRAY and length MUST equal the number of outlines provided.
 - The slides must follow the structure of the schema provided above.
 `;
+
+export const SLIDE_ANIMATIONS = {
+  container: {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, scale: 0.95, x: -50 },
+    transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
+  },
+  dragHandle: {
+    initial: { opacity: 0, x: -10 },
+    animate: (isVisible: boolean) => ({
+      opacity: isVisible ? 1 : 0,
+      x: isVisible ? 0 : -10,
+    }),
+    transition: { duration: 0.2 },
+  },
+  deleteButton: {
+    initial: { opacity: 0, x: 10 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: 10 },
+    transition: { duration: 0.2 },
+  },
+  orderBadge: {
+    whileHover: { scale: 1.05 },
+    whileTap: { scale: 0.95 },
+  },
+  editConfirm: {
+    whileHover: { scale: 1.1 },
+    whileTap: { scale: 0.9 },
+  },
+} as const;
+
+export const CREATE_PAGE_CARD: CreateOption[] = [
+  {
+    title: "Use a ",
+    highlightedText: "Template",
+    description: "Choose from professional templates and customize.",
+    type: "templates",
+  },
+  {
+    title: "Generate with ",
+    highlightedText: "Creative AI",
+    description: "Let AI create your entire presentation instantly.",
+    type: "creative-ai",
+    highlight: true,
+  },
+  {
+    title: "Start from ",
+    highlightedText: "Scratch",
+    description: "Build your presentation from the ground up.",
+    type: "create-from-scratch",
+  },
+] as const;

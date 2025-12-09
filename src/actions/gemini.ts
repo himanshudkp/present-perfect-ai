@@ -15,9 +15,9 @@ import {
   repairJsonString,
   safeParseJson,
   validateSlidesWithZod,
-} from "@/utils/utils";
-import { EXISTING_LAYOUTS } from "@/utils/constants";
-import type { ContentItem, Slide } from "@/types";
+} from "@/lib/utils";
+import { EXISTING_LAYOUTS } from "@/lib/constants";
+import type { ContentItem, Slide } from "@/lib/types";
 
 type GenerationResult<T> = {
   status: number;

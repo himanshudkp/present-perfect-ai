@@ -2,8 +2,8 @@ import { getAllProjects } from "@/actions/project";
 import Projects from "@/components/dashboard/projects";
 import DashboardHeader from "@/components/dashboard/dashboard-header";
 import ProjectNotFound from "@/components/dashboard/project-not-found";
-import DashboardErrorPage from "@/components/dashboard-error-page";
-import { type TabView } from "@/types";
+import DashboardErrorPage from "@/components/dashboard/dashboard-error-page";
+import { type TabView } from "@/lib/types";
 
 const DashboardPage = async ({
   searchParams,

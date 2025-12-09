@@ -14,7 +14,7 @@ import UnlockedButton from "./unlocked-button";
 import LockedButton from "./locked-button";
 import { showError } from "@/components/toast-message";
 import { usePromptStore } from "@/store/use-prompt-store";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 import type { User } from "@/generated/prisma/client";
 
 const BUTTON_VARIANTS = {

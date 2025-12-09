@@ -18,8 +18,8 @@ import {
 import { EmptySearchResult } from "./empty-search";
 import { CategorySection } from "./category-section";
 import { CommandFooter } from "./command-footer";
-import { CATEGORY_ORDER } from "@/utils/constants";
-import type { Action } from "@/types";
+import { CATEGORY_ORDER } from "@/lib/constants";
+import type { Action } from "@/lib/types";
 
 const CommandPalette = ({
   onNavigate,

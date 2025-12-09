@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import type { SortOption, TabView } from "@/types";
+import type { SortOption, TabView } from "@/lib/types";
 
 const formatSortLabel = (sortBy: SortOption) => sortBy.replace("-", " ");
 interface ResultSummaryProps {

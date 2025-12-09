@@ -1,5 +1,5 @@
 import { SignUp } from "@clerk/nextjs";
-import { CommonAuthSkeleton } from "@/components/common-auth-skeleton";
+import { CommonAuthSkeleton } from "@/components/authentication/common-auth-skeleton";
 
 export default function SignUpPage() {
   return (

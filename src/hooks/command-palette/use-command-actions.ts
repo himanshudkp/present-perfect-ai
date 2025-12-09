@@ -13,7 +13,7 @@ import {
   Star,
 } from "lucide-react";
 import { usePromptStore } from "@/store/use-prompt-store";
-import type { Action } from "@/types";
+import type { Action } from "@/lib/types";
 
 export const useCommandActions = () => {
   const { setPage } = usePromptStore();

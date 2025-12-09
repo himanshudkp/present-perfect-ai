@@ -15,11 +15,16 @@ import ResultSummary from "./result-summary";
 import NoProjectsFound from "./no-projects-found";
 import ProjectCard from "./project-card";
 import ViewToggleButton from "./view-toggle-button";
-import { cn } from "@/utils/utils";
-import { CONTAINER_VARIANTS, GRID_CLASSES } from "@/utils/constants";
+import { cn } from "@/lib/utils";
+import { CONTAINER_VARIANTS, GRID_CLASSES } from "@/lib/constants";
 
 import type { Project } from "@/generated/prisma/client";
-import type { ProjectFilters, SortOption, TabView, ViewMode } from "@/types";
+import type {
+  ProjectFilters,
+  SortOption,
+  TabView,
+  ViewMode,
+} from "@/lib/types";
 
 const ITEM_VARIANTS = {
   hidden: { opacity: 0, y: 20 },

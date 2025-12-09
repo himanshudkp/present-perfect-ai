@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { Check } from "lucide-react";
-import type { Theme } from "@/types";
+import type { Theme } from "@/lib/types";
 
 const SuccessToast = ({ theme, show }: { theme: Theme; show: boolean }) => {
   if (!show) return null;

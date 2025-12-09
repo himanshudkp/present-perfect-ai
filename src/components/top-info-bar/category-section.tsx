@@ -2,8 +2,8 @@
 
 import { memo } from "react";
 import { ActionItem } from "./action-item";
-import { CATEGORY_LABELS } from "@/utils/constants";
-import type { Action, ActionCategory } from "@/types";
+import { CATEGORY_LABELS } from "@/lib/constants";
+import type { Action, ActionCategory } from "@/lib/types";
 
 interface CategorySectionProps {
   category: ActionCategory;

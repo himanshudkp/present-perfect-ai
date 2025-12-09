@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAnimation } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { THEMES } from "@/utils/constants";
+import { THEMES } from "@/lib/constants";
 import SuccessToast from "./success-toast";
 import { MainCardContent } from "./main-card-content";
 import { RightCardContent } from "./right-card-content";
@@ -13,7 +13,7 @@ import { LeftCardContent } from "./left-card-content";
 import ThemePicker from "./theme-picker";
 import ThemePreviewCard from "./theme-preview-card";
 import { useSlideStore } from "@/store/use-slide-store";
-import type { Theme } from "@/types";
+import type { Theme } from "@/lib/types";
 
 const ThemePreview = () => {
   const router = useRouter();

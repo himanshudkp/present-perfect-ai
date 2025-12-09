@@ -1,9 +1,9 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { cn } from "@/utils/utils";
-import { GRID_CLASSES } from "@/utils/constants";
-import type { ViewMode } from "@/types";
+import { cn } from "@/lib/utils";
+import { GRID_CLASSES } from "@/lib/constants";
+import type { ViewMode } from "@/lib/types";
 
 const SKELETON_COUNT = {
   list: 4,
