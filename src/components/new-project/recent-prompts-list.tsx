@@ -3,10 +3,10 @@
 import { useCallback, useState, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Trash2, FileText, Layers } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { showError, showSuccess } from "@/components/toast-message";
-import { AIPromptCard } from "./new-project/ai-prompt-card";
-import DeletePromptAlert from "./new-project/delete-prompt-alert";
+import { AIPromptCard } from "./ai-prompt-card";
+import DeletePromptAlert from "./delete-prompt-alert";
 import { usePromptStore } from "@/store/use-prompt-store";
 import { useCreativeAiStore } from "@/store/use-creative-ai-store";
 import { cn } from "@/lib/utils";

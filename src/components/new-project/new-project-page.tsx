@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import RecentPromptsList from "../recent-prompts-list";
+import RecentPromptsList from "./recent-prompts-list";
 import NewProjectCard from "./new-project-card";
 import { usePromptStore } from "@/store/use-prompt-store";
 import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";

@@ -4,7 +4,7 @@ import { KeyboardEvent, memo, useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain } from "lucide-react";
 import CardList from "../slide-outlines/slide-card-list";
-import RecentPromptsList from "../recent-prompts-list";
+import RecentPromptsList from "./recent-prompts-list";
 import { CreatePresentation } from "./create-presentation";
 import CreateSLideHeader from "./create-slide-header";
 import GoBackButton from "./go-back-button";
