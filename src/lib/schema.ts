@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { ContentItem } from "@/types";
+import type { ContentItem } from "@/lib/types";
 
 const ContentItemSchema: z.ZodType<ContentItem> = z.lazy(() =>
   z.object({

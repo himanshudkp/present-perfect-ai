@@ -16,7 +16,7 @@ import NavigationContainer from "./navigation-container";
 import QuickAction from "./quick-action";
 import RecentProjects from "./recent-projects";
 import SidebarSkeleton from "./sidebar-skeleton";
-import { DATA } from "@/utils/constants";
+import { DATA } from "@/lib/constants";
 
 type AppSidebarProps = {
   recentProjects: Project[];

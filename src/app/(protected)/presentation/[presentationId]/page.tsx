@@ -2,7 +2,7 @@
 
 import { getProjectById } from "@/actions/project";
 import { Project } from "@/generated/prisma/client";
-import { THEMES } from "@/utils/constants";
+import { THEMES } from "@/lib/constants";
 import { showError } from "@/components/toast-message";
 import { useSlideStore } from "@/store/use-slide-store";
 import { Loader2 } from "lucide-react";

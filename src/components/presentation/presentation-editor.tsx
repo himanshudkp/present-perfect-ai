@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import PresentationDropZone from "./presentation-drop-zone";
-import { DropItem } from "@/types";
+import { DropItem } from "@/lib/types";
 import DraggableSlide from "./draggable-slide";
 
 const PresentationEditor = ({ isEditable }: { isEditable: boolean }) => {

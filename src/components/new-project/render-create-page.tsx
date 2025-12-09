@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePromptStore } from "@/store/use-prompt-store";
-import CreatePage from "./create-page";
+import CreatePage from "../create-page";
 import CreateFromScratch from "./create-from-scratch";
 import CreateWithAI from "./create-with-ai";
-import NewProjectSkeleton from "@/components/new-project-skeleton";
+import NewProjectSkeleton from "@/components/new-project/new-project-skeleton";
+import { usePromptStore } from "@/store/use-prompt-store";
 
-const pageVariants = {
+const PAGE_VARIANTS = {
   initial: {
     opacity: 0,
     y: 20,
@@ -34,7 +34,7 @@ const pageVariants = {
   },
 } as const;
 
-const RenderPage = () => {
+const RenderCreatePage = () => {
   const { page, setPage } = usePromptStore();
   const [isLoading, setIsLoading] = useState(true);
   const [displayPage, setDisplayPage] = useState(page);
@@ -80,16 +80,7 @@ const RenderPage = () => {
   }, [displayPage, handleSelectOption]);
 
   if (isLoading) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-      >
-        <NewProjectSkeleton />
-      </motion.div>
-    );
+    return <NewProjectSkeleton />;
   }
 
   return (
@@ -97,7 +88,7 @@ const RenderPage = () => {
       <AnimatePresence mode="wait">
         <motion.div
           key={displayPage}
-          variants={pageVariants}
+          variants={PAGE_VARIANTS}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -110,4 +101,4 @@ const RenderPage = () => {
   );
 };
 
-export default React.memo(RenderPage);
+export default memo(RenderCreatePage);

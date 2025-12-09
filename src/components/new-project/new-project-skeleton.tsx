@@ -1,15 +1,9 @@
-import React from "react";
-import { Card, CardContent, CardHeader } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
-import { cn } from "@/utils/utils";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
 
-type Props = {
-  className?: string;
-};
-
-const NewProjectSkeleton = ({ className }: Props) => {
+const NewProjectSkeleton = () => {
   return (
-    <div className={cn("space-y-8 animate-in fade-in duration-500", className)}>
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div className="text-center space-y-3">
         <Skeleton className="h-10 w-3/4 max-w-md mx-auto" />
         <Skeleton className="h-4 w-1/2 max-w-sm mx-auto" />

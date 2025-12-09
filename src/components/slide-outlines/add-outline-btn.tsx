@@ -4,7 +4,7 @@ import { memo, useCallback, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 
 const VARIANTS = {
   default: {

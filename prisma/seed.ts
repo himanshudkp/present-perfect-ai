@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { THEMES } from "@/utils/constants";
+import { THEMES } from "@/lib/constants";
 import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";

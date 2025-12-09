@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Action } from "@/types";
+import type { Action } from "@/lib/types";
 
 export const useKeyboardNavigation = (
   open: boolean,

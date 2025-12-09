@@ -3,9 +3,9 @@
 import { usePromptStore } from "@/store/use-prompt-store";
 import React, { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/utils/constants";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
 import { Card } from "./ui/card";
-import { cn, getTimeAgo } from "@/utils/utils";
+import { cn, getTimeAgo } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { useCreativeAiStore } from "@/store/use-creative-ai-store";
 import { showError, showSuccess } from "@/components/toast-message";

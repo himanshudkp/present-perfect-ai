@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Star } from "lucide-react";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 
 interface IconButtonProps {
   icon: typeof Star;

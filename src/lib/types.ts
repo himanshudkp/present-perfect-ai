@@ -145,3 +145,11 @@ export interface DropItem {
   component: SlidesLayout;
   index?: number;
 }
+
+export interface CreateOption {
+  title: string;
+  highlightedText: string;
+  description: string;
+  type: Page;
+  highlight?: boolean;
+}

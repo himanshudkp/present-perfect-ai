@@ -6,7 +6,7 @@ import React, { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 
 export default function PageNotFound() {
   const router = useRouter();

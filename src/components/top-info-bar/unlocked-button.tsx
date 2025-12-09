@@ -4,7 +4,7 @@ import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 
 interface UnlockedButtonProps {
   isHovering: boolean;

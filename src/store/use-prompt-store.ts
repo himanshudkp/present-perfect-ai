@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import type { Page, PromptHistory } from "@/types";
+import type { Page, PromptHistory } from "@/lib/types";
 
 interface PromptStore {
   page: Page;

@@ -4,39 +4,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Star, TrendingUp, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
-import type { Page } from "@/types";
+import { CREATE_PAGE_CARD } from "@/lib/constants";
 
-type CreateOption = {
-  title: string;
-  highlightedText: string;
-  description: string;
-  type: Page;
-  highlight?: boolean;
-};
+const CONTAINER_VARIANTS = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+} as const;
 
-const CREATE_PAGE_CARD: CreateOption[] = [
-  {
-    title: "Use a ",
-    highlightedText: "Template",
-    description: "Choose from professional templates and customize.",
-    type: "templates",
+const CARD_VARIANTS = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: "easeOut" },
   },
-  {
-    title: "Generate with ",
-    highlightedText: "Creative AI",
-    description: "Let AI create your entire presentation instantly.",
-    type: "creative-ai",
-    highlight: true,
-  },
-  {
-    title: "Start from ",
-    highlightedText: "Scratch",
-    description: "Build your presentation from the ground up.",
-    type: "create-from-scratch",
-  },
-];
+} as const;
 
 const NewProjectCard = ({
   onSelectOption,
@@ -45,30 +35,10 @@ const NewProjectCard = ({
 }) => {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      },
-    },
-  } as const;
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-  } as const;
-
   return (
     <motion.div
       className="w-full"
-      variants={containerVariants}
+      variants={CONTAINER_VARIANTS}
       initial="hidden"
       animate="visible"
     >
@@ -80,7 +50,7 @@ const NewProjectCard = ({
           return (
             <motion.div
               key={option.type}
-              variants={cardVariants}
+              variants={CARD_VARIANTS}
               className={cn(
                 "relative group overflow-hidden rounded-xl p-4",
                 "border-2 transition-all duration-300",

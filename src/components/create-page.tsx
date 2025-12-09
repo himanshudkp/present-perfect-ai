@@ -1,15 +1,16 @@
+"use client";
+
 import { motion, AnimatePresence } from "framer-motion";
 import RecentPrompts from "./recent-prompts";
 import { usePromptStore } from "@/store/use-prompt-store";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/utils/constants";
-import { Clock } from "lucide-react";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
 import NewProjectCard from "./new-project-card";
 
-type Props = {
+const CreatePage = ({
+  onSelectOption,
+}: {
   onSelectOption: (option: string) => void;
-};
-
-const CreatePage = ({ onSelectOption }: Props) => {
+}) => {
   const { prompts } = usePromptStore();
 
   return (
@@ -45,11 +46,6 @@ const CreatePage = ({ onSelectOption }: Props) => {
       </motion.div>
 
       <NewProjectCard onSelectOption={onSelectOption} />
-
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-        <Clock className="h-4 w-4" />
-        <span>Average creation time: 2-5 minutes</span>
-      </div>
 
       <AnimatePresence>
         {prompts.length > 0 && (

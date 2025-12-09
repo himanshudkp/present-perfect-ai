@@ -1,5 +1,5 @@
-import { DropItem, SlidesLayout } from "@/types";
-import { cn } from "@/utils/utils";
+import { DropItem, SlidesLayout } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import React from "react";
 import { useDrop } from "react-dnd";
 

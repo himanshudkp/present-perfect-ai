@@ -10,8 +10,8 @@ import { showError, showSuccess } from "../toast-message";
 import { ThemeCard } from "./theme-card";
 import { useSlideStore } from "@/store/use-slide-store";
 import { generateLayouts } from "@/actions/gemini";
-import { THEMES } from "@/utils/constants";
-import type { Slide, Theme } from "@/types";
+import { THEMES } from "@/lib/constants";
+import type { Slide, Theme } from "@/lib/types";
 
 const HEADER_ANIMATION = {
   initial: { opacity: 0, y: -20 },

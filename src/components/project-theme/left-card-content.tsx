@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Zap, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeatureCard from "./feature-card";
-import { Theme } from "@/types";
+import { Theme } from "@/lib/types";
 
 export function LeftCardContent({ selectedTheme }: { selectedTheme: Theme }) {
   const { accentColor, bgColor } = selectedTheme;
