@@ -1,33 +1,21 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { useStartScratchStore } from "@/store/use-start-scratch";
+import { memo, useCallback, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
-import { Button } from "../ui/button";
-import {
-  ChevronLeft,
-  Plus,
-  Wand2,
-  FileText,
-  Loader2,
-  Sparkles,
-} from "lucide-react";
-import { Input } from "../ui/input";
-import CardList from "../slide-outlines/slide-card-list";
-import { OutlineCard } from "@/lib/types";
-import { toast } from "sonner";
-
-import { cn } from "@/lib/utils";
-import { useCreatePresentation } from "@/hooks/presentation/use-create-presentation";
-import { useResetState } from "@/hooks/presentation/use-reset-state";
-import { PresentationDetailsCard } from "./presentation-details-card";
-import { AddSlideSection } from "./add-slide-section";
-import { StatusBanner } from "./status-banner";
-import { CreatePresentationFooter } from "./create-presentation-footer";
-import { CreatingModal } from "./creating-model";
+import { Plus, FileText } from "lucide-react";
 import CreateSLideHeader from "./create-slide-header";
 import GoBackButton from "./go-back-button";
+import { ProjectTitleCard } from "./project-title-card";
+import { showError, showSuccess } from "../toast-message";
+import CardList from "../slide-outlines/slide-card-list";
+import { CreatePresentation } from "./create-presentation";
+import { AddSlideSection } from "./add-slide-section";
+import { EmptySlideState } from "./empty-slide-state";
+import { useCreatePresentation } from "@/hooks/presentation/use-create-presentation";
+import { useResetState } from "@/hooks/presentation/use-reset-state";
+import { useStartScratchStore } from "@/store/use-start-scratch";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
+import type { OutlineCard } from "@/lib/types";
 
 const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
   const { addMultipleOutlines, addOutline, outlines, resetOutlines } =
@@ -65,9 +53,17 @@ const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
     }
   );
 
-  const hasCards = outlines.length > 0;
-  const canAddCard = editText.trim().length > 0;
+  const hasCards = useMemo(() => outlines.length > 0, [outlines.length]);
+  const canAddCard = useMemo(() => editText.trim().length > 0, [editText]);
   const cardCount = outlines.length;
+
+  const addIcon = useMemo(() => {
+    return <Plus className="h-3.5 w-3.5 text-primary" />;
+  }, []);
+
+  const fileIcon = useMemo(() => {
+    return FileText;
+  }, []);
 
   const handleBack = useCallback(() => {
     if (hasCards || presentationTitle.trim()) {
@@ -83,7 +79,7 @@ const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
 
   const handleAddCard = useCallback(() => {
     if (!canAddCard) {
-      toast.error("Please enter a slide title");
+      showError("Error", "Please enter a slide title");
       return;
     }
 
@@ -95,7 +91,7 @@ const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
 
     setEditText("");
     addOutline(newCard);
-    toast.success(`"${newCard.title}" added`);
+    showSuccess("Success", `"${newCard.title}" added`);
   }, [canAddCard, editText, outlines.length, addOutline]);
 
   const handleKeyPress = useCallback(
@@ -107,6 +103,12 @@ const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
     },
     [canAddCard, handleAddCard]
   );
+
+  const handleCardDoubleClick = useCallback((id: string, title: string) => {
+    setEditingCard(id);
+    setEditText(title);
+    setSelectedCard(id);
+  }, []);
 
   return (
     <motion.div
@@ -121,17 +123,15 @@ const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
         label="Manual Creation"
         title1="Build Your"
         title2="Presentation"
-        description="Create a custom presentation outline with complete control over every
-          slide"
-        icon={FileText}
+        description="Create a custom presentation outline with complete control"
+        icon={fileIcon}
       />
 
       <motion.div variants={ITEM_VARIANTS}>
-        <PresentationDetailsCard
+        <ProjectTitleCard
           title={presentationTitle}
           onChange={setPresentationTitle}
           disabled={isCreating}
-          description="Give your presentation a title"
           placeholder="E.g., Q4 Marketing Strategy 2025"
         />
       </motion.div>
@@ -142,89 +142,49 @@ const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
           onTitleChange={setEditText}
           onAddClick={handleAddCard}
           onResetClick={resetCards}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           canAdd={canAddCard}
           disabled={isCreating}
           cardCount={cardCount}
           showResetConfirm={showResetConfirm}
           placeholder="E.g., Introduction, Overview, Key Features..."
           label="Add Individual Slides"
-          icon={<Plus className="h-3.5 w-3.5 text-primary" />}
+          icon={addIcon}
           isManual={true}
-        />
-      </motion.div>
-
-      <motion.div variants={ITEM_VARIANTS}>
-        <StatusBanner
-          cardCount={cardCount}
-          presentationTitle={presentationTitle}
-          hasGeneratedSlides={false}
-          isReady={isReady}
         />
       </motion.div>
 
       <motion.div variants={ITEM_VARIANTS}>
         <AnimatePresence mode="wait">
           {cardCount > 0 ? (
-            <motion.div
-              key="card-list"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-            >
-              <CardList
-                outlines={outlines}
-                addOutline={addOutline}
-                addMultipleOutlines={addMultipleOutlines}
-                editingCard={editingCard}
-                selectedCard={selectedCard}
-                editText={editText}
-                onEditChange={setEditText}
-                onCardSelect={setSelectedCard}
-                setEditText={setEditText}
-                setEditingCard={setEditingCard}
-                setSelectedCard={setSelectedCard}
-                onCardDoubleClick={(id, title) => {
-                  setEditingCard(id);
-                  setEditText(title);
-                  setSelectedCard(id);
-                }}
-              />
-            </motion.div>
+            <CardList
+              outlines={outlines}
+              addOutline={addOutline}
+              addMultipleOutlines={addMultipleOutlines}
+              editingCard={editingCard}
+              selectedCard={selectedCard}
+              editText={editText}
+              onEditChange={setEditText}
+              onCardSelect={setSelectedCard}
+              setEditText={setEditText}
+              setEditingCard={setEditingCard}
+              setSelectedCard={setSelectedCard}
+              onCardDoubleClick={handleCardDoubleClick}
+            />
           ) : (
-            <motion.div
-              key="empty-state"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-16 border-2 border-dashed rounded-lg bg-muted/20"
-            >
-              <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-              <h3 className="text-base font-semibold mb-1">No slides yet</h3>
-              <p className="text-sm text-muted-foreground">
-                Add slides above to get started
-              </p>
-            </motion.div>
+            <EmptySlideState />
           )}
         </AnimatePresence>
       </motion.div>
 
-      <CreatePresentationFooter
+      <CreatePresentation
         isVisible={cardCount > 0 || presentationTitle.trim().length > 0}
         isReady={isReady}
         isCreating={isCreating}
-        cardCount={cardCount}
-        presentationTitle={presentationTitle}
         onCreateClick={handleCreatePresentation}
-      />
-
-      <CreatingModal
-        isCreating={isCreating}
-        presentationTitle={presentationTitle}
-        cardCount={cardCount}
       />
     </motion.div>
   );
 };
 
-export default CreateFromScratch;
+export default memo(CreateFromScratch);

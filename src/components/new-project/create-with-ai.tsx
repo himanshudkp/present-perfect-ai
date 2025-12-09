@@ -1,43 +1,22 @@
 "use client";
 
-import { useCreativeAiStore } from "@/store/use-creative-ai-store";
-import React, { useCallback, useState } from "react";
+import { KeyboardEvent, memo, useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
-import { Button } from "../ui/button";
-import {
-  ChevronLeft,
-  Loader2,
-  Sparkles,
-  Wand2,
-  FileText,
-  Brain,
-} from "lucide-react";
-import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Brain } from "lucide-react";
 import CardList from "../slide-outlines/slide-card-list";
-import { usePromptStore } from "@/store/use-prompt-store";
-import RecentPrompts from "../recent-prompts";
-import { toast } from "sonner";
-import { generateCreativePrompt } from "@/actions/gemini";
-import { cn } from "@/lib/utils";
-import { OutlineCard } from "@/lib/types";
-import { useCreatePresentation } from "@/hooks/presentation/use-create-presentation";
-import { useResetState } from "@/hooks/presentation/use-reset-state";
-import { PresentationDetailsCard } from "./presentation-details-card";
-import { AddSlideSection } from "./add-slide-section";
-import { StatusBanner } from "./status-banner";
-import { CreatePresentationFooter } from "./create-presentation-footer";
-import { CreatingModal } from "./creating-model";
+import RecentPromptsList from "../recent-prompts-list";
+import { CreatePresentation } from "./create-presentation";
 import CreateSLideHeader from "./create-slide-header";
 import GoBackButton from "./go-back-button";
 import AiPromptSection from "./ai-prompt-section";
+import { EmptySlideState } from "./empty-slide-state";
+import { showError, showSuccess } from "../toast-message";
+import { generateCreativePrompt } from "@/actions/gemini";
+import { usePromptStore } from "@/store/use-prompt-store";
+import { useCreativeAiStore } from "@/store/use-creative-ai-store";
+import { useCreatePresentation } from "@/hooks/presentation/use-create-presentation";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
+import type { OutlineCard } from "@/lib/types";
 
 const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
   const [editingCard, setEditingCard] = useState<string | null>(null);
@@ -45,20 +24,17 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const [noOfCards, setNoOfCards] = useState("6");
-  const [generationProgress, setGenerationProgress] = useState(0);
-  const [manualSlideTitle, setManualSlideTitle] = useState("");
   const [presentationTitle, setPresentationTitle] = useState("");
 
-  const {
-    currentAIPrompt,
-    setCurrentAIPrompt,
-    outlines,
-    resetOutlines,
-    addMultipleOutlines,
-    addOutline,
-  } = useCreativeAiStore();
+  const currentAIPrompt = useCreativeAiStore((s) => s.currentAIPrompt);
+  const setCurrentAIPrompt = useCreativeAiStore((s) => s.setCurrentAIPrompt);
+  const outlines = useCreativeAiStore((s) => s.outlines);
+  const resetOutlines = useCreativeAiStore((s) => s.resetOutlines);
+  const addMultipleOutlines = useCreativeAiStore((s) => s.addMultipleOutlines);
+  const addOutline = useCreativeAiStore((s) => s.addOutline);
 
-  const { prompts, addPrompt } = usePromptStore();
+  const prompts = usePromptStore((s) => s.prompts);
+  const addPrompt = usePromptStore((s) => s.addPrompt);
 
   const { handleCreatePresentation, isCreating, isReady } =
     useCreatePresentation({
@@ -77,35 +53,11 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
           createdAt: new Date().toISOString(),
         });
         setCurrentAIPrompt("");
-        setManualSlideTitle("");
         setPresentationTitle("");
       },
     });
 
-  const { resetCards, showResetConfirm } = useResetState(
-    {
-      outlines,
-      presentationTitle,
-      currentAIPrompt,
-      manualSlideTitle,
-    },
-    {
-      onReset: () => {
-        setEditingCard(null);
-        setSelectedCard(null);
-        setEditText("");
-        setCurrentAIPrompt("");
-        setManualSlideTitle("");
-        setPresentationTitle("");
-        resetOutlines();
-        setNoOfCards("6");
-      },
-    }
-  );
-
   const cardCount = outlines.length;
-  const canAddManualSlide = manualSlideTitle.trim().length > 0;
-  const hasGeneratedSlides = cardCount > 0 && currentAIPrompt.trim().length > 0;
 
   const handleBack = useCallback(() => {
     if (
@@ -120,7 +72,6 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
     }
     resetOutlines();
     setCurrentAIPrompt("");
-    setManualSlideTitle("");
     setPresentationTitle("");
     onBack();
   }, [
@@ -134,21 +85,17 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
 
   const generateOutline = useCallback(async () => {
     if (!currentAIPrompt.trim()) {
-      toast.error("Please enter a prompt");
+      showError("Error", "Please enter a prompt");
       return;
     }
 
     setIsGenerating(true);
-    setGenerationProgress(0);
 
     try {
-      setGenerationProgress(20);
       const result = await generateCreativePrompt(
         currentAIPrompt,
         parseInt(noOfCards)
       );
-
-      setGenerationProgress(60);
 
       if (result.status === 200 && result.data?.outlines) {
         const cards: OutlineCard[] = result.data.outlines.map(
@@ -159,49 +106,43 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
           })
         );
 
-        setGenerationProgress(90);
         addMultipleOutlines(cards);
         setNoOfCards(cards.length.toString());
-        setGenerationProgress(100);
 
-        toast.success("Outline generated!", {
-          description: `Created ${cards.length} slides`,
-        });
+        showSuccess("Success", "Outline generated successfully!");
 
         if (result.data.title && !presentationTitle.trim()) {
           setPresentationTitle(result.data.title);
         }
-
-        setTimeout(() => setGenerationProgress(0), 500);
       } else {
-        toast.error("Generation failed", {
-          description: result.error || "Please try again",
-        });
+        showError("Error", "Outline Generation failed");
       }
     } catch (error) {
       console.error("Generation error:", error);
-      toast.error("Something went wrong");
+      showError("Error", "Something went wrong");
     } finally {
       setIsGenerating(false);
     }
   }, [currentAIPrompt, noOfCards, addMultipleOutlines, presentationTitle]);
 
-  const handleAddManualSlide = useCallback(() => {
-    if (!canAddManualSlide) {
-      toast.error("Please enter a slide title");
-      return;
-    }
+  const onCardDoubleClick = useCallback((id: string, title: string) => {
+    setEditingCard(id);
+    setEditText(title);
+    setSelectedCard(id);
+  }, []);
 
-    const newCard: OutlineCard = {
-      id: crypto.randomUUID(),
-      title: manualSlideTitle.trim(),
-      order: outlines.length + 1,
-    };
+  const onEditChange = useCallback((v: string) => setEditText(v), []);
+  const onCardSelect = useCallback((v: string) => setSelectedCard(v), []);
 
-    addOutline(newCard);
-    setManualSlideTitle("");
-    toast.success(`"${newCard.title}" added successfully`);
-  }, [canAddManualSlide, manualSlideTitle, outlines.length, addOutline]);
+  const handlePromptKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        generateOutline();
+      }
+    },
+    [generateOutline]
+  );
 
   return (
     <motion.div
@@ -220,69 +161,21 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
         icon={Brain}
       />
 
-      {/* <motion.div variants={ITEM_VARIANTS}>
-        <PresentationDetailsCard
-          title={presentationTitle}
-          onChange={setPresentationTitle}
-          disabled={isGenerating || isCreating}
-        />
-      </motion.div> */}
-
       <AiPromptSection
         currentAIPrompt={currentAIPrompt}
         isGenerating={isGenerating}
         isCreating={isCreating}
         noOfCards={noOfCards}
-        generationProgress={generationProgress}
         setNoOfCards={setNoOfCards}
         generateOutline={generateOutline}
         setCurrentAIPrompt={setCurrentAIPrompt}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            generateOutline();
-          }
-        }}
+        onKeyDown={handlePromptKeyDown}
       />
-
-      {/* <motion.div variants={ITEM_VARIANTS}>
-        <AddSlideSection
-          title={manualSlideTitle}
-          onTitleChange={setManualSlideTitle}
-          onAddClick={handleAddManualSlide}
-          onResetClick={resetCards}
-          onKeyPress={(e) => {
-            if (e.key === "Enter" && canAddManualSlide) {
-              e.preventDefault();
-              handleAddManualSlide();
-            }
-          }}
-          canAdd={canAddManualSlide}
-          disabled={isGenerating || isCreating}
-          cardCount={cardCount}
-          showResetConfirm={showResetConfirm}
-          label="Add Slides Manually"
-        />
-      </motion.div> */}
-
-      <motion.div variants={ITEM_VARIANTS}>
-        <StatusBanner
-          cardCount={cardCount}
-          presentationTitle={presentationTitle}
-          hasGeneratedSlides={hasGeneratedSlides}
-          isReady={isReady}
-        />
-      </motion.div>
 
       <motion.div variants={ITEM_VARIANTS}>
         <AnimatePresence mode="wait">
           {cardCount > 0 ? (
-            <motion.div
-              key="card-list"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-            >
+            <>
               <CardList
                 outlines={outlines}
                 addOutline={addOutline}
@@ -290,58 +183,33 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
                 editingCard={editingCard}
                 selectedCard={selectedCard}
                 editText={editText}
-                onEditChange={setEditText}
-                onCardSelect={setSelectedCard}
+                onEditChange={onEditChange}
+                onCardSelect={onCardSelect}
                 setEditText={setEditText}
                 setEditingCard={setEditingCard}
                 setSelectedCard={setSelectedCard}
-                onCardDoubleClick={(id, title) => {
-                  setEditingCard(id);
-                  setEditText(title);
-                  setSelectedCard(id);
-                }}
+                onCardDoubleClick={onCardDoubleClick}
               />
-            </motion.div>
+              <CreatePresentation
+                isVisible={cardCount > 0}
+                isReady={isReady}
+                isCreating={isCreating}
+                onCreateClick={handleCreatePresentation}
+              />
+            </>
           ) : (
-            <motion.div
-              key="empty-state"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-16 border-2 border-dashed rounded-lg bg-muted/20"
-            >
-              <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-              <h3 className="text-base font-semibold mb-1">No slides yet</h3>
-              <p className="text-sm text-muted-foreground">
-                Generate with AI or add manually above
-              </p>
-            </motion.div>
+            <EmptySlideState />
           )}
         </AnimatePresence>
       </motion.div>
 
       {prompts.length > 0 && (
         <motion.div variants={ITEM_VARIANTS}>
-          <RecentPrompts />
+          <RecentPromptsList />
         </motion.div>
       )}
-
-      <CreatePresentationFooter
-        isVisible={cardCount > 0 || presentationTitle.trim().length > 0}
-        isReady={isReady}
-        isCreating={isCreating}
-        cardCount={cardCount}
-        presentationTitle={presentationTitle}
-        onCreateClick={handleCreatePresentation}
-      />
-
-      <CreatingModal
-        isCreating={isCreating}
-        presentationTitle={presentationTitle}
-        cardCount={cardCount}
-      />
     </motion.div>
   );
 };
 
-export default CreateWithAI;
+export default memo(CreateWithAI);

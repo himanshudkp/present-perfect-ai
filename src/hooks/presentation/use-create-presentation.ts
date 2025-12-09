@@ -22,7 +22,7 @@ export const useCreatePresentation = ({
   const { setProject } = useSlideStore();
   const [isCreating, setIsCreating] = useState(false);
 
-  const isReady = outlines.length > 0 && presentationTitle.trim().length > 0;
+  const isReady = outlines.length > 0;
 
   const handleCreatePresentation = useCallback(async () => {
     if (!isReady) {

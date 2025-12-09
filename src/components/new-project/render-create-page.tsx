@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import CreatePage from "../create-page";
+import NewProjectPage from "./new-project-page";
 import CreateFromScratch from "./create-from-scratch";
 import CreateWithAI from "./create-with-ai";
 import NewProjectSkeleton from "@/components/new-project/new-project-skeleton";
@@ -67,14 +67,14 @@ const RenderCreatePage = () => {
 
   const renderStep = useMemo(() => {
     const pageComponents = {
-      create: <CreatePage onSelectOption={handleSelectOption} />,
+      create: <NewProjectPage onSelectOption={handleSelectOption} />,
       "creative-ai": <CreateWithAI onBack={handleBack} />,
       "create-from-scratch": <CreateFromScratch onBack={handleBack} />,
     };
 
     return (
       pageComponents[displayPage as keyof typeof pageComponents] || (
-        <CreatePage onSelectOption={handleSelectOption} />
+        <NewProjectPage onSelectOption={handleSelectOption} />
       )
     );
   }, [displayPage, handleSelectOption]);

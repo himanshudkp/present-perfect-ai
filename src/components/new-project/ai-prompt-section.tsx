@@ -1,9 +1,8 @@
-import React, { memo } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { ITEM_VARIANTS } from "@/lib/constants";
+"use client";
+
+import { memo } from "react";
+import { motion } from "framer-motion";
 import { Brain, Loader2, Wand2 } from "lucide-react";
-import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
@@ -12,13 +11,17 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
+import { ITEM_VARIANTS } from "@/lib/constants";
+
+const NO_OF_SLIDES = [3, 5, 6, 7, 10, 15, 20] as const;
 
 interface AIPromptSectionProps {
   currentAIPrompt: string;
   isGenerating: boolean;
   isCreating: boolean;
   noOfCards: string;
-  generationProgress: number;
   generateOutline: () => Promise<void>;
   setNoOfCards: React.Dispatch<React.SetStateAction<string>>;
   setCurrentAIPrompt: (prompt: string) => void;
@@ -30,7 +33,6 @@ const AIPromptSection = ({
   isGenerating,
   isCreating,
   noOfCards,
-  generationProgress,
   generateOutline,
   setCurrentAIPrompt,
   setNoOfCards,
@@ -47,8 +49,8 @@ const AIPromptSection = ({
       variants={ITEM_VARIANTS}
     >
       <div className="space-y-3">
-        <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
-          <Brain className="h-3.5 w-3.5 text-primary" />
+        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <Brain className="h-4 w-4 text-primary text-sm" />
           AI Generation
         </div>
 
@@ -83,7 +85,7 @@ const AIPromptSection = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-lg">
-                {[3, 5, 6, 7, 10, 15, 20].map((num) => (
+                {NO_OF_SLIDES.map((num) => (
                   <SelectItem key={num} value={num.toString()}>
                     {num} slides
                   </SelectItem>
@@ -108,31 +110,6 @@ const AIPromptSection = ({
             </Button>
           </div>
         </div>
-
-        <AnimatePresence>
-          {isGenerating && generationProgress > 0 && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="space-y-1"
-            >
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">Generating...</span>
-                <span className="font-semibold text-primary">
-                  {generationProgress}%
-                </span>
-              </div>
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-primary"
-                  animate={{ width: `${generationProgress}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </motion.div>
   );
