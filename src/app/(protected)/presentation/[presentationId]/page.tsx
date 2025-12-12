@@ -72,9 +72,7 @@ const Presentation = (props: Props) => {
   }
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen flex flex-col">
-        <PresentationNavbar presentationId={presentationId as string} />
-      </div>
+      <PresentationNavbar presentationId={presentationId as string} />
       <div
         className="flex-1 flex overflow-hidden pt-16 "
         style={{

@@ -1,7 +1,9 @@
-import { DropItem, SlidesLayout } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import React from "react";
+"use client";
+
+import { memo } from "react";
 import { useDrop } from "react-dnd";
+import { cn } from "@/lib/utils";
+import type { DropItem } from "@/lib/types";
 
 interface PresentationDropZoneProps {
   index: number;
@@ -9,39 +11,33 @@ interface PresentationDropZoneProps {
   isEditable: boolean;
 }
 
-const PresentationDropZone = ({
-  index,
-  isEditable,
-  onDrop,
-}: PresentationDropZoneProps) => {
-  const [{ canDrop, isOver }, dropRef] = useDrop({
-    accept: ["SLIDES", "layout"],
-    drop: (item: DropItem) => {
-      onDrop(item, index);
-    },
-    canDrop: () => isEditable,
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver,
-      canDrop: !!monitor.canDrop,
-    }),
-  });
+const PresentationDropZone = memo(
+  ({ index, isEditable, onDrop }: PresentationDropZoneProps) => {
+    const [{ canDrop, isOver }, dropRef] = useDrop({
+      accept: ["SLIDE", "layout"],
+      drop: (item: DropItem) => onDrop(item, index),
+      canDrop: () => isEditable,
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop(),
+      }),
+    });
 
-  if (isEditable) null;
-  return (
-    <div
-      className={cn(
-        "h-4 rounded-md transition-all duration-300",
-        isOver && canDrop ? "border-green-500 bg-green-100" : "border-gray-300",
-        canDrop ? "border-blue-300" : ""
-      )}
-    >
-      {isOver && canDrop && (
-        <div className="h-full flex items-center justify-center text-green-600">
-          Drop Here
-        </div>
-      )}
-    </div>
-  );
-};
+    if (!isEditable) return null;
+
+    return (
+      <div
+        // ref={dropRef}
+        className={cn(
+          "h-1 rounded-full transition-all duration-300 my-2",
+          isOver && canDrop ? "bg-blue-500 h-2" : "bg-gray-300",
+          canDrop ? "opacity-100" : "opacity-40"
+        )}
+        role="region"
+        aria-label="Drop zone for slides"
+      />
+    );
+  }
+);
 
 export default PresentationDropZone;

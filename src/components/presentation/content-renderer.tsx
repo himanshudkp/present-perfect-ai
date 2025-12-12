@@ -1,11 +1,17 @@
 "use client";
 
-import { ContentItem } from "@/lib/types";
-import React, { ChangeEvent, Fragment, memo, useCallback } from "react";
+import { ChangeEvent, memo, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Heading1 } from "../project-editor/headings";
+import {
+  Heading1,
+  Heading2,
+  Heading3,
+  Heading4,
+  Title,
+} from "../slides-editor/headings-title";
+import type { ContentItem } from "@/lib/types";
 
-interface ContentRendererProps {
+export interface ContentRendererProps {
   content: ContentItem;
   onContentChange: (
     contentId: string,
@@ -29,69 +35,73 @@ const ANIMATION_PROPS = {
   transition: { duration: 0.5 },
 } as const;
 
-const ContentRenderer = ({
-  content,
-  onContentChange,
-  slideId,
-  index,
-  isEditable,
-  isPreview,
-}: ContentRendererProps) => {
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) =>
-      onContentChange(content.id, e.target.value),
-    [content.id, onContentChange]
-  );
-  const commonProps = {
-    placeHolder: content.placeholder,
-    value: content.content as string,
-    onChange: handleChange,
-    isPreview: isPreview,
-  };
-  switch (content.type) {
-    case "heading1":
-      return (
-        <motion.div className="w-full h-full">
-          <Heading1 {...commonProps} />
-        </motion.div>
-      );
-    default:
-      return <h1>Nothing</h1>;
-  }
-};
+const COMPONENT_MAP = {
+  heading1: Heading1,
+  heading2: Heading2,
+  heading3: Heading3,
+  heading4: Heading4,
+  title: Title,
+} as const;
 
-export const RecursiveComponent = ({
-  content,
-  onContentChange,
-  slideId,
-  index,
-  isEditable = true,
-  isPreview = false,
-}: ContentRendererProps) => {
-  if (isPreview) {
+interface CommonProps {
+  placeholder?: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  isPreview?: boolean;
+  readOnly?: boolean;
+}
+
+export const ContentRenderer = memo(
+  ({
+    content,
+    onContentChange,
+    slideId,
+    index,
+    isEditable = true,
+    isPreview = false,
+  }: ContentRendererProps) => {
+    const handleChange = useCallback(
+      (e: ChangeEvent<HTMLTextAreaElement>) => {
+        onContentChange(content.id, e.target.value);
+      },
+      [content.id, onContentChange]
+    );
+
+    const commonProps: CommonProps = useMemo(
+      () => ({
+        placeholder: content.placeholder,
+        value: (content.content as string) || "",
+        onChange: handleChange,
+        isPreview,
+        readOnly: isPreview || !isEditable,
+      }),
+      [
+        content.placeholder,
+        content.content,
+        handleChange,
+        isPreview,
+        isEditable,
+      ]
+    );
+
+    const Component = COMPONENT_MAP[content.type as keyof typeof COMPONENT_MAP];
+
+    if (!Component) {
+      return (
+        <div className="text-red-500 p-2">
+          Unknown content type: {content.type}
+        </div>
+      );
+    }
+
     return (
-      <ContentRenderer
-        content={content}
-        onContentChange={onContentChange}
-        slideId={slideId}
-        index={index}
-        isEditable={isEditable}
-        isPreview={isPreview}
-      />
+      <motion.div
+        {...ANIMATION_PROPS}
+        className="w-full h-full"
+        {...(isPreview ? {} : ANIMATION_PROPS)}
+      >
+        <Component {...commonProps} />
+      </motion.div>
     );
   }
-  return (
-    <Fragment>
-      <ContentRenderer
-        content={content}
-        onContentChange={onContentChange}
-        slideId={slideId}
-        index={index}
-        isEditable={isEditable}
-        isPreview={isPreview}
-      />
-    </Fragment>
-  );
-};
-
-export default memo(RecursiveComponent);
+);
