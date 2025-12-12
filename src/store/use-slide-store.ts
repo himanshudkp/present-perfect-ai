@@ -12,7 +12,13 @@ interface SlideState {
   addSlide: (slide: Slide, index: number) => void;
   updateCurrentSlide: (
     id: string,
-    newContent: string | string[] | string[][],
+    newContent:
+      | ContentItem
+      | string
+      | string[]
+      | string[][]
+      | ContentItem[]
+      | (string | ContentItem)[],
     contentId: string
   ) => void;
   deleteSlide: (id: string) => void;
@@ -172,8 +178,10 @@ export const useSlideStore = create<SlideState>()(
           ),
 
         getOrderedSlides: () => {
-          const state = get();
-          return [...state.slides].sort((a, b) => a.slideOrder - b.slideOrder);
+          const { slides } = get();
+          return Array.isArray(slides)
+            ? [...slides].sort((a, b) => a.slideOrder - b.slideOrder)
+            : [];
         },
 
         setCurrentSlide: (index) =>

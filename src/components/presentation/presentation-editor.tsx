@@ -7,7 +7,7 @@ import { DropItem } from "@/lib/types";
 import DraggableSlide from "./draggable-slide";
 
 const PresentationEditor = ({ isEditable }: { isEditable: boolean }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const {
     getOrderedSlides,
     reorderSlides,
@@ -45,6 +45,13 @@ const PresentationEditor = ({ isEditable }: { isEditable: boolean }) => {
     }
   };
 
+  const handleDelete = (id: string) => {
+    if (isEditable) {
+      console.log("Deleting", id);
+      deleteSlide(id);
+    }
+  };
+
   useEffect(() => {
     const currentSlide = slideRefs.current[currentSlideIndex];
     if (currentSlide) {
@@ -54,6 +61,13 @@ const PresentationEditor = ({ isEditable }: { isEditable: boolean }) => {
       });
     }
   }, [currentSlideIndex]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setLoading(false);
+      return;
+    }
+  }, []);
 
   return (
     <div className="flex-1 flex flex-col h-full max-w-3xl mx-auto px-4 mb-20">
@@ -77,7 +91,7 @@ const PresentationEditor = ({ isEditable }: { isEditable: boolean }) => {
               <DraggableSlide
                 key={slide.id || index}
                 index={index}
-                handleDelete={() => {}}
+                handleDelete={handleDelete}
                 isEditable={isEditable}
                 moveSlide={moveSlide}
                 slide={slide}
