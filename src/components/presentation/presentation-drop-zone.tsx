@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, type RefObject } from "react";
 import { useDrop } from "react-dnd";
 import { cn } from "@/lib/utils";
 import type { DropItem } from "@/lib/types";
@@ -11,7 +11,7 @@ interface PresentationDropZoneProps {
   isEditable: boolean;
 }
 
-const PresentationDropZone = memo(
+export const PresentationDropZone = memo(
   ({ index, isEditable, onDrop }: PresentationDropZoneProps) => {
     const [{ canDrop, isOver }, dropRef] = useDrop({
       accept: ["SLIDE", "layout"],
@@ -27,11 +27,12 @@ const PresentationDropZone = memo(
 
     return (
       <div
-        // ref={dropRef}
+        ref={dropRef as unknown as RefObject<HTMLDivElement>}
         className={cn(
           "h-1 rounded-full transition-all duration-300 my-2",
-          isOver && canDrop ? "bg-blue-500 h-2" : "bg-gray-300",
-          canDrop ? "opacity-100" : "opacity-40"
+          isOver && canDrop && "bg-blue-500 h-2 shadow-md",
+          canDrop && !isOver && "bg-gray-400",
+          !canDrop && "bg-gray-200 opacity-50"
         )}
         role="region"
         aria-label="Drop zone for slides"
@@ -39,5 +40,3 @@ const PresentationDropZone = memo(
     );
   }
 );
-
-export default PresentationDropZone;

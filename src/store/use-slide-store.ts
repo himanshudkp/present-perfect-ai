@@ -41,6 +41,12 @@ interface SlideState {
 
   currentSlide: number;
   setCurrentSlide: (index: number) => void;
+  addComponentIntoSlide: (
+    slideId: string,
+    item: ContentItem,
+    parentId: string,
+    index: number
+  ) => void;
 }
 
 export const useSlideStore = create<SlideState>()(
@@ -191,6 +197,41 @@ export const useSlideStore = create<SlideState>()(
               Math.min(index, state.slides.length - 1)
             ),
           })),
+        addComponentIntoSlide: (
+          slideId: string,
+          item: ContentItem,
+          parentId: string,
+          index: number
+        ) => {
+          set((state: SlideState) => {
+            const updatedSlides = state.slides.map((slide) => {
+              if (slide.id === slideId) {
+                const updateContentRecursively = (
+                  content: ContentItem
+                ): ContentItem => {
+                  if (
+                    content.id === parentId &&
+                    Array.isArray(content.content)
+                  ) {
+                    const updatedContent = [...content.content];
+                    updatedContent.splice(index, 0, item);
+                    return {
+                      ...content,
+                      content: updatedContent as unknown as string[],
+                    };
+                  }
+                  return content;
+                };
+                return {
+                  ...slide,
+                  content: updateContentRecursively(slide.content),
+                };
+              }
+              return slide;
+            });
+            return { slides: updatedSlides };
+          });
+        },
       }),
 
       {

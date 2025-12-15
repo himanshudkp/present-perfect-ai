@@ -3,7 +3,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
-import PresentationDropZone from "./presentation-drop-zone";
+import { PresentationDropZone } from "./presentation-drop-zone";
 import DraggableSlide from "./draggable-slide";
 import { useSlideStore } from "@/store/use-slide-store";
 import type { DropItem } from "@/lib/types";

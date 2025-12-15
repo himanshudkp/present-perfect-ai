@@ -10,29 +10,24 @@ export interface Slide {
 }
 
 export type ContentType =
-  | "blank"
-  | "imageAndText"
   | "heading1"
   | "heading2"
   | "heading3"
-  | "title"
   | "heading4"
-  | "table"
+  | "title"
+  | "paragraph"
   | "blockquote"
-  | "numberedList"
-  | "bulletedList"
-  | "code"
-  | "link"
-  | "quote"
-  | "divider"
   | "calloutBox"
-  | "todoList"
-  | "bulletList"
-  | "codeBlock"
-  | "customButton"
   | "table"
+  | "column"
+  | "resizable-column"
+  | "image"
+  | "numberedList"
+  | "bulletList"
+  | "todoList"
+  | "codeBlock"
   | "tableOfContents"
-  | "image";
+  | "divider";
 
 export interface ContentItem {
   id: string;

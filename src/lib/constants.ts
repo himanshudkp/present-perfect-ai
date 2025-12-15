@@ -197,7 +197,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     className: "p-6 flex items-center gap-6",
     content: {
       id: crypto.randomUUID(),
-      type: "imageAndText",
+      type: "image",
       name: "Root",
       content: [
         {
@@ -270,7 +270,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 5,
     content: {
       id: crypto.randomUUID(),
-      type: "bulletedList",
+      type: "bulletList",
       name: "List Items",
       content: [
         "High performance components",
@@ -356,7 +356,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 11,
     content: {
       id: crypto.randomUUID(),
-      type: "imageAndText",
+      type: "image",
       name: "Root",
       content: [
         {
@@ -367,7 +367,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
         },
         {
           id: crypto.randomUUID(),
-          type: "blank",
+          type: "heading1",
           name: "Nested Wrapper",
           content: [
             {
@@ -386,19 +386,19 @@ export const EXISTING_LAYOUTS: Slide[] = [
             },
             {
               id: crypto.randomUUID(),
-              type: "blank",
+              type: "blockquote",
               name: "Level 3 Wrapper",
               content: [
                 {
                   id: crypto.randomUUID(),
-                  type: "code",
+                  type: "codeBlock",
                   name: "Code",
                   code: "console.log('Deep level');",
                   content: "",
                 },
                 {
                   id: crypto.randomUUID(),
-                  type: "quote",
+                  type: "blockquote",
                   name: "Quote",
                   content: "Depth creates complexity.",
                 },
@@ -416,7 +416,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 12,
     content: {
       id: crypto.randomUUID(),
-      type: "link",
+      type: "paragraph",
       name: "External Link",
       link: "https://example.com",
       content: "Visit Example.com",
@@ -455,7 +455,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 15,
     content: {
       id: crypto.randomUUID(),
-      type: "customButton",
+      type: "bulletList",
       name: "Button",
       content: "Click Me",
       bgColor: "#4f46e5",
@@ -485,7 +485,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 17,
     content: {
       id: crypto.randomUUID(),
-      type: "imageAndText",
+      type: "image",
       name: "Gallery",
       content: [
         {
@@ -522,7 +522,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 18,
     content: {
       id: crypto.randomUUID(),
-      type: "blank",
+      type: "blockquote",
       name: "Two Columns",
       content: [
         {
@@ -547,7 +547,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 19,
     content: {
       id: crypto.randomUUID(),
-      type: "blank",
+      type: "blockquote",
       name: "Mixed",
       content: [
         {
@@ -580,7 +580,7 @@ export const EXISTING_LAYOUTS: Slide[] = [
     slideOrder: 20,
     content: {
       id: crypto.randomUUID(),
-      type: "quote",
+      type: "heading1",
       name: "Quote",
       content:
         "The beginning of knowledge is the discovery of something we do not understand.",
@@ -664,3 +664,9 @@ export const CREATE_PAGE_CARD: CreateOption[] = [
     type: "create-from-scratch",
   },
 ] as const;
+
+export const ANIMATION_PROPS = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5 },
+} as const;
