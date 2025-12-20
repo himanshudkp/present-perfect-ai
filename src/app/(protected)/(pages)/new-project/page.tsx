@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import NewProjectSkeleton from "@/components/new-project/new-project-skeleton";
 import RenderPage from "@/components/new-project/render-create-page";
-import type { Page } from "@/lib/types";
+import type { Page } from "@/types";
 import { authenticateUser } from "@/actions/user";
 import { redirect } from "next/navigation";
 

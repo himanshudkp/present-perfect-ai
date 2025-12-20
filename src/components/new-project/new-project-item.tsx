@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { Brain, ChevronRight, Star, TrendingUp } from "lucide-react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { cn } from "@/lib/utils";
-import type { CreateOption } from "@/lib/types";
+import { cn } from "@/utils";
+import type { CreateOption } from "@/types";
 
 const CARD_VARIANTS = {
   hidden: { opacity: 0, y: 15 },

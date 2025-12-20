@@ -8,10 +8,10 @@ import ThumbnailPreview from "./thumbnail-preview";
 import StatusBadges from "./status-badges";
 import { LoadingOverlay } from "./loading-overlay";
 import ActionButtons from "./action-buttons";
-import { cn } from "@/lib/utils";
-import { ITEM_VARIANTS } from "@/lib/constants";
+import { cn } from "@/utils";
+import { ITEM_VARIANTS } from "@/constants";
 import type { Project } from "@/generated/prisma/client";
-import type { Slide } from "@/lib/types";
+import type { Slide } from "@/types";
 
 const SELECTION_BAR_VARIANTS = {
   initial: { scaleY: 0 },

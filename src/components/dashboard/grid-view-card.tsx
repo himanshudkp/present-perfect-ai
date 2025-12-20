@@ -9,10 +9,10 @@ import ActionButtons from "./action-buttons";
 import StatusBadges from "./status-badges";
 import { LoadingOverlay } from "./loading-overlay";
 import ThumbnailPreview from "./thumbnail-preview";
-import { ITEM_VARIANTS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { ITEM_VARIANTS } from "@/constants";
+import { cn } from "@/utils";
 import type { Project } from "@/generated/prisma/client";
-import type { Slide } from "@/lib/types";
+import type { Slide } from "@/types";
 
 const HOVER_OVERLAY_VARIANTS = {
   initial: { opacity: 0, y: 10 },

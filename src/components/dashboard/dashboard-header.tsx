@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { FileText } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 type DashboardHeaderProps = {
   projectCount: number;

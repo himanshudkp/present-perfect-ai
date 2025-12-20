@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { GripVertical } from "lucide-react";
-import { SLIDE_ANIMATIONS } from "@/lib/constants";
+import { SLIDE_ANIMATIONS } from "@/constants";
 
 interface SlideDragHandleProps {
   isVisible: boolean;

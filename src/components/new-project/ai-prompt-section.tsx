@@ -12,8 +12,8 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { cn } from "@/lib/utils";
-import { ITEM_VARIANTS } from "@/lib/constants";
+import { cn } from "@/utils";
+import { ITEM_VARIANTS } from "@/constants";
 
 const NO_OF_SLIDES = [3, 5, 6, 7, 10, 15, 20] as const;
 

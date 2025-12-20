@@ -11,11 +11,11 @@ import CardList from "../slide-outlines/slide-card-list";
 import { CreatePresentation } from "./create-presentation";
 import { AddSlideSection } from "./add-slide-section";
 import { EmptySlideState } from "./empty-slide-state";
-import { useCreatePresentation } from "@/hooks/presentation/use-create-presentation";
-import { useResetState } from "@/hooks/presentation/use-reset-state";
+import { useCreatePresentation } from "@/hooks/use-create-presentation";
+import { useResetState } from "@/hooks/use-reset-state";
 import { useStartScratchStore } from "@/store/use-start-scratch";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
-import type { OutlineCard } from "@/lib/types";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/constants";
+import type { OutlineCard } from "@/types";
 
 const CreateFromScratch = ({ onBack }: { onBack: () => void }) => {
   const { addMultipleOutlines, addOutline, outlines, resetOutlines } =

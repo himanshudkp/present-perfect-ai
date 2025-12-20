@@ -3,9 +3,9 @@
 import { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Grid3x3, LayoutGrid, List } from "lucide-react";
-import { useProjectActions } from "@/hooks/presentation/use-project-actions";
-import { useProjectStats } from "@/hooks/presentation/use-project-stats";
-import { useProjectFiltering } from "@/hooks/presentation/use-project-filter";
+import { useProjectActions } from "@/hooks/use-project-actions";
+import { useProjectStats } from "@/hooks/use-project-stats";
+import { useProjectFiltering } from "@/hooks/use-project-filter";
 import SkeletonGrid from "./skeleton-loader";
 import FilterTabs from "../search-sort-filter/filter-tabs";
 import SearchProjects from "../search-sort-filter/search-projects";
@@ -15,16 +15,11 @@ import ResultSummary from "./result-summary";
 import NoProjectsFound from "./no-projects-found";
 import ProjectCard from "./project-card";
 import ViewToggleButton from "./view-toggle-button";
-import { cn } from "@/lib/utils";
-import { CONTAINER_VARIANTS, GRID_CLASSES } from "@/lib/constants";
+import { cn } from "@/utils";
+import { CONTAINER_VARIANTS, GRID_CLASSES } from "@/constants";
 
 import type { Project } from "@/generated/prisma/client";
-import type {
-  ProjectFilters,
-  SortOption,
-  TabView,
-  ViewMode,
-} from "@/lib/types";
+import type { ProjectFilters, SortOption, TabView, ViewMode } from "@/types";
 
 const ITEM_VARIANTS = {
   hidden: { opacity: 0, y: 20 },

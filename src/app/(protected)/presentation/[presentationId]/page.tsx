@@ -2,7 +2,7 @@
 
 import { getProjectById } from "@/actions/project";
 import { Project } from "@/generated/prisma/client";
-import { THEMES } from "@/lib/constants";
+import { THEMES } from "@/constants";
 import { showError } from "@/components/toast-message";
 import { useSlideStore } from "@/store/use-slide-store";
 import { Loader2 } from "lucide-react";
@@ -72,9 +72,7 @@ const Presentation = (props: Props) => {
   }
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen flex flex-col">
-        <PresentationNavbar presentationId={presentationId as string} />
-      </div>
+      <PresentationNavbar presentationId={presentationId as string} />
       <div
         className="flex-1 flex overflow-hidden pt-16 "
         style={{

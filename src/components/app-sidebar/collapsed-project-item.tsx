@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { FileText, Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 interface CollapsedProjectItemProps {
   noOfSlides: number;

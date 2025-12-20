@@ -2,9 +2,9 @@
 
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
-import { DEFAULT_THEME } from "@/lib/constants";
+import { DEFAULT_THEME } from "@/constants";
 import type { Project } from "@/generated/prisma/client";
-import type { ContentItem, Slide, Theme } from "@/lib/types";
+import type { ContentItem, Slide, Theme } from "@/types";
 
 interface SlideState {
   slides: Slide[];
@@ -12,7 +12,13 @@ interface SlideState {
   addSlide: (slide: Slide, index: number) => void;
   updateCurrentSlide: (
     id: string,
-    newContent: string | string[] | string[][],
+    newContent:
+      | ContentItem
+      | string
+      | string[]
+      | string[][]
+      | ContentItem[]
+      | (string | ContentItem)[],
     contentId: string
   ) => void;
   deleteSlide: (id: string) => void;
@@ -35,6 +41,12 @@ interface SlideState {
 
   currentSlide: number;
   setCurrentSlide: (index: number) => void;
+  addComponentIntoSlide: (
+    slideId: string,
+    item: ContentItem,
+    parentId: string,
+    index: number
+  ) => void;
 }
 
 export const useSlideStore = create<SlideState>()(
@@ -172,8 +184,10 @@ export const useSlideStore = create<SlideState>()(
           ),
 
         getOrderedSlides: () => {
-          const state = get();
-          return [...state.slides].sort((a, b) => a.slideOrder - b.slideOrder);
+          const { slides } = get();
+          return Array.isArray(slides)
+            ? [...slides].sort((a, b) => a.slideOrder - b.slideOrder)
+            : [];
         },
 
         setCurrentSlide: (index) =>
@@ -183,6 +197,41 @@ export const useSlideStore = create<SlideState>()(
               Math.min(index, state.slides.length - 1)
             ),
           })),
+        addComponentIntoSlide: (
+          slideId: string,
+          item: ContentItem,
+          parentId: string,
+          index: number
+        ) => {
+          set((state: SlideState) => {
+            const updatedSlides = state.slides.map((slide) => {
+              if (slide.id === slideId) {
+                const updateContentRecursively = (
+                  content: ContentItem
+                ): ContentItem => {
+                  if (
+                    content.id === parentId &&
+                    Array.isArray(content.content)
+                  ) {
+                    const updatedContent = [...content.content];
+                    updatedContent.splice(index, 0, item);
+                    return {
+                      ...content,
+                      content: updatedContent as unknown as string[],
+                    };
+                  }
+                  return content;
+                };
+                return {
+                  ...slide,
+                  content: updateContentRecursively(slide.content),
+                };
+              }
+              return slide;
+            });
+            return { slides: updatedSlides };
+          });
+        },
       }),
 
       {

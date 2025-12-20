@@ -7,11 +7,11 @@ import { SLideOrderBadge } from "./slide-order-badge";
 import { SlideOutlineEditor } from "./slide-outline-editor";
 import { DeleteSlideButton } from "./delete-slide-button";
 import { SLideHelpText } from "./slide-help-text";
-import { useDeleteConfirm } from "@/hooks/slide-outlines/use-delete-confirm";
-import { useCardEdit } from "@/hooks/slide-outlines/use-card-edit";
-import { cn } from "@/lib/utils";
-import { SLIDE_ANIMATIONS } from "@/lib/constants";
-import type { OutlineCard } from "@/lib/types";
+import { useDeleteConfirm } from "@/hooks/use-delete-confirm";
+import { useCardEdit } from "@/hooks/use-card-edit";
+import { cn } from "@/utils";
+import { SLIDE_ANIMATIONS } from "@/constants";
+import type { OutlineCard } from "@/types";
 
 interface SlideOutlineProps {
   card: OutlineCard;

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import RecentPromptsList from "./recent-prompts-list";
 import NewProjectCard from "./new-project-card";
 import { usePromptStore } from "@/store/use-prompt-store";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/constants";
 
 const ANIMATION = {
   initial: { opacity: 0, y: 20 },

@@ -4,7 +4,7 @@ import { useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import { Button } from "../ui/button";
-import type { Theme } from "@/lib/types";
+import type { Theme } from "@/types";
 
 const CHECK_ICON_ANIMATION = {
   initial: { scale: 0, rotate: -180 },

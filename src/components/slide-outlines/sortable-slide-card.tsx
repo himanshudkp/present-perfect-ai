@@ -1,4 +1,4 @@
-import { OutlineCard } from "@/lib/types";
+import { OutlineCard } from "@/types";
 import { defaultAnimateLayoutChanges, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { motion } from "framer-motion";

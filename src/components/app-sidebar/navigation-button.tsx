@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import type { LucideIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 const ITEM_VARIANTS = {
   hidden: { opacity: 0, x: -10 },

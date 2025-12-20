@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import type { OutlineCard } from "@/lib/types";
+import type { OutlineCard } from "@/types";
 
 interface CreativeAiStore {
   outlines: OutlineCard[];

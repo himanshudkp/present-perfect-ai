@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 const COLLAPSED_AVATAR_APPEARANCE = {
   elements: { avatarBox: "h-10 w-10" },

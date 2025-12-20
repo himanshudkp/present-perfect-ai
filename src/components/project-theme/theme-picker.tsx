@@ -9,9 +9,9 @@ import { ScrollArea } from "../ui/scroll-area";
 import { showError, showSuccess } from "../toast-message";
 import { ThemeCard } from "./theme-card";
 import { useSlideStore } from "@/store/use-slide-store";
-import { generateLayouts } from "@/actions/gemini";
-import { THEMES } from "@/lib/constants";
-import type { Slide, Theme } from "@/lib/types";
+import { THEMES } from "@/constants";
+import type { Slide, Theme } from "@/types";
+import { generateLayouts } from "@/actions/ai";
 
 const HEADER_ANIMATION = {
   initial: { opacity: 0, y: -20 },
