@@ -1,12 +1,10 @@
 import { z } from "zod";
-import type { ContentItem } from "@/lib/types";
+import type { ContentItem } from "@/types";
 
 const ContentItemSchema: z.ZodType<ContentItem> = z.lazy(() =>
   z.object({
     id: z.string(),
     type: z.enum([
-      "blank",
-      "imageAndText",
       "heading1",
       "heading2",
       "heading3",
@@ -15,17 +13,15 @@ const ContentItemSchema: z.ZodType<ContentItem> = z.lazy(() =>
       "table",
       "blockquote",
       "numberedList",
-      "bulletedList",
-      "code",
-      "link",
-      "quote",
       "divider",
       "calloutBox",
       "todoList",
       "bulletList",
       "codeBlock",
-      "customButton",
       "tableOfContents",
+      "resizable-column",
+      "column",
+      "paragraph",
       "image",
     ]),
     name: z.string(),
@@ -70,6 +66,3 @@ const SlideSchema = z.object({
 });
 
 export const SlidesArraySchema = z.array(SlideSchema);
-
-export type SlideType = z.infer<typeof SlideSchema>;
-export type ContentItemType = z.infer<typeof ContentItemSchema>;

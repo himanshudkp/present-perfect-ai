@@ -4,7 +4,7 @@ import { memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { SLIDE_ANIMATIONS } from "@/lib/constants";
+import { SLIDE_ANIMATIONS } from "@/constants";
 
 interface DeleteSlideButtonProps {
   showDeleteConfirm: boolean;

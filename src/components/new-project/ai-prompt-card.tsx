@@ -6,9 +6,9 @@ import { Clock, Sparkles, Edit3, Trash2, FileText } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { cn, getTimeAgo } from "@/lib/utils";
-import { ITEM_VARIANTS } from "@/lib/constants";
-import type { PromptHistory } from "@/lib/types";
+import { cn, getTimeAgo } from "@/utils";
+import { ITEM_VARIANTS } from "@/constants";
+import type { PromptHistory } from "@/types";
 
 const CARD_HOVER_VARIANTS = {
   rest: { scale: 1, y: 0 },

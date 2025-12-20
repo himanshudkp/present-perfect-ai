@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { createProject } from "@/actions/project";
+import { createProject } from "@/actions/projects";
 import { useSlideStore } from "@/store/use-slide-store";
-import { OutlineCard } from "@/lib/types";
+import { OutlineCard } from "@/types";
 
 interface UseCreatePresentationProps {
   outlines: OutlineCard[];

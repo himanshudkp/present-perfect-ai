@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import type { Project } from "@/generated/prisma/client";
-import type { ProjectFilters, SortOption, TabView } from "@/lib/types";
+import type { ProjectFilters, SortOption, TabView } from "@/types";
 
 const FILTER_FUNCTIONS = {
   search: (project: Project, query: string) => {

@@ -3,7 +3,7 @@ import AppSidebar from "@/components/app-sidebar/app-sidebar";
 import UpperInfoBar from "@/components/top-info-bar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import RouteTransition from "@/components/route-transition/route-transition";
-import { getRecentProjects } from "@/actions/project";
+import { getRecentProjects } from "@/actions/projects";
 import { authenticateUser } from "@/actions/user";
 import type { ReactNode } from "react";
 

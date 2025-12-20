@@ -7,7 +7,7 @@ import {
   ResizablePanelGroup,
 } from "../ui/resizable";
 import { RecursiveComponent } from "../presentation/recursive-component";
-import type { ContentItem } from "@/lib/types";
+import type { ContentItem } from "@/types";
 
 interface ResizableColumnProps {
   content: ContentItem[];

@@ -3,8 +3,8 @@
 import { memo, type ReactNode, useMemo } from "react";
 import { Star, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import type { ViewMode } from "@/lib/types";
+import { cn } from "@/utils";
+import type { ViewMode } from "@/types";
 
 interface StatusBadgesProps {
   isFavorite?: boolean | null;

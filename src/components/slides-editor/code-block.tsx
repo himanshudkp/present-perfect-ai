@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from "react";
 import { useSlideStore } from "@/store/use-slide-store";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 interface CodeBlockProps {
   code?: string;

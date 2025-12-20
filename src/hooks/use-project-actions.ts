@@ -7,7 +7,7 @@ import {
   deleteProject,
   recoverProject,
   updateFavorite,
-} from "@/actions/project";
+} from "@/actions/projects";
 
 interface ActionResponse {
   status: number;

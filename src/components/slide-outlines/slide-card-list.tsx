@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AddOutlineButton from "./add-outline-btn";
-import { cn } from "@/lib/utils";
-import type { OutlineCard } from "@/lib/types";
+import { cn } from "@/utils";
+import type { OutlineCard } from "@/types";
 
 import {
   DndContext,

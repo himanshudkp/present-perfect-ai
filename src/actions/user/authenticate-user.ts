@@ -1,5 +1,6 @@
 "use server";
-import { prisma } from "@/lib/prisma";
+
+import { prisma } from "@/config/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const authenticateUser = async () => {

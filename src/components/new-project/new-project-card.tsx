@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { NewProjectItem } from "./new-project-item";
-import { CREATE_PAGE_CARD } from "@/lib/constants";
+import { CREATE_PAGE_CARD } from "@/constants";
 
 const CONTAINER_VARIANTS = {
   hidden: { opacity: 0 },

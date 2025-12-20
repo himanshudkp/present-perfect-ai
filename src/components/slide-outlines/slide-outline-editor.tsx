@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { SLIDE_ANIMATIONS } from "@/lib/constants";
+import { cn } from "@/utils";
+import { SLIDE_ANIMATIONS } from "@/constants";
 
 interface SlideOutlineEditorProps {
   isEditing: boolean;

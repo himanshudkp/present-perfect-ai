@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { DragOverlay } from "@dnd-kit/core";
-import type { OutlineCard } from "@/lib/types";
+import type { OutlineCard } from "@/types";
 
 const ANIMATION = {
   initial: { scale: 0.9, opacity: 0 },

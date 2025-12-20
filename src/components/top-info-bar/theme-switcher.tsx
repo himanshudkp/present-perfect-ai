@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "motion/react";
 import { Moon, Sun, Monitor } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import { showSuccess } from "../toast-message";
 
 const THEMES = [

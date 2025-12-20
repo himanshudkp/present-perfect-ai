@@ -2,9 +2,9 @@
 
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
-import { DEFAULT_THEME } from "@/lib/constants";
+import { DEFAULT_THEME } from "@/constants";
 import type { Project } from "@/generated/prisma/client";
-import type { ContentItem, Slide, Theme } from "@/lib/types";
+import type { ContentItem, Slide, Theme } from "@/types";
 
 interface SlideState {
   slides: Slide[];

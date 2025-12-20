@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useCallback, memo } from "react";
 import { Search, Command } from "lucide-react";
-import { useCommandActions } from "@/hooks/command-palette/use-command-actions";
-import { useFilteredActions } from "@/hooks/command-palette/use-filtered-actions";
-import { useInputFocus } from "@/hooks/command-palette/use-input-focus";
-import { useKeyboardNavigation } from "@/hooks/command-palette/use--keyboard-navigation";
-import { useGlobalShortcuts } from "@/hooks/command-palette/use-global-shortcuts";
+import { useCommandActions } from "@/hooks/use-command-actions";
+import { useFilteredActions } from "@/hooks/use-filtered-actions";
+import { useInputFocus } from "@/hooks/use-input-focus";
+import { useKeyboardNavigation } from "@/hooks/use--keyboard-navigation";
+import { useGlobalShortcuts } from "@/hooks/use-global-shortcuts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,8 +18,8 @@ import {
 import { EmptySearchResult } from "./empty-search";
 import { CategorySection } from "./category-section";
 import { CommandFooter } from "./command-footer";
-import { CATEGORY_ORDER } from "@/lib/constants";
-import type { Action } from "@/lib/types";
+import { CATEGORY_ORDER } from "@/constants";
+import type { Action } from "@/types";
 
 const CommandPalette = ({
   onNavigate,

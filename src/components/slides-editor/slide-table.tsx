@@ -7,7 +7,7 @@ import {
   ResizablePanelGroup,
 } from "../ui/resizable";
 import { useSlideStore } from "@/store/use-slide-store";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 interface SlideTableProps {
   content: string[][];

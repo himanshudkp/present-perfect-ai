@@ -3,7 +3,7 @@
 import { memo, type RefObject } from "react";
 import { useDrop } from "react-dnd";
 import { useSlideStore } from "@/store/use-slide-store";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 interface DropZoneProps {
   index: number;

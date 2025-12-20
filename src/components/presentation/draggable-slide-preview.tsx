@@ -2,8 +2,8 @@
 
 import { memo } from "react";
 import { useSlideStore } from "@/store/use-slide-store";
-import { cn } from "@/lib/utils";
-import type { Slide } from "@/lib/types";
+import { cn } from "@/utils";
+import type { Slide } from "@/types";
 
 interface DraggableSlidePreviewProps {
   slide: Slide;

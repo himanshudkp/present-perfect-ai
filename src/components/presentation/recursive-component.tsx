@@ -2,7 +2,7 @@
 
 import { Fragment, memo } from "react";
 import { ContentRenderer, ContentRendererProps } from "./content-renderer";
-import type { ContentItem } from "@/lib/types";
+import type { ContentItem } from "@/types";
 
 interface RecursiveComponentProps extends ContentRendererProps {
   depth?: number;

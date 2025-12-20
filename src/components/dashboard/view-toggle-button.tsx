@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Button } from "../ui/button";
-import type { ViewMode } from "@/lib/types";
+import type { ViewMode } from "@/types";
 
 interface ViewToggleButtonProps {
   mode: ViewMode;

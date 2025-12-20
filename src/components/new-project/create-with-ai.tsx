@@ -11,12 +11,12 @@ import GoBackButton from "./go-back-button";
 import AiPromptSection from "./ai-prompt-section";
 import { EmptySlideState } from "./empty-slide-state";
 import { showError, showSuccess } from "../toast-message";
-import { generateCreativePrompt } from "@/actions/gemini";
 import { usePromptStore } from "@/store/use-prompt-store";
 import { useCreativeAiStore } from "@/store/use-creative-ai-store";
-import { useCreatePresentation } from "@/hooks/presentation/use-create-presentation";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
-import type { OutlineCard } from "@/lib/types";
+import { useCreatePresentation } from "@/hooks/use-create-presentation";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/constants";
+import type { OutlineCard } from "@/types";
+import { generateOutline as generateOutlineWithAI } from "@/actions/ai";
 
 const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
   const [editingCard, setEditingCard] = useState<string | null>(null);
@@ -92,7 +92,7 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
     setIsGenerating(true);
 
     try {
-      const result = await generateCreativePrompt(
+      const result = await generateOutlineWithAI(
         currentAIPrompt,
         parseInt(noOfCards)
       );

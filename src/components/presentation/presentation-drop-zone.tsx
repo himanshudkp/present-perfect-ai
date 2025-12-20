@@ -2,8 +2,8 @@
 
 import { memo, type RefObject } from "react";
 import { useDrop } from "react-dnd";
-import { cn } from "@/lib/utils";
-import type { DropItem } from "@/lib/types";
+import { cn } from "@/utils";
+import type { DropItem } from "@/types";
 
 interface PresentationDropZoneProps {
   index: number;

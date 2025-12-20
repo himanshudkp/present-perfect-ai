@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
-import type { ContentItem } from "@/lib/types";
-import { supabase } from "@/lib/supabase";
+import type { ContentItem } from "@/types";
+import { supabase } from "@/config/supabase";
 
 interface UploadImageProps {
   onImageSelect?: (file: File, preview: string, publicUrl: string) => void;

@@ -2,7 +2,7 @@
 
 import { memo, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import type { Theme } from "@/lib/types";
+import type { Theme } from "@/types";
 
 interface FeatureCard {
   theme: Theme;

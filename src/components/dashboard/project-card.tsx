@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { ListViewCard } from "./list-view-card";
 import { GridViewCard } from "./grid-view-card";
 import { showSuccess } from "@/components/toast-message";
-import { THEMES } from "@/lib/constants";
-import { getTimeAgo } from "@/lib/utils";
+import { THEMES } from "@/constants";
+import { getTimeAgo } from "@/utils";
 import { useSlideStore } from "@/store/use-slide-store";
-import type { Slide } from "@/lib/types";
+import type { Slide } from "@/types";
 import type { Project } from "@/generated/prisma/client";
 
 interface ProjectCardProps {

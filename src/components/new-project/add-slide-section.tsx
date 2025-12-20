@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Plus, RotateCcw } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 interface AddSlideSectionProps {
   title: string;

@@ -4,9 +4,9 @@ import { Fragment, memo } from "react";
 import { motion } from "framer-motion";
 import { DropZone } from "./drop-zone";
 import { RecursiveComponent } from "../presentation/recursive-component";
-import { cn } from "@/lib/utils";
-import type { ContentItem } from "@/lib/types";
-import { ANIMATION_PROPS } from "@/lib/constants";
+import { cn } from "@/utils";
+import type { ContentItem } from "@/types";
+import { ANIMATION_PROPS } from "@/constants";
 
 interface TableColumnProps {
   content: ContentItem;

@@ -6,7 +6,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { PresentationDropZone } from "./presentation-drop-zone";
 import DraggableSlide from "./draggable-slide";
 import { useSlideStore } from "@/store/use-slide-store";
-import type { DropItem } from "@/lib/types";
+import type { DropItem } from "@/types";
 
 interface PresentationEditorProps {
   isEditable: boolean;

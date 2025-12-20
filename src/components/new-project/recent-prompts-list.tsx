@@ -9,8 +9,8 @@ import { AIPromptCard } from "./ai-prompt-card";
 import DeletePromptAlert from "./delete-prompt-alert";
 import { usePromptStore } from "@/store/use-prompt-store";
 import { useCreativeAiStore } from "@/store/use-creative-ai-store";
-import { cn } from "@/lib/utils";
-import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/lib/constants";
+import { cn } from "@/utils";
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "@/constants";
 
 const CLOCK_VARIANTS = {
   animate: { rotate: [0, 10, -10, 0] },

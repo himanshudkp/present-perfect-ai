@@ -23,8 +23,8 @@ import { BulletList } from "../slides-editor/bullet-list";
 import { TodoList } from "../slides-editor/todo-list";
 import { SlideDivider } from "../slides-editor/slide-divider";
 import type { ChangeEvent } from "react";
-import type { ContentItem } from "@/lib/types";
-import { ANIMATION_PROPS } from "@/lib/constants";
+import type { ContentItem } from "@/types";
+import { ANIMATION_PROPS } from "@/constants";
 
 export interface ContentRendererProps {
   content: ContentItem;

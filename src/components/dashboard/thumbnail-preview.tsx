@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from "react";
 import Image from "next/image";
-import type { Slide, Theme } from "@/lib/types";
+import type { Slide, Theme } from "@/types";
 
 type ThumbnailPreviewProps = {
   slides: Slide[];

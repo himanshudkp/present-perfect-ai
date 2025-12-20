@@ -1,5 +1,5 @@
 import { Home, LayoutTemplate, Settings2, Trash2 } from "lucide-react";
-import type { ActionCategory, CreateOption, Slide, Theme } from "./types";
+import type { ActionCategory, CreateOption, Slide, Theme } from "../types";
 
 export const DATA = {
   user: {

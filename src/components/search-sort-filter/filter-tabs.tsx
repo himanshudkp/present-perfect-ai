@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 import { Inbox, Star, X, Zap } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Badge } from "../ui/badge";
-import type { TabView } from "@/lib/types";
+import type { TabView } from "@/types";
 
 const TAB_CONFIG = [
   { value: "all", icon: Inbox, label: "All" },

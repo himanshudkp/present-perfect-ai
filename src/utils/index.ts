@@ -1,8 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { SlidesArraySchema } from "./schema";
-import { CLEAN_JSON_PROMPT_SUFFIX, SLIDE_JSON_SCHEMA } from "./constants";
-import type { Slide } from "@/lib/types";
+import { SlidesArraySchema } from "../schema";
+import { CLEAN_JSON_PROMPT_SUFFIX, SLIDE_JSON_SCHEMA } from "../constants";
+import type { Slide } from "@/types";
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));

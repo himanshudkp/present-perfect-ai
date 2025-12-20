@@ -2,8 +2,8 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { SLIDE_ANIMATIONS } from "@/lib/constants";
+import { cn } from "@/utils";
+import { SLIDE_ANIMATIONS } from "@/constants";
 
 interface SLideOrderBadgeProps {
   order: number;

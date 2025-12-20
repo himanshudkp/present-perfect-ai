@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
-import { ITEM_VARIANTS } from "@/lib/constants";
+import { ITEM_VARIANTS } from "@/constants";
 
 const GoBackButton = ({
   handleBack,

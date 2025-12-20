@@ -5,7 +5,7 @@ import { type LegacyAnimationControls, motion } from "framer-motion";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
-import type { Theme } from "@/lib/types";
+import type { Theme } from "@/types";
 
 const createSpringTransition = (delay: number) => ({
   type: "spring" as const,

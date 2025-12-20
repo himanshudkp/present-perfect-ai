@@ -6,9 +6,9 @@ import { EllipsisVertical, Trash2, Copy } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { RecursiveComponent } from "./recursive-component";
-import { ContentItem, Slide } from "@/lib/types";
+import { ContentItem, Slide } from "@/types";
 import { useSlideStore } from "@/store/use-slide-store";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 interface DraggableSlideProps {
   slide: Slide;
