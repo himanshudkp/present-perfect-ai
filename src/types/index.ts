@@ -148,3 +148,30 @@ export interface CreateOption {
   type: Page;
   highlight?: boolean;
 }
+
+export type LayoutType =
+  | "blank-card"
+  | "twoImageColumns"
+  | "threeImageColumns"
+  | "fourImageColumns"
+  | "accentLeft"
+  | "accentRight"
+  | "textAndImage"
+  | "twoColumns"
+  | "threeColumns"
+  | "fourColumns"
+  | "twoColumnsWithHeadings"
+  | "threeColumnsWithHeadings";
+
+export interface Layout {
+  name: string;
+  icon: React.FC;
+  type: string;
+  component: SlidesLayout;
+  layoutType: LayoutType;
+}
+
+export interface LayoutGroup {
+  name: string;
+  layouts: Layout[];
+}

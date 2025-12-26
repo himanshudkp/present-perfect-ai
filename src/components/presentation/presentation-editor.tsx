@@ -7,6 +7,7 @@ import { PresentationDropZone } from "./presentation-drop-zone";
 import DraggableSlide from "./draggable-slide";
 import { useSlideStore } from "@/store/use-slide-store";
 import type { DropItem } from "@/types";
+import { updateProject } from "@/actions/projects";
 
 interface PresentationEditorProps {
   isEditable: boolean;
@@ -14,6 +15,7 @@ interface PresentationEditorProps {
 
 const PresentationEditor = memo(({ isEditable }: PresentationEditorProps) => {
   const [loading, setLoading] = useState(true);
+  const autoSaveRef = useRef<NodeJS.Timeout | null>(null);
   const {
     getOrderedSlides,
     reorderSlides,
@@ -22,6 +24,7 @@ const PresentationEditor = memo(({ isEditable }: PresentationEditorProps) => {
     deleteSlide,
     currentSlideIndex,
     setCurrentSlideIndex,
+    project,
   } = useSlideStore();
 
   const slideRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -93,9 +96,35 @@ const PresentationEditor = memo(({ isEditable }: PresentationEditorProps) => {
     }
   }, [currentSlideIndex, orderedSlides]);
 
+  const saveSlides = useCallback(() => {
+    if (isEditable && project) {
+      (async () => {
+        await updateProject(project.id, JSON.parse(JSON.stringify(slides)));
+      })();
+    }
+  }, [isEditable, project, slides]);
+
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (autoSaveRef.current) {
+      clearTimeout(autoSaveRef.current);
+    }
+
+    if (isEditable) {
+      autoSaveRef.current = setTimeout(() => {
+        saveSlides();
+      }, 200);
+    }
+
+    return () => {
+      if (autoSaveRef.current) {
+        clearTimeout(autoSaveRef.current);
+      }
+    };
+  }, [slides, isEditable, project]);
 
   if (loading) {
     return (

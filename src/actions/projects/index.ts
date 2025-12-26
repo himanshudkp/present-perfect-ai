@@ -5,3 +5,4 @@ export * from "./project-by-id";
 export * from "./recover-project";
 export * from "./update-favorite";
 export * from "./delete-project";
+export * from "./update-project";

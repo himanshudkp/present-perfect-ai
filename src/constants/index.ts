@@ -1,5 +1,25 @@
 import { Home, LayoutTemplate, Settings2, Trash2 } from "lucide-react";
-import type { ActionCategory, CreateOption, Slide, Theme } from "../types";
+import type {
+  ActionCategory,
+  ContentType,
+  CreateOption,
+  LayoutGroup,
+  Slide,
+  Theme,
+} from "../types";
+import {
+  BlankCardIcon,
+  FourColumnsIcon,
+  FourImageColumnsIcon,
+  ImageAndTextIcon,
+  TextAndImageIcon,
+  ThreeColumnsIcon,
+  ThreeColumnsWithHeadingsIcon,
+  ThreeImageColumnsIcon,
+  TwoColumnsIcon,
+  TwoColumnsWithHeadingsIcon,
+  TwoImageColumnsIcon,
+} from "@/components/app-sidebar/slide-icons";
 
 export const DATA = {
   user: {
@@ -670,3 +690,776 @@ export const ANIMATION_PROPS = {
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5 },
 } as const;
+
+export const SLIDE_COMPONENTS_JSON = {
+  BlankCard: {
+    id: crypto.randomUUID(),
+    slideName: "Blank card",
+    type: "blank-card",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "title" as ContentType,
+          name: "Title",
+          content: "",
+          placeholder: "Untitled Card",
+        },
+      ],
+    },
+  },
+
+  TwoImageColumns: {
+    id: crypto.randomUUID(),
+    slideName: "Two image columns",
+    type: "two-image-columns",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 1",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 2",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  ThreeImageColumns: {
+    id: crypto.randomUUID(),
+    slideName: "Three image columns",
+    type: "three-image-columns",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 1",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 2",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 3",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  FourImageColumns: {
+    id: crypto.randomUUID(),
+    slideName: "Four image columns",
+    type: "four-image-columns",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 1",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 2",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 3",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image 4",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  AccentLeft: {
+    id: crypto.randomUUID(),
+    slideName: "Accent left",
+    type: "accent-left",
+    className: "min-h-[300px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      restrictToDrop: true,
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Describe your amazing thing here",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  AccentRight: {
+    id: crypto.randomUUID(),
+    slideName: "Accent right",
+    type: "accent-right",
+    className: "min-h-[300px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      restrictToDrop: true,
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Describe your amazing thing here",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "resizable-column" as ContentType,
+          name: "Resizable column",
+          restrictToDrop: true,
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "image" as ContentType,
+              name: "Image",
+              content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+              alt: "Image",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  TextAndImage: {
+    id: crypto.randomUUID(),
+    slideName: "Text and image",
+    type: "text-and-image",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "image" as ContentType,
+          name: "Image",
+          content: "https://plus.unsplash.com/premium.photo-IMAGE_URL",
+          alt: "Image",
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Start typing here",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  TwoColumns: {
+    id: crypto.randomUUID(),
+    slideName: "Two columns",
+    type: "two-columns",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  ThreeColumns: {
+    id: crypto.randomUUID(),
+    slideName: "Three columns",
+    type: "three-columns",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  FourColumns: {
+    id: crypto.randomUUID(),
+    slideName: "Four columns",
+    type: "four-columns",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  TwoColumnsWithHeadings: {
+    id: crypto.randomUUID(),
+    slideName: "Two columns with headings",
+    type: "two-columns-with-headings",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  ThreeColumnsWithHeadings: {
+    id: crypto.randomUUID(),
+    slideName: "Three columns with headings",
+    type: "three-columns-with-headings",
+    className: "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+    slideOrder: 0,
+    content: {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+        {
+          id: crypto.randomUUID(),
+          type: "column" as ContentType,
+          name: "Column",
+          content: [
+            {
+              id: crypto.randomUUID(),
+              type: "heading1" as ContentType,
+              name: "Heading1",
+              content: "",
+              placeholder: "Heading",
+            },
+            {
+              id: crypto.randomUUID(),
+              type: "paragraph" as ContentType,
+              name: "Paragraph",
+              content: "",
+              placeholder: "Column content",
+            },
+          ],
+        },
+      ],
+    },
+  },
+};
+
+export const Layouts: LayoutGroup[] = [
+  {
+    name: "Basic",
+    layouts: [
+      {
+        name: "Blank card",
+        icon: BlankCardIcon,
+        type: "layout",
+        layoutType: "blank-card",
+        component: SLIDE_COMPONENTS_JSON.BlankCard,
+      },
+    ],
+  },
+
+  {
+    name: "Images",
+    layouts: [
+      {
+        name: "2 images columns",
+        icon: TwoImageColumnsIcon,
+        type: "layout",
+        layoutType: "twoImageColumns",
+        component: SLIDE_COMPONENTS_JSON.TwoImageColumns,
+      },
+      {
+        name: "3 images columns",
+        icon: ThreeImageColumnsIcon,
+        type: "layout",
+        layoutType: "threeImageColumns",
+        component: SLIDE_COMPONENTS_JSON.ThreeImageColumns,
+      },
+      {
+        name: "4 images columns",
+        icon: FourImageColumnsIcon,
+        type: "layout",
+        layoutType: "fourImageColumns",
+        component: SLIDE_COMPONENTS_JSON.FourImageColumns,
+      },
+    ],
+  },
+
+  {
+    name: "Card layouts",
+    layouts: [
+      {
+        name: "Accent left",
+        icon: ImageAndTextIcon,
+        type: "layout",
+        layoutType: "accentLeft",
+        component: SLIDE_COMPONENTS_JSON.AccentLeft,
+      },
+      {
+        name: "Accent right",
+        icon: TextAndImageIcon,
+        type: "layout",
+        layoutType: "accentRight",
+        component: SLIDE_COMPONENTS_JSON.AccentRight,
+      },
+    ],
+  },
+
+  {
+    name: "Text & Columns",
+    layouts: [
+      {
+        name: "Text and image",
+        icon: TextAndImageIcon,
+        type: "layout",
+        layoutType: "textAndImage",
+        component: SLIDE_COMPONENTS_JSON.TextAndImage,
+      },
+      {
+        name: "Two Columns",
+        icon: TwoColumnsIcon,
+        type: "layout",
+        layoutType: "twoColumns",
+        component: SLIDE_COMPONENTS_JSON.TwoColumns,
+      },
+      {
+        name: "Three Columns",
+        icon: ThreeColumnsIcon,
+        type: "layout",
+        layoutType: "threeColumns",
+        component: SLIDE_COMPONENTS_JSON.ThreeColumns,
+      },
+      {
+        name: "Four Columns",
+        icon: FourColumnsIcon,
+        type: "layout",
+        layoutType: "fourColumns",
+        component: SLIDE_COMPONENTS_JSON.FourColumns,
+      },
+    ],
+  },
+
+  {
+    name: "Columns with headings",
+    layouts: [
+      {
+        name: "Two Columns with headings",
+        icon: TwoColumnsWithHeadingsIcon,
+        type: "layout",
+        layoutType: "twoColumnsWithHeadings",
+        component: SLIDE_COMPONENTS_JSON.TwoColumnsWithHeadings,
+      },
+      {
+        name: "Three Columns with headings",
+        icon: ThreeColumnsWithHeadingsIcon,
+        type: "layout",
+        layoutType: "threeColumnsWithHeadings",
+        component: SLIDE_COMPONENTS_JSON.ThreeColumnsWithHeadings,
+      },
+    ],
+  },
+];

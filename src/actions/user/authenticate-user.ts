@@ -13,7 +13,7 @@ export const authenticateUser = async () => {
         status: 403,
       };
 
-    const existing = await prisma.user.findUnique({
+    const existing = await prisma.user.findFirst({
       where: {
         clerkId: user.id,
       },

@@ -32,7 +32,7 @@ const DashboardPage = async ({
           {hasProjects ? (
             <Projects
               projects={projects}
-              filter={filter}
+              filter={filter || "all"}
               defaultTab="all"
               defaultView="grid"
             />

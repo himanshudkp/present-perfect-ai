@@ -1,6 +1,5 @@
 "use client";
 
-import { getProjectById } from "@/actions/project";
 import { Project } from "@/generated/prisma/client";
 import { THEMES } from "@/constants";
 import { showError } from "@/components/toast-message";
@@ -12,11 +11,12 @@ import React, { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PresentationNavbar from "@/components/presentation/presentation-navbar";
-import PresentationLayoutPreview from "@/components/presentation/presentation-layout-preview";
 import PresentationEditor from "@/components/presentation/presentation-editor";
-type Props = {};
+import { getProjectById } from "@/actions/projects";
+import LayoutPreview from "@/components/presentation/layout-preview";
+import EditorSidebar from "@/components/presentation/editor-sidebar";
 
-const Presentation = (props: Props) => {
+const Presentation = () => {
   const {
     setSlides,
     setProject,
@@ -28,6 +28,7 @@ const Presentation = (props: Props) => {
   const { presentationId } = useParams();
   const [loading, setLoading] = useState(false);
   const { setTheme } = useTheme();
+
   useEffect(() => {
     (async () => {
       try {
@@ -70,6 +71,7 @@ const Presentation = (props: Props) => {
       </div>
     );
   }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <PresentationNavbar presentationId={presentationId as string} />
@@ -81,10 +83,11 @@ const Presentation = (props: Props) => {
           backgroundColor: currentTheme.bgColor,
         }}
       >
-        <PresentationLayoutPreview />
+        <LayoutPreview />
         <div className="flex-1 ml-64 pr-16">
           <PresentationEditor isEditable={true} />
         </div>
+        <EditorSidebar />
       </div>
     </DndProvider>
   );

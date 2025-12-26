@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useRef } from "react";
-import { useDrag } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { EllipsisVertical, Trash2, Copy } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
@@ -39,8 +39,20 @@ const DraggableSlide = memo(
       canDrag: isEditable,
     });
 
+    const [_, drop] = useDrop({
+      accept: ["SLIDE", "LAYOUT"],
+      hover(item: { index: number; type: string }) {
+        if (!ref.current || !isEditable) return;
+        if (item.type === "SLIDE") {
+          if (item.index === index) return;
+          moveSlide(item.index, index);
+          item.index = index;
+        }
+      },
+    });
+
     if (isEditable) {
-      drag(ref);
+      drag(drop(ref));
     }
 
     const handleContentChange = useCallback(
