@@ -139,13 +139,6 @@ const PresentationEditor = memo(({ isEditable }: PresentationEditorProps) => {
   return (
     <div className="flex-1 flex flex-col h-full max-w-3xl mx-auto px-4 mb-20">
       <ScrollArea className="flex-1 mt-8">
-        {/* {isEditable && (
-          <PresentationDropZone
-            index={0}
-            isEditable={isEditable}
-            onDrop={handleDrop}
-          />
-        )} */}
         <div className="space-y-6 pr-4">
           {orderedSlides.map((slide, index) => (
             <div
@@ -156,7 +149,7 @@ const PresentationEditor = memo(({ isEditable }: PresentationEditorProps) => {
             >
               {isEditable && (
                 <PresentationDropZone
-                  index={index + 1}
+                  index={0}
                   isEditable={isEditable}
                   onDrop={handleDrop}
                 />
@@ -169,6 +162,13 @@ const PresentationEditor = memo(({ isEditable }: PresentationEditorProps) => {
                 moveSlide={moveSlide}
                 slide={slide}
               />
+              {isEditable && (
+                <PresentationDropZone
+                  index={index + 1}
+                  isEditable={isEditable}
+                  onDrop={handleDrop}
+                />
+              )}
             </div>
           ))}
         </div>

@@ -10,7 +10,7 @@ const CreateNewProject = async ({
 }: {
   searchParams: { mode?: string };
 }) => {
-  const mode = (await searchParams.mode) as Page;
+  // const mode = (await searchParams.mode) as Page;
   const checkUser = await authenticateUser();
 
   if (!checkUser.user) {

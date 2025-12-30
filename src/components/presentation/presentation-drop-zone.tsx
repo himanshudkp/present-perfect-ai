@@ -36,7 +36,13 @@ export const PresentationDropZone = memo(
         )}
         role="region"
         aria-label="Drop zone for slides"
-      />
+      >
+        {isOver && canDrop && (
+          <div className="h-full flex items-center justify-center text-green-600">
+            Drop here...
+          </div>
+        )}
+      </div>
     );
   }
 );

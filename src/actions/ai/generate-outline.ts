@@ -10,7 +10,7 @@ import {
   retryWithBackoff,
 } from "./generative-ai-config";
 
-export const safetySettings = [
+const safetySettings = [
   {
     category: HarmCategory.HARM_CATEGORY_HARASSMENT,
     threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,

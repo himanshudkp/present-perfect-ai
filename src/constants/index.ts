@@ -1,6 +1,7 @@
 import { Home, LayoutTemplate, Settings2, Trash2 } from "lucide-react";
 import type {
   ActionCategory,
+  ComponentGroup,
   ContentType,
   CreateOption,
   LayoutGroup,
@@ -20,6 +21,7 @@ import {
   TwoColumnsWithHeadingsIcon,
   TwoImageColumnsIcon,
 } from "@/components/app-sidebar/slide-icons";
+import { id } from "zod/v4/locales";
 
 export const DATA = {
   user: {
@@ -1348,7 +1350,7 @@ export const SLIDE_COMPONENTS_JSON = {
   },
 };
 
-export const Layouts: LayoutGroup[] = [
+export const SLIDE_LAYOUTS: LayoutGroup[] = [
   {
     name: "Basic",
     layouts: [
@@ -1459,6 +1461,353 @@ export const Layouts: LayoutGroup[] = [
         type: "layout",
         layoutType: "threeColumnsWithHeadings",
         component: SLIDE_COMPONENTS_JSON.ThreeColumnsWithHeadings,
+      },
+    ],
+  },
+];
+
+export const Heading1 = {
+  id: crypto.randomUUID(),
+  type: "heading1" as ContentType,
+  name: "Heading1",
+  content: "",
+  placeHolder: "Heading1",
+};
+
+export const Heading2 = {
+  id: crypto.randomUUID(),
+  type: "heading2" as ContentType,
+  name: "Heading2",
+  content: "",
+  placeHolder: "Heading2",
+};
+
+export const Heading3 = {
+  id: crypto.randomUUID(),
+  type: "heading3" as ContentType,
+  name: "Heading3",
+  content: "",
+  placeHolder: "Heading3",
+};
+
+export const Heading4 = {
+  id: crypto.randomUUID(),
+  type: "heading4" as ContentType,
+  name: "Heading4",
+  content: "",
+  placeHolder: "Heading4",
+};
+
+export const ResizableColumn = {
+  id: crypto.randomUUID(),
+  type: "resizable-column" as ContentType,
+  name: "Text and Image",
+  className: "border",
+  content: [
+    {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "paragraph" as ContentType,
+          name: "Paragraph",
+          content: "",
+          placeHolder: "Start typing...",
+        },
+      ],
+    },
+    {
+      id: crypto.randomUUID(),
+      type: "column" as ContentType,
+      name: "Column",
+      content: [
+        {
+          id: crypto.randomUUID(),
+          type: "paragraph" as ContentType,
+          name: "Paragraph",
+          content: "",
+          placeHolder: "Start typing...",
+        },
+      ],
+    },
+  ],
+};
+
+export const DividerComponent = {
+  id: crypto.randomUUID(),
+  type: "divider" as ContentType,
+  name: "Divider",
+  content: "",
+};
+
+export const TableOfContentComponent = {
+  id: crypto.randomUUID(),
+  type: "tableOfContents" as ContentType,
+  name: "Table Of Content",
+  content: ["Selection 1", "Selection 2", "Selection 3"],
+};
+
+export const CodeBlockComponent = {
+  id: crypto.randomUUID(),
+  type: "codeBlock" as ContentType,
+  name: "Code Block",
+  content: "console.log('Hello World!');",
+  language: "javascript",
+};
+
+export const CalloutBoxComponent = {
+  id: crypto.randomUUID(),
+  type: "calloutBox" as ContentType,
+  name: "Callout Box",
+  content: "This is callout box.",
+};
+
+export const TodoListComponent = {
+  id: crypto.randomUUID(),
+  type: "todoList" as ContentType,
+  name: "Todo List",
+  content: ["[ ] Task 1", "[ ] Task 2", "[x] Task 3"],
+};
+
+export const NumberedListComponent = {
+  id: crypto.randomUUID(),
+  type: "numberedList" as ContentType,
+  name: "Numbered List",
+  content: ["First Item", "Second Item", "Third Item"],
+};
+
+export const BulletListComponent = {
+  id: crypto.randomUUID(),
+  type: "bulletList" as ContentType,
+  name: "Bullet List",
+  content: ["First Item", "Second Item", "Third Item"],
+};
+
+export const CustomImageComponent = {
+  id: crypto.randomUUID(),
+  type: "image" as ContentType,
+  name: "Custom Image",
+  content: "",
+  alt: "Image",
+};
+
+export const BlockQuoteComponent = {
+  id: crypto.randomUUID(),
+  type: "blockquote" as ContentType,
+  name: "Block Quote",
+  content: "type here...",
+};
+
+export const TableComponent = {
+  id: crypto.randomUUID(),
+  type: "table" as ContentType,
+  name: "Table",
+  initialRows: 2,
+  initialColumns: 2,
+  content: [],
+};
+
+export const TitleComponent = {
+  id: crypto.randomUUID(),
+  type: "title" as ContentType,
+  name: "Title",
+  content: "",
+  placeHolder: "Title",
+};
+
+export const ParagraphComponent = {
+  id: crypto.randomUUID(),
+  type: "paragraph" as ContentType,
+  name: "Paragraph",
+  content: "",
+  placeHolder: "type here...",
+};
+
+export const CustomButtonComponent = {
+  id: crypto.randomUUID(),
+  type: "button" as ContentType,
+  name: "Custom Button",
+  content: "Click me",
+  link: "#",
+  bgColor: "#3B82F6",
+  isTransparent: false,
+};
+
+export const COMPONENTS: ComponentGroup[] = [
+  {
+    name: "Text",
+    components: [
+      {
+        name: "Title",
+        icon: "T",
+        type: "component",
+        component: TitleComponent,
+        componentType: "title",
+      },
+      {
+        name: "Heading 1",
+        icon: "H1",
+        type: "component",
+        component: Heading1,
+        componentType: "heading1",
+      },
+      {
+        name: "Heading 2",
+        icon: "H2",
+        type: "component",
+        component: Heading2,
+        componentType: "heading2",
+      },
+      {
+        name: "Heading 3",
+        icon: "H3",
+        type: "component",
+        component: Heading3,
+        componentType: "heading3",
+      },
+      {
+        name: "Heading 4",
+        icon: "H4",
+        type: "component",
+        component: Heading4,
+        componentType: "heading4",
+      },
+      {
+        name: "Paragraph",
+        icon: "¶",
+        type: "component",
+        component: ParagraphComponent,
+        componentType: "paragraph",
+      },
+      {
+        name: "Block Quote",
+        icon: "❝",
+        type: "component",
+        component: BlockQuoteComponent,
+        componentType: "blockquote",
+      },
+    ],
+  },
+
+  {
+    name: "Table",
+    components: [
+      {
+        name: "2x2 Table",
+        icon: "⊞",
+        type: "component",
+        component: { ...TableComponent, initialColumns: 2, initialRows: 2 },
+        componentType: "table2x2",
+      },
+      {
+        name: "3x3 Table",
+        icon: "▦",
+        type: "component",
+        component: { ...TableComponent, initialColumns: 3, initialRows: 3 },
+        componentType: "table3x3",
+      },
+      {
+        name: "4x4 Table",
+        icon: "▦",
+        type: "component",
+        component: { ...TableComponent, initialColumns: 4, initialRows: 4 },
+        componentType: "table4x4",
+      },
+      {
+        name: "Table of Contents",
+        icon: "≡",
+        type: "component",
+        component: TableOfContentComponent,
+        componentType: "tableOfContents",
+      },
+    ],
+  },
+
+  {
+    name: "Lists",
+    components: [
+      {
+        name: "Bulleted List",
+        icon: "●",
+        type: "component",
+        component: BulletListComponent,
+        componentType: "bulletList",
+      },
+      {
+        name: "Numbered List",
+        icon: "1.",
+        type: "component",
+        component: NumberedListComponent,
+        componentType: "numberedList",
+      },
+      {
+        name: "Todo List",
+        icon: "☑",
+        type: "component",
+        component: TodoListComponent,
+        componentType: "todoList",
+      },
+    ],
+  },
+
+  {
+    name: "Layout",
+    components: [
+      {
+        name: "Columns",
+        icon: "▤",
+        type: "component",
+        component: ResizableColumn,
+        componentType: "resizable-column",
+      },
+      {
+        name: "Divider",
+        icon: "—",
+        type: "component",
+        component: DividerComponent,
+        componentType: "divider",
+      },
+    ],
+  },
+
+  {
+    name: "Media",
+    components: [
+      {
+        name: "Image",
+        icon: "🖼",
+        type: "component",
+        component: CustomImageComponent,
+        componentType: "image",
+      },
+      {
+        name: "Button",
+        icon: "▢",
+        type: "component",
+        component: CustomButtonComponent,
+        componentType: "button",
+      },
+    ],
+  },
+
+  {
+    name: "Advanced",
+    components: [
+      {
+        name: "Code Block",
+        icon: "</>",
+        type: "component",
+        component: CodeBlockComponent,
+        componentType: "codeBlock",
+      },
+      {
+        name: "Callout Box",
+        icon: "💡",
+        type: "component",
+        component: CalloutBoxComponent,
+        componentType: "calloutBox",
       },
     ],
   },

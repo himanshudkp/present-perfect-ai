@@ -84,6 +84,7 @@ const CreateWithAI = ({ onBack }: { onBack: () => void }) => {
   ]);
 
   const generateOutline = useCallback(async () => {
+    // debugger;
     if (!currentAIPrompt.trim()) {
       showError("Error", "Please enter a prompt");
       return;

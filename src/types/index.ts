@@ -27,7 +27,8 @@ export type ContentType =
   | "todoList"
   | "codeBlock"
   | "tableOfContents"
-  | "divider";
+  | "divider"
+  | "button";
 
 export interface ContentItem {
   id: string;
@@ -174,4 +175,17 @@ export interface Layout {
 export interface LayoutGroup {
   name: string;
   layouts: Layout[];
+}
+
+export interface Component {
+  name: string;
+  icon: string;
+  type: string;
+  component: ContentItem;
+  componentType: string;
+}
+
+export interface ComponentGroup {
+  name: string;
+  components: Component[];
 }
